@@ -31,9 +31,13 @@ jobs:
         with:
           name: node-app
           path: |
-            build
             .deployment
             package.json
+            static
+            src
+            svelte.config.js
+            tsconfig.json
+            .vscode
 
   deploy:
     runs-on: ubuntu-latest
