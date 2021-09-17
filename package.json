@@ -34,6 +34,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"carbon-components-svelte": "^0.44.2"
+		"carbon-components-svelte": "^0.44.2",
+		"carbon-icons-svelte": "^10.38.0"
 	}
 }

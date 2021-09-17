@@ -6,6 +6,7 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^4.31.0
   '@typescript-eslint/parser': ^4.31.0
   carbon-components-svelte: ^0.44.2
+  carbon-icons-svelte: ^10.38.0
   carbon-preprocess-svelte: ^0.6.0
   eslint: ^7.32.0
   eslint-config-prettier: ^8.3.0
@@ -21,6 +22,7 @@ specifiers:
 
 dependencies:
   carbon-components-svelte: 0.44.2
+  carbon-icons-svelte: 10.38.0
 
 devDependencies:
   '@sveltejs/adapter-node': 1.0.0-next.48
