@@ -27,11 +27,15 @@
 		"svelte-check": "^2.2.6",
 		"svelte-preprocess": "^4.9.4",
 		"tslib": "^2.3.1",
-		"typescript": "^4.4.3"
+		"typescript": "^4.4.3",
+		"postcss": "^8.3.6",
+		"postcss-load-config": "^3.1.0",
+		"autoprefixer": "^10.3.4",
+		"cssnano": "^5.0.8",
+		"tailwindcss": "^2.2.15"
 	},
 	"type": "module",
 	"dependencies": {
-		"carbon-components-svelte": "^0.44.2",
 		"carbon-icons-svelte": "^10.38.0"
 	}
 }
