@@ -1,11 +1,12 @@
 import { AppSyncResolverEvent, AppSyncIdentityOIDC } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { CreateUserInput, CreateEventInput, Event, CreateTeamInput, AddCommentInput } from '../../generated/graphql'
+import { CreateUserInput, CreateEventInput, Event, CreateTeamInput, AddCommentInput, CreateNamecardInput } from '../../generated/graphql'
 import { createUser, getUser } from './user';
 import { createEvent, listEvent } from './event';
 import { addComment, createTeam, getTeam, listTeam } from './team';
 import { listAffiliation } from './affiliation';
+import { createNamecard, getNamecard } from './namecard';
 
 const client = new DynamoDBClient({
   apiVersion: '2012-08-10',
@@ -96,13 +97,31 @@ export async function handler(
         throw err
       }
     
-      case 'listAffiliation':
-        console.log('call listAffiliation')
-        try {
-          return await listAffiliation();
-        } catch(err) {
-          throw err
-        }
+    case 'listAffiliation':
+      console.log('call listAffiliation')
+      try {
+        return await listAffiliation();
+      } catch(err) {
+        throw err
+      }
+    
+    case 'createNamecard': 
+      console.log('call createNamecard')
+      try {
+        const input = event.arguments.input as CreateNamecardInput
+        return await createNamecard(input);
+      } catch (err) {
+        throw err
+      }
+    
+    case 'getNamecard':
+      console.log('call getNamecard')
+      try {
+        const namecardId = event.arguments.namecardId
+        return await getNamecard(namecardId)
+      } catch(err){
+        throw err
+      }
 
     default:
       console.log(event.info.fieldName)
@@ -116,9 +135,7 @@ type AppSyncInput = {
   [key: string]: any
 }
 
-type AppSyncResponse = {
-  [key: string]: any
-}
+type AppSyncResponse = any
 
 // {
 //   arguments: { input: { name: 'onsd', iconURL: 'exmaple.com', githubId: 'onsd' } },

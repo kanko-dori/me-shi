@@ -68,7 +68,7 @@ export type Event = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addComment: Comment;
+  addComment: Team;
   addNamecard: User;
   createEvent: Event;
   createNamecard: Namecard;
@@ -116,11 +116,10 @@ export type Namecard = {
   __typename?: 'Namecard';
   event?: Maybe<Event>;
   id: Scalars['ID'];
-  memberOf?: Maybe<Affiliation>;
-  preferTechnologies?: Maybe<Array<Technology>>;
-  product?: Maybe<Product>;
+  memberOf?: Maybe<Scalars['String']>;
+  preferTechnologies?: Maybe<Array<Scalars['String']>>;
   team?: Maybe<Team>;
-  usedTechnologies?: Maybe<Array<Technology>>;
+  usedTechnologies?: Maybe<Array<Scalars['String']>>;
 };
 
 export type Product = {
@@ -140,6 +139,7 @@ export type ProductInput = {
 
 export type Query = {
   __typename?: 'Query';
+  getNamecard?: Maybe<Namecard>;
   getUser?: Maybe<User>;
   listAffiliation?: Maybe<Array<Maybe<Affiliation>>>;
   listEvent?: Maybe<Array<Maybe<Event>>>;
@@ -148,8 +148,13 @@ export type Query = {
 };
 
 
+export type QueryGetNamecardArgs = {
+  namecardId: Scalars['ID'];
+};
+
+
 export type QueryGetUserArgs = {
-  userid: Scalars['ID'];
+  userId: Scalars['ID'];
 };
 
 
@@ -338,7 +343,7 @@ export type EventResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  addComment?: Resolver<ResolversTypes['Comment'], ParentType, ContextType, RequireFields<MutationAddCommentArgs, never>>;
+  addComment?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationAddCommentArgs, never>>;
   addNamecard?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAddNamecardArgs, 'namecardId'>>;
   createEvent?: Resolver<ResolversTypes['Event'], ParentType, ContextType, RequireFields<MutationCreateEventArgs, never>>;
   createNamecard?: Resolver<ResolversTypes['Namecard'], ParentType, ContextType, RequireFields<MutationCreateNamecardArgs, never>>;
@@ -350,11 +355,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 export type NamecardResolvers<ContextType = any, ParentType extends ResolversParentTypes['Namecard'] = ResolversParentTypes['Namecard']> = {
   event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  memberOf?: Resolver<Maybe<ResolversTypes['Affiliation']>, ParentType, ContextType>;
-  preferTechnologies?: Resolver<Maybe<Array<ResolversTypes['Technology']>>, ParentType, ContextType>;
-  product?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType>;
+  memberOf?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  preferTechnologies?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   team?: Resolver<Maybe<ResolversTypes['Team']>, ParentType, ContextType>;
-  usedTechnologies?: Resolver<Maybe<Array<ResolversTypes['Technology']>>, ParentType, ContextType>;
+  usedTechnologies?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -367,7 +371,8 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'userid'>>;
+  getNamecard?: Resolver<Maybe<ResolversTypes['Namecard']>, ParentType, ContextType, RequireFields<QueryGetNamecardArgs, 'namecardId'>>;
+  getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'userId'>>;
   listAffiliation?: Resolver<Maybe<Array<Maybe<ResolversTypes['Affiliation']>>>, ParentType, ContextType>;
   listEvent?: Resolver<Maybe<Array<Maybe<ResolversTypes['Event']>>>, ParentType, ContextType>;
   listTeam?: Resolver<Maybe<Array<Maybe<ResolversTypes['Team']>>>, ParentType, ContextType, RequireFields<QueryListTeamArgs, 'eventID'>>;
