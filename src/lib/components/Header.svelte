@@ -13,7 +13,7 @@
 			</Svg>
 		</a>
 		<div class="flex-grow" />
-		<p class="pr-4 text-right no-underline">
+		<p class="pr-4 text-right">
 			{#if githubId === undefined}
 				Sign in with GitHub
 			{:else}

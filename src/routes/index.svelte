@@ -1,37 +1,53 @@
 <script>
 	import { Static } from '$lib/svg';
 	import Header from '$lib/components/Header.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 </script>
 
-<div />
 <Header />
-<div class="bg-blue-300">
-	<div class="card1" />
-	<div class="card2" />
-</div>
-<div class="bg-blue-200 h-64">
-	<div class="absolute opacity-75 border-4 h-1/3 w-1/2 z-0 mt-0 bg-blue-100 border-gray-800" />
-	<div class="absolute opacity-75 border-4 h-1/3 w-1/2 z-10 mt-1 bg-blue-400 border-gray-800" />
-	<div class="absolute bg-blue-300 z-20 mt-2">
+<div class="card">
+	<div class="top">top</div>
+	<div class="botom">botom</div>
+	<div class="copy">
 		<p>名刺でつながる、</p>
 		<p>名刺でつなげる。</p>
 	</div>
 </div>
 
-<!-- <div>
-	<Static name="閑古鳥" github="kanko-dori" />
-</div> -->
+<!-- <div class="static aspect-w-10 aspect-h-5">
+		<Static name="閑古鳥" github="kanko-dori" />
+	</div>
+<Footer />
+ -->
 <style>
-	div.card1 {
-		position: absolute;
-		background-color: antiquewhite;
-		height: 55px;
-		width: 99px;
+	.card {
+		position: relative;
 	}
-	div.card2 {
+	.top,
+	.botom {
 		position: absolute;
-		background-color: antiquewhite;
-		height: 10px;
-		width: 10px;
+		border-color: gray;
+		background-color: ghostwhite;
+		border-width: 0.1em;
+		width: 50%;
+		padding-top: calc(50% * 0.6);
+		opacity: 0.7;
+	}
+	.botom {
+		z-index: 1;
+		top: 0;
+		right: 15%;
+	}
+	.top {
+		z-index: 2;
+		margin-top: 10%;
+		left: 15%;
+	}
+	.copy {
+		position: absolute;
+		left: 25%;
+		z-index: 3;
+		margin-top: 10%;
+		font-size: fill;
 	}
 </style>
