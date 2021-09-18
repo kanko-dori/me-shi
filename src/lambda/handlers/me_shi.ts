@@ -1,9 +1,10 @@
 import { AppSyncResolverEvent, AppSyncIdentityOIDC } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { CreateUserInput, CreateEventInput, Event } from '../../generated/graphql'
+import { CreateUserInput, CreateEventInput, Event, CreateTeamInput } from '../../generated/graphql'
 import { createUser, getUser } from './user';
 import { createEvent, listEvent } from './event';
+import { createTeam, getTeam, listTeam } from './team';
 
 const client = new DynamoDBClient({
   apiVersion: '2012-08-10',
@@ -50,8 +51,8 @@ export async function handler(
 
     case 'createEvent':
       console.log('call createEvent')
-      const input = event.arguments.input as CreateEventInput
       try {
+        const input = event.arguments.input as CreateEventInput
         const eventParam = await createEvent(input.name)
         return eventParam.Item as Event
       } catch (err) {
@@ -65,6 +66,25 @@ export async function handler(
       } catch (err) {
         throw err
       }
+
+    case 'createTeam':
+      console.log('call createTeam')
+      try {
+        const input = event.arguments.input as CreateTeamInput
+        const teamParam = await createTeam(input)
+        return await getTeam(teamParam.Item?.id)
+      } catch (err) {
+        throw err
+      }
+    
+    case 'listTeam':
+      console.log('call listTeam')
+      try {
+        const eventId = event.arguments.eventID as string
+        return await listTeam(eventId)
+      } catch(err) {
+        throw err
+      }
       
     default:
       console.log(event.info.fieldName)
@@ -74,18 +94,6 @@ export async function handler(
   throw new Error(`failed to invoke any query or mutation: ${event.info.fieldName}`)
 }
 
-// const obtainValue = () => {
-//   const user = {
-//     githubId: { S: 'onsd' },
-//     iconURL: { S: 'example.com' },
-//     id: { S: 'github|29172177' }
-//   }
-//   let obj = {}
-//   for (const [key, value] of Object.entries(user)) {
-//     console.log(`${key}: ${value}`);
-//     if (typeof value )
-//   }
-// }
 type AppSyncInput = {
   [key: string]: any
 }
