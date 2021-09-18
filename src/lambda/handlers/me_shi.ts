@@ -1,8 +1,9 @@
 import { AppSyncResolverEvent, AppSyncIdentityOIDC } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { CreateUserInput } from '../../generated/graphql'
+import { CreateUserInput, CreateEventInput, Event } from '../../generated/graphql'
 import { createUser, getUser } from './user';
+import { createEvent, listEvent } from './event';
 
 const client = new DynamoDBClient({
   apiVersion: '2012-08-10',
@@ -47,14 +48,30 @@ export async function handler(
         throw new Error(`failed to get user id ${userId}`)
       }
 
+    case 'createEvent':
+      console.log('call createEvent')
+      const input = event.arguments.input as CreateEventInput
+      try {
+        const eventParam = await createEvent(input.name)
+        return eventParam.Item as Event
+      } catch (err) {
+        throw err
+      }
+      
+    case 'listEvent':
+      console.log('call listEvent')
+      try {
+        return await listEvent()
+      } catch (err) {
+        throw err
+      }
+      
     default:
       console.log(event.info.fieldName)
   }
     
   
-  return {
-    "key": true
-  }
+  throw new Error(`failed to invoke any query or mutation: ${event.info.fieldName}`)
 }
 
 // const obtainValue = () => {

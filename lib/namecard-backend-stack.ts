@@ -5,6 +5,10 @@ import { AttributeType, Table } from '@aws-cdk/aws-dynamodb';
 import { Policy, PolicyStatement } from '@aws-cdk/aws-iam';
 import * as path from 'path';
 
+// TableNames
+export const UserTableName = "me-shi-UserTable"
+export const EventTableName = "me-shi-EventTable"
+
 export class NamecardBackendStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -67,15 +71,32 @@ export class NamecardBackendStack extends cdk.Stack {
       typeName: 'Query',
       fieldName: 'getUser',
     })
+    meShiFnDataSource.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'createEvent',
+    })
+    meShiFnDataSource.createResolver({
+      typeName: 'Query',
+      fieldName: 'listEvent',
+    })
 
     // DynamoDB
 
-    const userTable = new Table(this, "me-shi-UserTable", {
+    const userTable = new Table(this, UserTableName, {
       partitionKey: {
         name: "id",
         type: AttributeType.STRING,
       },
-      tableName: "me-shi-UserTable",
+      tableName: UserTableName,
+      removalPolicy: cdk.RemovalPolicy.DESTROY
+    })
+
+    const eventTable = new Table(this, EventTableName, {
+      partitionKey: {
+        name: "id",
+        type: AttributeType.STRING
+      },
+      tableName: EventTableName,
       removalPolicy: cdk.RemovalPolicy.DESTROY
     })
 
