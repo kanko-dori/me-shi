@@ -1,24 +1,19 @@
-# README
+# Welcome to your CDK TypeScript project!
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+You should explore the contents of this project. It demonstrates a CDK app with an instance of a stack (`NamecardBackendStack`)
+which contains an Amazon SQS queue that is subscribed to an Amazon SNS topic.
 
-Things you may want to cover:
+The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
-* Ruby version
+## Tutorial  
+See [this useful workshop](https://cdkworkshop.com/20-typescript.html) on working with the AWS CDK for Typescript projects.
 
-* System dependencies
 
-* Configuration
+## Useful commands
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+ * `npm run build`   compile typescript to js
+ * `npm run watch`   watch for changes and compile
+ * `npm run test`    perform the jest unit tests
+ * `cdk deploy`      deploy this stack to your default AWS account/region
+ * `cdk diff`        compare deployed stack with current state
+ * `cdk synth`       emits the synthesized CloudFormation template

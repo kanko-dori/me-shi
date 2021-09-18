@@ -1,0 +1,119 @@
+type Mutation {
+	createEvent(name: String!): Event!
+	createTeam(name: String!, eventId: ID!, product: ProductInput!): Team!
+	createNamecard(input: CreateNamecardInput): Namecard!
+	addComment(teamId: String!, comment: String!): Comment!
+
+	createUser(input: CreateUserInput!): User
+	updateUser(input: UpdateUserInput!): User
+    
+    # 名刺を登録する
+    # 登録した人自身が返ってくる
+    addNamecard(namecardId: ID!): User!
+}
+
+type Subscription {
+    # addNamecard が呼ばれたら発火する
+    # 登録した人が返ってくるので、それをもとに名刺を探して登録する
+    onAddedNamecard(namecardId: ID!): User!
+        @aws_subscribe(mutations: ["addNamecard"])
+}
+
+type User {
+    id: ID!
+    name: String
+    githubId: String
+    twitterId: String
+    iconURL: String
+    myNamecards: [ Namecard! ]
+    givenNamecards: [ Namecard! ]
+}
+
+type Technology {
+    id: ID!
+    name: String!
+}
+
+type Query {
+    # サジェストするために使う
+	listEvent: [Event]
+	listTeam(eventID: ID!): [Team]
+	listAffiliation: [Affiliation]
+	listTechnology: [Technology]
+
+	getUser(userid: ID!): User
+}
+
+type Affiliation {
+	id: ID!
+	name: String
+}
+
+type Comment {
+	id: ID!
+	body: String
+	commenterId: String # hidden
+}
+
+input CreateUserInput {
+	iconURL: String!
+	githubId: String!
+	twitterId: String
+    name: String
+}
+
+input DeleteUserInput {
+	userid: ID!
+}
+
+type Event {
+	id: ID!
+	name: String
+}
+
+type Team {
+	id: ID!
+	name: String!
+	event: Event!
+	product: Product!
+}
+
+type Namecard {
+	id: ID!
+	event: Event
+	team: Team
+	memberOf: Affiliation
+	product: Product
+	usedTechnologies: [Technology!]
+	preferTechnologies: [Technology!]
+}
+
+type Product {
+	id: ID!
+	name: String!
+	repository: String
+	description: String
+    comments: [Comment!]
+}
+
+input ProductInput {
+	name: String!
+	repository: String
+	description: String
+}
+
+input UpdateUserInput {
+	iconURL: String
+    name: String
+	githubId: String
+	twitterId: String
+}
+
+input CreateNamecardInput {
+    eventId: ID!,
+    teamId: ID!,
+    affiliation: String,
+    usedTechnologies: [String!],
+    preferTechnologies: [String!]
+}
+
