@@ -5,7 +5,7 @@ export async function handler(
   event: APIGatewayProxyEvent,
   context: APIGatewayEventRequestContext
 ): Promise<APIGatewayProxyResult> {
-
+  console.log(event, context)
   return {
     statusCode: 201,
     headers: event.headers,
