@@ -1,7 +1,8 @@
-import { ScanCommand, PutCommand, PutCommandInput, ScanCommandInput, GetCommandInput, GetCommand } from '@aws-sdk/lib-dynamodb'
-import { EventTableName, TeamTableName } from '../../../lib/namecard-backend-stack'
-import { CreateTeamInput, Event } from '../../generated/graphql'
+import { ScanCommand, PutCommand, PutCommandInput, ScanCommandInput, GetCommandInput, GetCommand, UpdateCommandInput, UpdateCommand } from '@aws-sdk/lib-dynamodb'
+import { TeamTableName } from '../../../lib/namecard-backend-stack'
+import { AddCommentInput, CreateTeamInput, Event, Team, Comment } from '../../generated/graphql'
 import { docClient } from './me_shi'
+import { v4 as uuidv4 } from 'uuid'
 
 export const createTeam = async (input: CreateTeamInput) => {
     console.log('createTeam', input)
@@ -20,7 +21,7 @@ export const createTeam = async (input: CreateTeamInput) => {
     return teamParam
 }
 
-export const getTeam = async (id: string) => {
+export const getTeam = async (id: string): Promise<Team> => {
     console.log('getTeam', id)
     const teamParam: GetCommandInput = {
         TableName: TeamTableName,
@@ -38,7 +39,9 @@ export const getTeam = async (id: string) => {
         name: teamRes.Item.eventId   
     }
     return {
-        ...teamRes.Item,
+        id: teamRes.Item.id,
+        name: teamRes.Item.name,
+        product: teamRes.Item.product,
         event
     }
 }
@@ -90,6 +93,33 @@ export const listTeam = async (eventId: string): Promise<any> => {
     return teams
 }
 
-const scan = async () => {
+export const addComment = async (input: AddCommentInput, userId: string) => {
+    const team = await getTeam(input.teamId)
+    const comment: Comment = {
+        id: uuidv4(),
+        body: input.comment,
+        commenterId: userId
+    }
+    if (team.product.comments) {
+        team.product.comments.push(comment)
+    } else {
+        team.product.comments = [comment]
+    }
 
+    const teamParam: UpdateCommandInput = {
+        TableName: TeamTableName,
+        Key: {
+            id: team.id
+        },
+        UpdateExpression: "set #product.#comments = :newcomment",
+        ExpressionAttributeNames: {
+            '#product': 'product',
+            '#comments': 'comments'
+        },
+        ExpressionAttributeValues: {
+            ':newcomment': team.product.comments
+        }
+    }
+    await docClient.send(new UpdateCommand(teamParam))
+    return team
 }

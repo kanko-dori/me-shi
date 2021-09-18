@@ -1,10 +1,10 @@
 import { AppSyncResolverEvent, AppSyncIdentityOIDC } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { CreateUserInput, CreateEventInput, Event, CreateTeamInput } from '../../generated/graphql'
+import { CreateUserInput, CreateEventInput, Event, CreateTeamInput, AddCommentInput } from '../../generated/graphql'
 import { createUser, getUser } from './user';
 import { createEvent, listEvent } from './event';
-import { createTeam, getTeam, listTeam } from './team';
+import { addComment, createTeam, getTeam, listTeam } from './team';
 
 const client = new DynamoDBClient({
   apiVersion: '2012-08-10',
@@ -86,6 +86,14 @@ export async function handler(
         throw err
       }
       
+    case 'addComment':
+      console.log('call addComment')
+      try {
+        const input = event.arguments.input as AddCommentInput
+        return await addComment(input, userId)
+      } catch(err) {
+        throw err
+      }
     default:
       console.log(event.info.fieldName)
   }

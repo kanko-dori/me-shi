@@ -13,6 +13,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type AddCommentInput = {
+  comment: Scalars['String'];
+  teamId: Scalars['String'];
+};
+
 export type Affiliation = {
   __typename?: 'Affiliation';
   id: Scalars['ID'];
@@ -74,8 +79,7 @@ export type Mutation = {
 
 
 export type MutationAddCommentArgs = {
-  comment: Scalars['String'];
-  teamId: Scalars['String'];
+  input?: Maybe<AddCommentInput>;
 };
 
 
@@ -264,6 +268,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AddCommentInput: AddCommentInput;
   Affiliation: ResolverTypeWrapper<Affiliation>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Comment: ResolverTypeWrapper<Comment>;
@@ -289,6 +294,7 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AddCommentInput: AddCommentInput;
   Affiliation: Affiliation;
   Boolean: Scalars['Boolean'];
   Comment: Comment;
@@ -332,7 +338,7 @@ export type EventResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  addComment?: Resolver<ResolversTypes['Comment'], ParentType, ContextType, RequireFields<MutationAddCommentArgs, 'comment' | 'teamId'>>;
+  addComment?: Resolver<ResolversTypes['Comment'], ParentType, ContextType, RequireFields<MutationAddCommentArgs, never>>;
   addNamecard?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAddNamecardArgs, 'namecardId'>>;
   createEvent?: Resolver<ResolversTypes['Event'], ParentType, ContextType, RequireFields<MutationCreateEventArgs, never>>;
   createNamecard?: Resolver<ResolversTypes['Namecard'], ParentType, ContextType, RequireFields<MutationCreateNamecardArgs, never>>;

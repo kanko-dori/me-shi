@@ -77,6 +77,10 @@ export class NamecardBackendStack extends cdk.Stack {
       typeName: 'Mutation',
       fieldName: 'createTeam',
     })
+    meShiFnDataSource.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'addComment',
+    })
 
     // query
     meShiFnDataSource.createResolver({
