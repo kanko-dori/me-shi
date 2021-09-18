@@ -64,21 +64,32 @@ export class NamecardBackendStack extends cdk.Stack {
       meShiFn
     )
 
+    // mutation
     meShiFnDataSource.createResolver({
       typeName: 'Mutation',
       fieldName: 'createUser',
-    })
-    meShiFnDataSource.createResolver({
-      typeName: 'Query',
-      fieldName: 'getUser',
     })
     meShiFnDataSource.createResolver({
       typeName: 'Mutation',
       fieldName: 'createEvent',
     })
     meShiFnDataSource.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'createTeam',
+    })
+
+    // query
+    meShiFnDataSource.createResolver({
+      typeName: 'Query',
+      fieldName: 'getUser',
+    })
+    meShiFnDataSource.createResolver({
       typeName: 'Query',
       fieldName: 'listEvent',
+    })
+    meShiFnDataSource.createResolver({
+      typeName: 'Query',
+      fieldName: 'listTeam',
     })
 
     // DynamoDB
