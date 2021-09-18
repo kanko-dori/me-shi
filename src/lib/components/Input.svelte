@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import type { InputEvent } from './types';
-	export let type: string = 'text';
+	export let type = 'text';
 	export let value: string | number | null | undefined = undefined;
-	export let placeholder: string = '';
+	export let placeholder = '';
 
 	type CustomEvent = {
 		input: InputEvent;

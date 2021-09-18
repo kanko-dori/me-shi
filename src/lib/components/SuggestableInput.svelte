@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import type { InputEvent, SvelteFocusEvent } from './types';
 	export let value: string | undefined = undefined;
-	export let placeholder: string = '';
+	export let placeholder = '';
 	export let candidates: string[] = [];
 
 	export let candidatesListClass = '';

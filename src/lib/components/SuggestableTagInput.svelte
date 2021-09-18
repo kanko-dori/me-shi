@@ -3,7 +3,7 @@
 	import type { InputEvent, SvelteFocusEvent } from './types';
 	import Close16 from 'carbon-icons-svelte/lib/Close16';
 	export let value: string[] = [];
-	export let placeholder: string = '';
+	export let placeholder = '';
 	export let candidates: string[] = [];
 	/**
 	 * max tag num. if 0, no limit.
