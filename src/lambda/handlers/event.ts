@@ -39,7 +39,3 @@ export const listEvent = async (): Promise<any> => {
     console.log(events)
     return events
 }
-
-const scan = async () => {
-
-}
