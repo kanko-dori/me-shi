@@ -1,8 +1,7 @@
-import * as sns from '@aws-cdk/aws-sns';
-import * as subs from '@aws-cdk/aws-sns-subscriptions';
-import * as sqs from '@aws-cdk/aws-sqs';
+import { AuthorizationType, GraphqlApi, Schema, FieldLogLevel } from '@aws-cdk/aws-appsync';
 import * as cdk from '@aws-cdk/core';
 import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
+import * as path from 'path';
 
 export class NamecardBackendStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
@@ -17,6 +16,29 @@ export class NamecardBackendStack extends cdk.Stack {
     // topic.addSubscription(new subs.SqsSubscription(queue));
     const lambda = new NodejsFunction(this, 'me-shi-lambda-func', {
       entry: 'src/lambda/handlers/me_shi.ts'
+    })
+
+    const appsync = new GraphqlApi(this, 'me-shi-bff', {
+      name: "MeShiBFF",
+      schema: Schema.fromAsset(
+        path.join(__dirname, 'schema.graphql')
+      ),
+      logConfig: {
+        excludeVerboseContent: true,
+        fieldLogLevel: FieldLogLevel.ALL,
+      },
+      authorizationConfig: {
+        defaultAuthorization: {
+          authorizationType: AuthorizationType.OIDC,
+          openIdConnectConfig: {
+            tokenExpiryFromAuth: 0,
+            tokenExpiryFromIssue: 0,
+            clientId: process.env.OIDC_CLIENTID || '',
+            oidcProvider: process.env.OIDC_PROVIDER || '',
+          },
+          
+        }
+      }
     })
   }
 }
