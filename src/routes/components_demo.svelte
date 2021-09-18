@@ -1,22 +1,27 @@
 <script lang="ts">
 	import { Input, SuggestableInput, SuggestableTagInput } from '$lib/components';
+	import Search16 from 'carbon-icons-svelte/lib/Search16';
+	import Event16 from 'carbon-icons-svelte/lib/Event16';
+	import Tag16 from 'carbon-icons-svelte/lib/Tag16';
 	let value = '';
+	let event = '';
 	let tags: string[] = [];
 </script>
 
-<div class="m-2 p-4 shadow">
+<div class="m-4 p-8 rounded-lg bg-pink-200">
 	<p>Input</p>
 	<Input bind:value placeholder="test" class="m-2 w-full">
-		<span slot="prefix"> This is prefix</span>
-		<span slot="suffix">This is suffix</span>
+		<span slot="suffix" class="inline-flex items-center px-1">
+			<Search16 class="cursor-pointer" on:click={() => alert('Searching...')} />
+		</span>
 	</Input>
 	<p>{value}</p>
 </div>
 
-<div class="m-2 p-4 shadow">
+<div class="m-4 p-8 rounded-lg bg-blue-200">
 	<p>SuggestableInput</p>
 	<SuggestableInput
-		bind:value
+		bind:value={event}
 		placeholder="test"
 		class="m-2 w-full"
 		candidates={[
@@ -25,13 +30,14 @@
 			'サマーハッカソン'
 		]}
 	>
-		<span slot="prefix"> This is prefix</span>
-		<span slot="suffix">This is suffix</span>
+		<span slot="prefix" class="inline-flex items-center px-1">
+			<Event16 />
+		</span>
 	</SuggestableInput>
-	<p>{value}</p>
+	<p>{event}</p>
 </div>
 
-<div class="m-2 p-4 shadow">
+<div class="m-4 p-8 rounded-lg bg-purple-200">
 	<p>SuggestableTagInput</p>
 	<SuggestableTagInput
 		bind:value={tags}
@@ -40,8 +46,9 @@
 		candidates={['Go', 'TypeScript', 'Kubernetes', 'CSS', 'Docker', 'Rust', 'WebAssembly', 'C']}
 		max={5}
 	>
-		<span slot="prefix"> This is prefix</span>
-		<span slot="suffix">This is suffix</span>
+		<span slot="prefix" class="inline-flex items-center px-1">
+			<Tag16 />
+		</span>
 	</SuggestableTagInput>
 	<p>{tags.join(', ')}</p>
 </div>
