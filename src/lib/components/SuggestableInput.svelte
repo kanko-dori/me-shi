@@ -41,7 +41,7 @@
 	};
 </script>
 
-<span class="p-2 rounded shadow focus-within:ring inline-flex relative {$$props.class}">
+<span class="p-2 rounded shadow focus-within:ring inline-flex relative bg-white {$$props.class}">
 	<slot name="prefix" />
 	<input
 		class="focus:outline-none flex-grow"
@@ -59,7 +59,7 @@
 </span>
 
 {#if (inputFocus || buttonFocus) && value !== ''}
-	<ul class="block absolute mx-2 bg-white shadow-md -mt-2 {candidatesListClass}">
+	<ul class="block absolute mx-2 bg-white shadow-md -mt-2 z-10 {candidatesListClass}">
 		{#each selectableCandidates as candidate (candidate)}
 			<li>
 				<button

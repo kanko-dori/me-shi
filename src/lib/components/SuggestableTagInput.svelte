@@ -53,9 +53,9 @@
 	};
 </script>
 
-<span class="p-2 rounded shadow focus-within:ring inline-flex relative {$$props.class}">
+<span class="p-2 rounded shadow focus-within:ring inline-flex relative bg-white {$$props.class}">
 	<slot name="prefix" />
-	<div class="inline-flex flex-wrap">
+	<div class="inline-flex flex-wrap flex-grow">
 		{#each value as tag}
 			<span class="bg-gray-300 px-2 rounded mr-1">
 				{tag}
@@ -67,25 +67,25 @@
 				/>
 			</span>
 		{/each}
+		<input
+			class="focus:outline-none flex-grow"
+			value={currentInput}
+			{placeholder}
+			readonly={max > 0 && value.length >= max}
+			on:input={handleInput}
+			on:focus={handleFocus}
+			on:blur={handleBlur}
+			on:change
+			on:keydown
+			on:keypress
+			on:keyup
+		/>
 	</div>
-	<input
-		class="focus:outline-none flex-grow"
-		value={currentInput}
-		{placeholder}
-		readonly={max > 0 && value.length >= max}
-		on:input={handleInput}
-		on:focus={handleFocus}
-		on:blur={handleBlur}
-		on:change
-		on:keydown
-		on:keypress
-		on:keyup
-	/>
 	<slot name="suffix" />
 </span>
 
 {#if (inputFocus || buttonFocus) && currentInput !== ''}
-	<ul class="block absolute mx-2 bg-white shadow-md -mt-2 {candidatesListClass}">
+	<ul class="block absolute mx-2 bg-white shadow-md -mt-2 z-10{candidatesListClass}">
 		{#each selectableCandidates as candidate (candidate)}
 			<li>
 				<button
