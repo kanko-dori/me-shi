@@ -5,9 +5,17 @@
 	export let value: string[] = [];
 	export let placeholder: string = '';
 	export let candidates: string[] = [];
+	/**
+	 * max tag num. if 0, no limit.
+	 */
+	export let max = 0;
 
 	export let candidatesListClass = '';
 	export let candidatesItemClass = '';
+
+	const addValues = (...values: string[]) => {
+		value = [...new Set([...value, ...values.filter((v) => v !== '')])].slice(0, max || undefined);
+	};
 
 	type CustomEvent = {
 		input: InputEvent;
@@ -28,7 +36,11 @@
 	const dispatcher = createEventDispatcher<CustomEvent>();
 
 	const handleInput = (ev: InputEvent) => {
-		currentInput = ev.currentTarget.value;
+		const input = ev.currentTarget.value;
+		const inputTags = input.split(/(?:,|\s)/g).map((t) => t.trim());
+		const last = inputTags.pop();
+		if (inputTags.length > 0) addValues(...inputTags);
+		if (last !== undefined) currentInput = last;
 		dispatcher('input', ev);
 	};
 	const handleFocus = (ev: SvelteFocusEvent) => {
@@ -43,21 +55,24 @@
 
 <span class="p-2 rounded shadow focus-within:ring inline-flex relative {$$props.class}">
 	<slot name="prefix" />
-	{#each value as tag}
-		<span class="bg-gray-300 px-2 rounded mr-1">
-			{tag}
-			<Close16
-				class="inline cursor-pointer"
-				style="width: 1em; height: 1em"
-				title="Remove {tag}"
-				on:click={() => (value = [...value.filter((v) => v !== tag)])}
-			/>
-		</span>
-	{/each}
+	<div class="inline-flex flex-wrap">
+		{#each value as tag}
+			<span class="bg-gray-300 px-2 rounded mr-1">
+				{tag}
+				<Close16
+					class="inline cursor-pointer"
+					style="width: 1em; height: 1em"
+					title="Remove {tag}"
+					on:click={() => (value = [...value.filter((v) => v !== tag)])}
+				/>
+			</span>
+		{/each}
+	</div>
 	<input
 		class="focus:outline-none flex-grow"
 		value={currentInput}
 		{placeholder}
+		readonly={max > 0 && value.length >= max}
 		on:input={handleInput}
 		on:focus={handleFocus}
 		on:blur={handleBlur}
@@ -76,7 +91,7 @@
 				<button
 					class="block w-full p-2 px-4 text-left {candidatesItemClass}"
 					on:click={() => {
-						if (!value.includes(candidate)) value = [...value, candidate];
+						if (!value.includes(candidate)) addValues(candidate);
 						currentInput = '';
 						buttonFocus = false;
 					}}
