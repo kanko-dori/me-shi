@@ -1,4 +1,5 @@
 import { AuthorizationType, GraphqlApi, Schema, FieldLogLevel } from '@aws-cdk/aws-appsync';
+import * as appsync from '@aws-cdk/aws-appsync'
 import * as cdk from '@aws-cdk/core';
 import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
 import * as path from 'path';
@@ -7,14 +8,7 @@ export class NamecardBackendStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // const queue = new sqs.Queue(this, 'NamecardBackendQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
-
-    // const topic = new sns.Topic(this, 'NamecardBackendTopic');
-
-    // topic.addSubscription(new subs.SqsSubscription(queue));
-    const lambda = new NodejsFunction(this, 'me-shi-lambda-func', {
+    const meShiFn = new NodejsFunction(this, 'MeShiFn', {
       entry: 'src/lambda/handlers/me_shi.ts'
     })
 
@@ -36,9 +30,19 @@ export class NamecardBackendStack extends cdk.Stack {
             clientId: process.env.OIDC_CLIENTID || '',
             oidcProvider: process.env.OIDC_PROVIDER || '',
           },
-          
         }
       }
     })
+
+    const meShiFnDataSource = appsync.addLambdaDataSource(
+      'MeShiDataSource',
+      meShiFn
+    )
+
+    meShiFnDataSource.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'createUser',
+    })
+
   }
 }
