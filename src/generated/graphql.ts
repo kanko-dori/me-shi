@@ -26,6 +26,10 @@ export type Comment = {
   id: Scalars['ID'];
 };
 
+export type CreateEventInput = {
+  name: Scalars['String'];
+};
+
 export type CreateNamecardInput = {
   affiliation?: Maybe<Scalars['String']>;
   eventId: Scalars['ID'];
@@ -75,7 +79,7 @@ export type MutationAddNamecardArgs = {
 
 
 export type MutationCreateEventArgs = {
-  name: Scalars['String'];
+  input?: Maybe<CreateEventInput>;
 };
 
 
@@ -259,6 +263,7 @@ export type ResolversTypes = {
   Affiliation: ResolverTypeWrapper<Affiliation>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Comment: ResolverTypeWrapper<Comment>;
+  CreateEventInput: CreateEventInput;
   CreateNamecardInput: CreateNamecardInput;
   CreateUserInput: CreateUserInput;
   DeleteUserInput: DeleteUserInput;
@@ -282,6 +287,7 @@ export type ResolversParentTypes = {
   Affiliation: Affiliation;
   Boolean: Scalars['Boolean'];
   Comment: Comment;
+  CreateEventInput: CreateEventInput;
   CreateNamecardInput: CreateNamecardInput;
   CreateUserInput: CreateUserInput;
   DeleteUserInput: DeleteUserInput;
@@ -322,7 +328,7 @@ export type EventResolvers<ContextType = any, ParentType extends ResolversParent
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addComment?: Resolver<ResolversTypes['Comment'], ParentType, ContextType, RequireFields<MutationAddCommentArgs, 'comment' | 'teamId'>>;
   addNamecard?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAddNamecardArgs, 'namecardId'>>;
-  createEvent?: Resolver<ResolversTypes['Event'], ParentType, ContextType, RequireFields<MutationCreateEventArgs, 'name'>>;
+  createEvent?: Resolver<ResolversTypes['Event'], ParentType, ContextType, RequireFields<MutationCreateEventArgs, never>>;
   createNamecard?: Resolver<ResolversTypes['Namecard'], ParentType, ContextType, RequireFields<MutationCreateNamecardArgs, never>>;
   createTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationCreateTeamArgs, 'eventId' | 'name' | 'product'>>;
   createUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
