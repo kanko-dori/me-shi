@@ -14,10 +14,10 @@ export const createUser = async (input: CreateUserInput, userId: string) => {
         }
     }
     if (input.name != null) {
-        userParams.Item = {...userParams.Item, name: {S: input.name}}
+        userParams.Item = {...userParams.Item, name: input.name}
     }
     if (input.twitterId != null) {
-        userParams.Item = {...userParams.Item, twitterId: {S: input.twitterId}}
+        userParams.Item = {...userParams.Item, twitterId: input.twitterId}
     }
 
     console.log('createUser', userParams)
