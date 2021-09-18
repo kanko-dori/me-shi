@@ -38,6 +38,12 @@ export type CreateNamecardInput = {
   usedTechnologies?: Maybe<Array<Scalars['String']>>;
 };
 
+export type CreateTeamInput = {
+  eventId: Scalars['String'];
+  name: Scalars['String'];
+  product: ProductInput;
+};
+
 export type CreateUserInput = {
   githubId: Scalars['String'];
   iconURL: Scalars['String'];
@@ -89,9 +95,7 @@ export type MutationCreateNamecardArgs = {
 
 
 export type MutationCreateTeamArgs = {
-  eventId: Scalars['ID'];
-  name: Scalars['String'];
-  product: ProductInput;
+  input?: Maybe<CreateTeamInput>;
 };
 
 
@@ -119,12 +123,12 @@ export type Product = {
   __typename?: 'Product';
   comments?: Maybe<Array<Comment>>;
   description?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
   name: Scalars['String'];
   repository?: Maybe<Scalars['String']>;
 };
 
 export type ProductInput = {
+  comment?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   repository?: Maybe<Scalars['String']>;
@@ -265,6 +269,7 @@ export type ResolversTypes = {
   Comment: ResolverTypeWrapper<Comment>;
   CreateEventInput: CreateEventInput;
   CreateNamecardInput: CreateNamecardInput;
+  CreateTeamInput: CreateTeamInput;
   CreateUserInput: CreateUserInput;
   DeleteUserInput: DeleteUserInput;
   Event: ResolverTypeWrapper<Event>;
@@ -289,6 +294,7 @@ export type ResolversParentTypes = {
   Comment: Comment;
   CreateEventInput: CreateEventInput;
   CreateNamecardInput: CreateNamecardInput;
+  CreateTeamInput: CreateTeamInput;
   CreateUserInput: CreateUserInput;
   DeleteUserInput: DeleteUserInput;
   Event: Event;
@@ -330,7 +336,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addNamecard?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAddNamecardArgs, 'namecardId'>>;
   createEvent?: Resolver<ResolversTypes['Event'], ParentType, ContextType, RequireFields<MutationCreateEventArgs, never>>;
   createNamecard?: Resolver<ResolversTypes['Namecard'], ParentType, ContextType, RequireFields<MutationCreateNamecardArgs, never>>;
-  createTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationCreateTeamArgs, 'eventId' | 'name' | 'product'>>;
+  createTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationCreateTeamArgs, never>>;
   createUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
   updateUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
 };
@@ -349,7 +355,6 @@ export type NamecardResolvers<ContextType = any, ParentType extends ResolversPar
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
   comments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   repository?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

@@ -1,6 +1,6 @@
 type Mutation {
 	createEvent(input: CreateEventInput): Event!
-	createTeam(name: String!, eventId: ID!, product: ProductInput!): Team!
+	createTeam(input: CreateTeamInput): Team!
 	createNamecard(input: CreateNamecardInput): Namecard!
 	addComment(teamId: String!, comment: String!): Comment!
 
@@ -82,6 +82,12 @@ type Team {
 	product: Product!
 }
 
+input CreateTeamInput {
+	name: String!
+	eventId: String!
+	product: ProductInput!
+}
+
 type Namecard {
 	id: ID!
 	event: Event
@@ -93,7 +99,6 @@ type Namecard {
 }
 
 type Product {
-	id: ID!
 	name: String!
 	repository: String
 	description: String
@@ -104,6 +109,7 @@ input ProductInput {
 	name: String!
 	repository: String
 	description: String
+	comment: String
 }
 
 input UpdateUserInput {
