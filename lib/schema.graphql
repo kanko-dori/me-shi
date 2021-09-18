@@ -41,7 +41,8 @@ type Query {
 	listAffiliation: [Affiliation]
 	listTechnology: [Technology]
 
-	getUser(userid: ID!): User
+	getUser(userId: ID!): User
+	getNamecard(namecardId: ID!): Namecard
 }
 
 type Affiliation {
@@ -97,10 +98,9 @@ type Namecard {
 	id: ID!
 	event: Event
 	team: Team
-	memberOf: Affiliation
-	product: Product
-	usedTechnologies: [Technology!]
-	preferTechnologies: [Technology!]
+	memberOf: String # affiliation name
+	usedTechnologies: [String!] # Technology names
+	preferTechnologies: [String!] #  Technology names
 }
 
 type Product {
