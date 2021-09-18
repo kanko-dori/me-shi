@@ -13,6 +13,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type AddCommentInput = {
+  comment: Scalars['String'];
+  teamId: Scalars['String'];
+};
+
 export type Affiliation = {
   __typename?: 'Affiliation';
   id: Scalars['ID'];
@@ -36,6 +41,12 @@ export type CreateNamecardInput = {
   preferTechnologies?: Maybe<Array<Scalars['String']>>;
   teamId: Scalars['ID'];
   usedTechnologies?: Maybe<Array<Scalars['String']>>;
+};
+
+export type CreateTeamInput = {
+  eventId: Scalars['String'];
+  name: Scalars['String'];
+  product: ProductInput;
 };
 
 export type CreateUserInput = {
@@ -68,8 +79,7 @@ export type Mutation = {
 
 
 export type MutationAddCommentArgs = {
-  comment: Scalars['String'];
-  teamId: Scalars['String'];
+  input?: Maybe<AddCommentInput>;
 };
 
 
@@ -89,9 +99,7 @@ export type MutationCreateNamecardArgs = {
 
 
 export type MutationCreateTeamArgs = {
-  eventId: Scalars['ID'];
-  name: Scalars['String'];
-  product: ProductInput;
+  input?: Maybe<CreateTeamInput>;
 };
 
 
@@ -119,12 +127,12 @@ export type Product = {
   __typename?: 'Product';
   comments?: Maybe<Array<Comment>>;
   description?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
   name: Scalars['String'];
   repository?: Maybe<Scalars['String']>;
 };
 
 export type ProductInput = {
+  comment?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   repository?: Maybe<Scalars['String']>;
@@ -260,11 +268,13 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AddCommentInput: AddCommentInput;
   Affiliation: ResolverTypeWrapper<Affiliation>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Comment: ResolverTypeWrapper<Comment>;
   CreateEventInput: CreateEventInput;
   CreateNamecardInput: CreateNamecardInput;
+  CreateTeamInput: CreateTeamInput;
   CreateUserInput: CreateUserInput;
   DeleteUserInput: DeleteUserInput;
   Event: ResolverTypeWrapper<Event>;
@@ -284,11 +294,13 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AddCommentInput: AddCommentInput;
   Affiliation: Affiliation;
   Boolean: Scalars['Boolean'];
   Comment: Comment;
   CreateEventInput: CreateEventInput;
   CreateNamecardInput: CreateNamecardInput;
+  CreateTeamInput: CreateTeamInput;
   CreateUserInput: CreateUserInput;
   DeleteUserInput: DeleteUserInput;
   Event: Event;
@@ -326,11 +338,11 @@ export type EventResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  addComment?: Resolver<ResolversTypes['Comment'], ParentType, ContextType, RequireFields<MutationAddCommentArgs, 'comment' | 'teamId'>>;
+  addComment?: Resolver<ResolversTypes['Comment'], ParentType, ContextType, RequireFields<MutationAddCommentArgs, never>>;
   addNamecard?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAddNamecardArgs, 'namecardId'>>;
   createEvent?: Resolver<ResolversTypes['Event'], ParentType, ContextType, RequireFields<MutationCreateEventArgs, never>>;
   createNamecard?: Resolver<ResolversTypes['Namecard'], ParentType, ContextType, RequireFields<MutationCreateNamecardArgs, never>>;
-  createTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationCreateTeamArgs, 'eventId' | 'name' | 'product'>>;
+  createTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationCreateTeamArgs, never>>;
   createUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
   updateUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
 };
@@ -349,7 +361,6 @@ export type NamecardResolvers<ContextType = any, ParentType extends ResolversPar
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
   comments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   repository?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
