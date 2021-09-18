@@ -5,6 +5,7 @@ import { CreateUserInput, CreateEventInput, Event, CreateTeamInput, AddCommentIn
 import { createUser, getUser } from './user';
 import { createEvent, listEvent } from './event';
 import { addComment, createTeam, getTeam, listTeam } from './team';
+import { listAffiliation } from './affiliation';
 
 const client = new DynamoDBClient({
   apiVersion: '2012-08-10',
@@ -94,6 +95,15 @@ export async function handler(
       } catch(err) {
         throw err
       }
+    
+      case 'listAffiliation':
+        console.log('call listAffiliation')
+        try {
+          return await listAffiliation();
+        } catch(err) {
+          throw err
+        }
+
     default:
       console.log(event.info.fieldName)
   }
