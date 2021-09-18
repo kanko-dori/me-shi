@@ -38,6 +38,7 @@
 		placeholder="test"
 		class="m-2 w-full"
 		candidates={['Go', 'TypeScript', 'Kubernetes', 'CSS', 'Docker', 'Rust', 'WebAssembly', 'C']}
+		max={5}
 	>
 		<span slot="prefix"> This is prefix</span>
 		<span slot="suffix">This is suffix</span>
