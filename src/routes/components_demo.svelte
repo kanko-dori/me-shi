@@ -1,12 +1,16 @@
 <script lang="ts">
-	import { Input, SuggestableInput, SuggestableTagInput } from '$lib/components';
-	import Search16 from 'carbon-icons-svelte/lib/Search16';
+	import { Footer, Header, Input, SuggestableInput, SuggestableTagInput } from '$lib/components';
 	import Event16 from 'carbon-icons-svelte/lib/Event16';
+	import Search16 from 'carbon-icons-svelte/lib/Search16';
 	import Tag16 from 'carbon-icons-svelte/lib/Tag16';
 	let value = '';
 	let event = '';
 	let tags: string[] = [];
 </script>
+
+<Header />
+
+<Header githubId="ssssota" />
 
 <div class="m-4 p-8 rounded-lg bg-pink-200">
 	<p>Input</p>
@@ -52,3 +56,5 @@
 	</SuggestableTagInput>
 	<p>{tags.join(', ')}</p>
 </div>
+
+<Footer />
