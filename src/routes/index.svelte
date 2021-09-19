@@ -5,20 +5,31 @@
 </script>
 
 <Header />
-<div class="card">
-	<div class="top">top</div>
-	<div class="botom">botom</div>
-	<div class="copy">
-		<p>名刺でつながる、</p>
-		<p>名刺でつなげる。</p>
+<div class="container mx-auto">
+	<div class="relative aspect-w-2 aspect-h-1">
+		<div class="card">
+			<div class="top">top</div>
+			<div class="botom">botom</div>
+			<div class="copy">
+				<p>名刺でつながる、</p>
+				<p>名刺がつなげる。</p>
+			</div>
+		</div>
+		<!-- <dev class="static">
+		<p>イベントで見つけたあの人ともう少しだけつながってみませんか？</p>
+		<p>me-shiは、あと「少しだけ」つながる場を提供します。</p>
+		<div class="static aspect-w-10 aspect-h-5">
+			<Static name="閑古鳥" github="kanko-dori" />
+		</div>
+	</dev>
+
+	<p>つながった人には感想を残しましょう</p>
+	<p>成果物の感想欲しくない？？</p> -->
 	</div>
 </div>
 
-<!-- <div class="static aspect-w-10 aspect-h-5">
-		<Static name="閑古鳥" github="kanko-dori" />
-	</div>
 <Footer />
- -->
+
 <style>
 	.card {
 		position: relative;
@@ -48,6 +59,6 @@
 		left: 25%;
 		z-index: 3;
 		margin-top: 10%;
-		font-size: fill;
+		font-size: 6vw;
 	}
 </style>

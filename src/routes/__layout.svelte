@@ -14,7 +14,7 @@
 <slot />
 
 <style>
-	* {
+	html body * {
 		font-family: 'Noto Sans JP', Meiryo, Arial, Helvetica, sans-serif;
 	}
 </style>

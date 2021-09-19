@@ -4,6 +4,9 @@ const config = {
 	theme: {
 		extend: {}
 	},
+	corePlugins: {
+		fontFamily: false
+	},
 	plugins: [require('@tailwindcss/aspect-ratio')]
 };
 
