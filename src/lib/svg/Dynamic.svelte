@@ -15,7 +15,7 @@
 	export let memberOf: string | undefined = undefined;
 </script>
 
-<Svg width={1200} height={630} class={$$props.class}>
+<Svg width={1200} height={630} class={$$props.class} style={$$props.style}>
 	<path
 		fill="#999999"
 		d="M 888.76562 58.345703 L 670.61133 630 L 831.40625 630 L 1200 497.1543 L 1200 358.31641 L 888.76562 58.345703 z M 920.36719 199.91602 L 1156.7266 427.71484 L 781.88281 562.81055 L 920.36719 199.91602 z"

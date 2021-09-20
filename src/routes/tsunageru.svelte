@@ -1,6 +1,8 @@
-<script>
+<script lang="ts">
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import ArrowRight16 from 'carbon-icons-svelte/lib/ArrowRight16';
+	import Add16 from 'carbon-icons-svelte/lib/Add16';
 	import { Static } from '$lib/svg';
 	import { Pen16 } from 'carbon-icons-svelte';
 	// 値の仮置き
@@ -98,76 +100,74 @@
 </script>
 
 <Header />
-<div class="container mx-auto relative">
-	<div class="aspect-w-2 aspect-h-1 w-3/4 mx-auto ">
-		<Static name="閑古鳥" github="kanko-dori" />
-	</div>
-	<div class="absolute edit-possition bottom-0 ">
-		<div class="continer rounded edit-bt opacity-75 bg-gray-800">
+<main class="container mx-auto max-w-screen-lg relative px-4">
+	<div class="p-8">
+		<div class="max-w-3xl w-full mx-auto relative">
+			<Static name="閑古鳥" github="kanko-dori" class="w-full shadow-xl" />
 			<a
 				href="/kaerareru"
-				class="flex justify-center items-center outline-none focus:ring-2 w-full h-full"
+				class="absolute flex justify-center items-center outline-none focus:ring-2 w-12 h-12 rounded-md opacity-75 bg-gray-800 right-2 bottom-2"
 			>
 				<Pen16 class="h-3/5 w-3/5" style="fill:white" />
 			</a>
 		</div>
 	</div>
-</div>
-<div class="container mx-auto m-4 p-8 ">
-	<p class="t-size">参加したイベントの名刺</p>
-	<div class="border-gray-400 border mb-6" />
-	<a href="/" class="relative t-size outline-none focus:ring-2 w-full h-full flex ">
-		<p>新しくイベントの名刺を作る</p>
-		<div class="flex-grow" />
-		<p>+</p>
-	</a>
 
-	<ul>
-		{#each user.myNamecards as mycard}
-			<li>
-				<a href="/" class="outline-none focus:ring-2 mt-2 w-full h-full flex t-size">
-					<p>{mycard.event.name}</p>
-					<div class="flex-grow" />
-					<p class="t-size">→</p>
-				</a>
-			</li>
-		{/each}
-	</ul>
-</div>
-
-<div class="container mx-auto m-4 p-8">
-	<p class="t-size">いままでにもらった名刺</p>
-	<div class="border-gray-400 border mb-6" />
-	<ul>
-		{#each user.givenNamecards as givencard}
-			<li>
-				<a href="/" class="outline-none focus:ring-2 mt-2 w-full h-full flex">
-					<div class="flex-col">
-						<p class="t-size">{givencard.owner}</p>
-						<p>{givencard.event.name}</p>
-					</div>
-					<div class="flex-grow" />
-					<div class="flex h-hull items-center">
-						<p class="t-size ">→</p>
-					</div>
-				</a>
-			</li>
-		{/each}
-	</ul>
-</div>
+	<div class="md:flex">
+		<section class="md:w-1/2 md:px-2">
+			<p class="text-xl p-2 border-b-2 border-gray-300">参加したイベントの名刺</p>
+			<ul>
+				<li>
+					<a
+						href="/tsukuritai"
+						class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
+					>
+						<p>新しくイベントの名刺を作る</p>
+						<div class="flex-grow" />
+						<Add16
+							class="transition-transform duration-200 ease-out group-hover:rotate-180 group-hover:scale-150"
+						/>
+					</a>
+				</li>
+				{#each user.myNamecards as mycard}
+					<li>
+						<a
+							href="/mirareru"
+							class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
+						>
+							<p>{mycard.event.name}</p>
+							<div class="flex-grow" />
+							<ArrowRight16
+								class="transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:scale-110"
+							/>
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</section>
+		<section class="md:w-1/2 md:px-2">
+			<p class="text-xl p-2 border-b-2 border-gray-300">いままでにもらった名刺</p>
+			<ul>
+				{#each user.givenNamecards as givencard}
+					<li>
+						<a
+							href="/"
+							class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
+						>
+							<div class="flex-col">
+								<p>{givencard.owner}</p>
+								<p class="text-sm text-gray-500">{givencard.event.name}</p>
+							</div>
+							<div class="flex-grow" />
+							<ArrowRight16
+								class="transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:scale-110"
+							/>
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</section>
+	</div>
+</main>
 
 <Footer />
-
-<style>
-	.edit-possition {
-		right: 15vw;
-		bottom: 5vw;
-	}
-	.edit-bt {
-		height: 6vw;
-		width: 6vw;
-	}
-	.t-size {
-		font-size: 3vw;
-	}
-</style>

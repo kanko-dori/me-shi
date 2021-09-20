@@ -1,5 +1,5 @@
-import type { GraphQLResult } from '.pnpm/@aws-amplify+api-graphql@2.2.5/node_modules/@aws-amplify/api-graphql';
-import type { Observable } from '.pnpm/zen-observable-ts@0.8.19/node_modules/zen-observable-ts/lib';
+import type { GraphQLResult } from 'node_modules/@aws-amplify/api-graphql';
+import type { Observable } from 'node_modules/zen-observable-ts/lib';
 import * as amplify from 'aws-amplify';
 
 amplify.Amplify.configure({
