@@ -9,9 +9,10 @@ type Mutation {
     
     # 名刺を登録する
     # 登録した人自身が返ってくる
-    addNamecard(namecardId: ID!): User!
+    addNamecard(ownerId: ID!, namecardId: ID!): User!
 }
-
+# A, B
+# AがBのカードを登録 addNamecard(namecardId: BのカードのID): 
 type Subscription {
     # addNamecard が呼ばれたら発火する
     # 登録した人が返ってくるので、それをもとに名刺を探して登録する
@@ -96,8 +97,9 @@ input AddCommentInput {
 
 type Namecard {
 	id: ID!
-	event: Event
-	team: Team
+	owner: User!
+	event: Event!
+	team: Team!
 	memberOf: String # affiliation name
 	usedTechnologies: [String!] # Technology names
 	preferTechnologies: [String!] #  Technology names
