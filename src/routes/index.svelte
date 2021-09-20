@@ -20,7 +20,7 @@
 	</div>
 </div>
 <div class="containar mx-auto relative">
-	<div class="aspect-w-6 aspect-h-1 bg-gray-300">
+	<div class="aspect-w-6 aspect-h-1">
 		<div class="absolute p-left">
 			<p>イベントで見つけたあの人ともう少しだけつながってみませんか？</p>
 			<p>me-shiは、あと「少しだけ」つながる場を提供します。</p>
