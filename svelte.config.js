@@ -16,7 +16,12 @@ const config = {
 	kit: {
 		// hydrate the <div id="svelte"> element in src/app.html
 		target: '#svelte',
-		adapter: adapt()
+		adapter: adapt(),
+		vite: {
+			optimizeDeps: {
+				exclude: ['@urql/svelte']
+			}
+		}
 	}
 };
 
