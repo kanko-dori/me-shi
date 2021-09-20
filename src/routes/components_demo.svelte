@@ -6,7 +6,8 @@
 		Input,
 		SuggestableInput,
 		SuggestableTagInput,
-		QRcode
+		QRcode,
+		ZukanCard
 	} from '$lib/components';
 	import Event16 from 'carbon-icons-svelte/lib/Event16';
 	import Search16 from 'carbon-icons-svelte/lib/Search16';
@@ -36,6 +37,11 @@
 			}
 		]}
 	/>
+</div>
+
+<div class="container mx-auto flex">
+	<ZukanCard name="octocat" icon="https://github.com/octocat.png" isOwn={true} class="w-48" />
+	<ZukanCard name="octocat" icon="https://github.com/octocat.png" isOwn={false} class="w-48" />
 </div>
 
 <div class="container mx-auto">
