@@ -1,7 +1,7 @@
 import { GetCommand, GetCommandInput, PutCommand, PutCommandInput, ScanCommand, ScanCommandInput } from "@aws-sdk/lib-dynamodb";
 
 import { NamecardTableName } from "../../../lib/namecard-backend-stack";
-import { CreateNamecardInput, Event, Namecard, User } from "../../generated/graphql";
+import { CreateNamecardInput, Event, Namecard, User, Zukan, ZukanNamecard } from "../../generated/graphql";
 import { createAffiliation } from "./affiliation";
 import { docClient } from "./me_shi";
 import { createTechnology } from "./technology";
@@ -132,15 +132,83 @@ export const listNamecards = async (): Promise<any> => {
 
     let res = await docClient.send(new ScanCommand(namecardParam))
     if (res.Items) {
-        namecards.push(...res.Items)
+        for (const namecard of res.Items) {
+            const user = await getUser(namecard.ownerId, false)
+            const team = await getTeam(namecard.teamId)
+            const event: Event = {
+                id: namecard.eventId,
+                name: namecard.eventId   
+            }
+            namecards.push({
+                id: namecard.id,
+                memberOf: namecard.memberOf,
+                usedTechnologies: namecard.usedTechnologies,
+                preferTechnologies: namecard.preferTechnologies,
+                event: event,
+                team: team,
+                owner: user
+            })
+        }
     }
     while (res.LastEvaluatedKey) {
         namecardParam.ExclusiveStartKey = res.LastEvaluatedKey
         res = await docClient.send(new ScanCommand(namecardParam))
         if (res.Items) {
-            namecards.push(...res.Items)
+            for (const namecard of res.Items) {
+                const user = await getUser(namecard.ownerId, false)
+                const team = await getTeam(namecard.teamId)
+                const event: Event = {
+                    id: namecard.eventId,
+                    name: namecard.eventId   
+                }
+                namecards.push({
+                    id: namecard.id,
+                    memberOf: namecard.memberOf,
+                    usedTechnologies: namecard.usedTechnologies,
+                    preferTechnologies: namecard.preferTechnologies,
+                    event: event,
+                    team: team,
+                    owner: user
+                })
+            }
         }
     }
     console.log('namecards', namecards.length, namecards)
     return namecards
+}
+
+// イベント(eventId) ごとに名刺をリストし、持ってる・持っていないを判断する
+export const getZukan = async (eventId: string, userId: string) => {
+    console.log('getZukan', eventId, userId)
+    const allNamecards = await listNamecards()
+    // イベントにある名刺をリストする
+    const namecards = allNamecards.filter((n: Namecard) => n.event.id === eventId)
+    console.log(namecards)
+
+    // イベントにある名刺のIDの map
+    const namecardIDMap = Object.fromEntries(namecards.map((namecard: Namecard) => [namecard['id'], {...namecard, isOwn: false}]))
+
+    console.log('created namecardIDMap', namecardIDMap)
+    // 自分の持っている名刺を取得
+    const me = await getUser(userId, true) as User
+    
+    // 自分が持っている名刺を true にする
+    me.givenNamecards?.forEach((n: Namecard) => {
+        if(namecardIDMap[n.id]){
+            console.log('ownCard is found', namecardIDMap[n.id])
+            namecardIDMap[n.id].isOwn = true
+        }
+    })
+    console.log('processed namecardIDsMap', namecardIDMap)
+
+    // object を array にする
+    // const zukanNamecards = Object.keys(namecardIDMap).map(key => ({...namecardIDMap[key]})) as Array<ZukanNamecard>
+    const zukanNamecards = Object.values(namecardIDMap)
+    return {
+        event: {
+            id: eventId,
+            name: eventId
+        },
+        namecards: zukanNamecards
+    }
 }

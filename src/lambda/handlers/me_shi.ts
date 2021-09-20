@@ -6,7 +6,7 @@ import { createUser, getUser } from './user';
 import { createEvent, listEvent } from './event';
 import { addComment, createTeam, getTeam, listTeam } from './team';
 import { listAffiliation } from './affiliation';
-import { addNamecard, createNamecard, getNamecard } from './namecard';
+import { addNamecard, createNamecard, getNamecard, getZukan } from './namecard';
 
 const client = new DynamoDBClient({
   apiVersion: '2012-08-10',
@@ -59,12 +59,13 @@ export async function handler(
     
     case 'getUser':
       console.log('getUser');
-      const user = await getUser(userId, true)
+      const targetUserId = event.arguments.userId
+      const user = await getUser(targetUserId, true)
       if (user != null){
         console.log('user', user)
         return user
       }else{
-        throw new Error(`failed to get user id ${userId}`)
+        throw new Error(`failed to get user id ${targetUserId}`)
       }
 
     case 'createEvent':
@@ -147,6 +148,16 @@ export async function handler(
       } catch (err) {
         throw err
       }
+
+    case 'getZukan':
+      console.log('call getZukan')
+      try {
+        const eventId = event.arguments.eventId
+        return await getZukan(eventId, userId)
+      } catch (err) {
+        throw err
+      }
+
     default:
       console.log(event.info.fieldName)
   }
