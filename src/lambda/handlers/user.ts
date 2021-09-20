@@ -9,8 +9,8 @@ import { getNamecard } from './namecard'
 //     iconURL: string // https://github.com/<githubId>.png
 //     githubId: string // e.g. onsd
 //     twitterId: string
-//     myNamecardIdList: Array<string> // 作った名刺の id
-//     givenCardIdList: Array<string> // もらった名刺 の id
+//     myNamecardIdMap: {[namecardId: string]: bool} // 作った名刺の id
+//     givenCardIdMap: {[namecardId: string]: bool} // もらった名刺 の id
 // }
 
 // type User {
@@ -31,8 +31,8 @@ export const createUser = async (input: CreateUserInput, userId: string) => {
             id: userId,
             githubId: input.githubId,
             iconURL: input.iconURL,
-            namecardIdList: [],
-            givenCardIdList: [],
+            namecardIdMap: {},
+            givenCardIdMap: {},
         }
     }
     if (input.name != null) {
@@ -52,20 +52,21 @@ export const addOwnNamecard = async (namecard: Namecard, userId: string): Promis
     if(user == null) {
         throw new Error(`user: ${userId} does not exist`)
     }
-    user.namecardIdList?.push(namecard.id)
+    const namecardIdMap = user.namecardIdMap as {[namecardId: string]: boolean}
+    namecardIdMap[namecard.id] = true
 
-    console.log("user", user)
+    console.log("user", user, namecardIdMap)
     const userParam: UpdateCommandInput = {
         TableName: UserTableName,
         Key: {
             id: user.id
         },
-        UpdateExpression: "set #namecardIdList = :newNamecardList",
+        UpdateExpression: "set #namecardIdMap = :newNamecardMap",
         ExpressionAttributeNames: {
-            "#namecardIdList": "namecardIdList"
+            "#namecardIdMap": "namecardIdMap"
         },
         ExpressionAttributeValues: {
-            ":newNamecardList": user.namecardIdList
+            ":newNamecardMap": namecardIdMap
         },
     }
     await docClient.send(new UpdateCommand(userParam))
@@ -89,8 +90,12 @@ export const getUser = async (userId: string, mustGetNamecard: boolean): Promise
     }
     console.log("getUser", user)
     if (mustGetNamecard) {
-        const myNamecardList = await Promise.all(user.namecardIdList.map((id: string) => getNamecard(id)))
-        const givenNamecardList = await Promise.all(user.givenCardIdList.map((id: string) => getNamecard(id)))
+        console.log("namecardIdMap", user.namecardIdMap, typeof user.namecardIdMap)
+        console.log("givenCardIdMap", user.givenCardIdMap, typeof user.givenCardIdMap)
+
+        const myNamecardList = await Promise.all(Object.keys(user.namecardIdMap).map((id: string) => getNamecard(id)))
+
+        const givenNamecardList = await Promise.all(Object.keys(user.givenCardIdMap).map((id: string) => getNamecard(id)))
 
         user.myNamecards = myNamecardList
         user.givenNamecards = givenNamecardList
