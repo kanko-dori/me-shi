@@ -7,9 +7,9 @@ type Mutation {
 	createUser(input: CreateUserInput!): User
 	updateUser(input: UpdateUserInput!): User
     
-    # 名刺を登録する
-    # 登録した人自身が返ってくる
-    addNamecard(ownerId: ID!, namecardId: ID!): User!
+    # この関数を呼んだ人の givenNamecards に指定した名刺を登録する
+    # 登録した人の、同じイベントに参加している Namecard が返ってくる
+    addNamecard(namecardId: ID!): Namecard!
 }
 # A, B
 # AがBのカードを登録 addNamecard(namecardId: BのカードのID): 
