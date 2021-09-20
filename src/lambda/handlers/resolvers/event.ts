@@ -1,6 +1,6 @@
 import { ScanCommand, PutCommand, PutCommandInput, ScanCommandInput, GetCommandInput, GetCommand } from '@aws-sdk/lib-dynamodb'
-import { EventTableName } from '../../../lib/namecard-backend-stack'
-import { docClient } from './me_shi'
+import { EventTableName } from '../../../../lib/namecard-backend-stack'
+import { docClient } from '../me_shi'
 
 export const createEvent = async (name: String) => {
     console.log('eventname', name)

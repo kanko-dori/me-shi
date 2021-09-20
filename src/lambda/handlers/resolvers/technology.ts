@@ -1,7 +1,7 @@
 import { PutCommand, PutCommandInput, ScanCommand, ScanCommandInput } from "@aws-sdk/lib-dynamodb"
-import { TechnologyTableName } from "../../../lib/namecard-backend-stack"
-import { Affiliation, Technology } from "../../generated/graphql"
-import { docClient } from "./me_shi"
+import { TechnologyTableName } from "../../../../lib/namecard-backend-stack"
+import { Affiliation, Technology } from "../../../generated/graphql"
+import { docClient } from "../me_shi"
 
 export const createTechnology = async (name: string) => {
     console.log('call createTechnology')
