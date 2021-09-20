@@ -44,6 +44,7 @@ type Query {
 
 	getUser(userId: ID!): User
 	getNamecard(namecardId: ID!): Namecard
+	getZukan(eventId: ID!): Zukan
 }
 
 type Affiliation {
@@ -103,6 +104,23 @@ type Namecard {
 	memberOf: String # affiliation name
 	usedTechnologies: [String!] # Technology names
 	preferTechnologies: [String!] #  Technology names
+}
+
+type Zukan {
+	event: Event!
+	namecards: [ZukanNamecard!]
+}
+
+type ZukanNamecard {
+	id: ID!
+	owner: User!
+	event: Event!
+	team: Team!
+	memberOf: String # affiliation name
+	usedTechnologies: [String!] # Technology names
+	preferTechnologies: [String!] #  Technology names
+
+	isOwn: Boolean
 }
 
 type Product {
