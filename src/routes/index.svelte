@@ -13,8 +13,8 @@
 		<div class="card card1 absolute border-2 border-gray-300 bg-gray-100 opacity-50" />
 		<div class="card card2 absolute border-2 border-gray-300 bg-gray-100 opacity-50" />
 		<div class="catch-copy absolute z-20 font-bold" style="--parent-width: {eyecatchWidth}px">
-			<p>名刺でつながる、</p>
-			<p>名刺がつなげる。</p>
+			<p class="fadein fadein1">名刺でつながる、</p>
+			<p class="fadein fadein2">名刺がつなげる。</p>
 		</div>
 	</section>
 	<div class="text-lg p-4">
@@ -58,5 +58,26 @@
 		font-size: calc(var(--parent-width) / 10);
 		top: 25%;
 		left: 5%;
+	}
+	.fadein {
+		animation: name duration timing-function delay iteration-count direction fill-mode;
+		animation-name: fade-in;
+		animation-duration: 1s;
+		animation-timing-function: ease;
+		animation-fill-mode: both;
+	}
+	.fadein1 {
+		animation-delay: 1s;
+	}
+	.fadein2 {
+		animation-delay: 1.5s;
+	}
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
 	}
 </style>
