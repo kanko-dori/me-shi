@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { auth, getToken, getUser, waitForSignIn } from '$lib/auth';
-	import { auth0 } from '$lib/auth/auth0';
 	import { login } from '$lib/graphql/query';
 	import { onMount } from 'svelte';
 
