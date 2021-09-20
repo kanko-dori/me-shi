@@ -13,11 +13,10 @@
 </script>
 
 <Header />
-
-<div class="aspect-w-3 aspect-h-1 mx-auto">
-	<Static {name} {github} {twitter} />
-</div>
 <div class="container mx-auto">
+	<div class="aspect-w-3 aspect-h-1 mx-auto">
+		<Static {name} {github} {twitter} />
+	</div>
 	<div class="m-4 p-8 border">
 		<p class="t-size">Name</p>
 		<Input bind:value={name} placeholder="" class="m-2 w-full" />
@@ -30,14 +29,13 @@
 		<p class="t-size">twitter ID</p>
 		<Input bind:value={twitter} placeholder="" class="m-2 w-full" />
 	</div>
-</div>
 
-<div class="container mx-auto flex px-8">
-	<Button class="bg-gray-300" on:click={cancelClick}>Cancel</Button>
-	<div class="flex-grow" />
-	<Button class="bg-blue-600 text-white" on:click={applyClick}>Apply</Button>
+	<div class="flex px-8">
+		<Button class="bg-gray-300" on:click={cancelClick}>Cancel</Button>
+		<div class="flex-grow" />
+		<Button class="bg-blue-600 text-white" on:click={applyClick}>Apply</Button>
+	</div>
 </div>
-
 <Footer />
 
 <style>
