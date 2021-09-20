@@ -85,6 +85,7 @@ export type MutationAddCommentArgs = {
 
 export type MutationAddNamecardArgs = {
   namecardId: Scalars['ID'];
+  ownerId: Scalars['ID'];
 };
 
 
@@ -114,11 +115,12 @@ export type MutationUpdateUserArgs = {
 
 export type Namecard = {
   __typename?: 'Namecard';
-  event?: Maybe<Event>;
+  event: Event;
   id: Scalars['ID'];
   memberOf?: Maybe<Scalars['String']>;
+  owner: User;
   preferTechnologies?: Maybe<Array<Scalars['String']>>;
-  team?: Maybe<Team>;
+  team: Team;
   usedTechnologies?: Maybe<Array<Scalars['String']>>;
 };
 
@@ -344,7 +346,7 @@ export type EventResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addComment?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationAddCommentArgs, never>>;
-  addNamecard?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAddNamecardArgs, 'namecardId'>>;
+  addNamecard?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAddNamecardArgs, 'namecardId' | 'ownerId'>>;
   createEvent?: Resolver<ResolversTypes['Event'], ParentType, ContextType, RequireFields<MutationCreateEventArgs, never>>;
   createNamecard?: Resolver<ResolversTypes['Namecard'], ParentType, ContextType, RequireFields<MutationCreateNamecardArgs, never>>;
   createTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationCreateTeamArgs, never>>;
@@ -353,11 +355,12 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type NamecardResolvers<ContextType = any, ParentType extends ResolversParentTypes['Namecard'] = ResolversParentTypes['Namecard']> = {
-  event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType>;
+  event?: Resolver<ResolversTypes['Event'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   memberOf?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   preferTechnologies?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  team?: Resolver<Maybe<ResolversTypes['Team']>, ParentType, ContextType>;
+  team?: Resolver<ResolversTypes['Team'], ParentType, ContextType>;
   usedTechnologies?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

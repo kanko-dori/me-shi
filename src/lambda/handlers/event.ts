@@ -1,4 +1,4 @@
-import { ScanCommand, PutCommand, PutCommandInput, ScanCommandInput } from '@aws-sdk/lib-dynamodb'
+import { ScanCommand, PutCommand, PutCommandInput, ScanCommandInput, GetCommandInput, GetCommand } from '@aws-sdk/lib-dynamodb'
 import { EventTableName } from '../../../lib/namecard-backend-stack'
 import { docClient } from './me_shi'
 
@@ -38,4 +38,17 @@ export const listEvent = async (): Promise<any> => {
     }
     console.log(events)
     return events
+}
+
+export const getEvent = async (eventId:string) => {
+    console.log('call getEvent')
+    const eventParams: GetCommandInput = {
+        TableName: EventTableName,
+        Key: {
+            id: eventId
+        }
+    }
+
+    const res = await docClient.send(new GetCommand(eventParams))
+    return res.Item
 }

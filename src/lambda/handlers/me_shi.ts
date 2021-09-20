@@ -12,7 +12,24 @@ const client = new DynamoDBClient({
   apiVersion: '2012-08-10',
   region: 'ap-northeast-1'
 })
-export const docClient = DynamoDBDocumentClient.from(client)
+
+const marshallOptions = {
+  // Whether to automatically convert empty strings, blobs, and sets to `null`.
+  convertEmptyValues: false, // false, by default.
+  // Whether to remove undefined values while marshalling.
+  removeUndefinedValues: true, // false, by default.
+  // Whether to convert typeof object to map attribute.
+  convertClassInstanceToMap: false, // false, by default.
+};
+
+const unmarshallOptions = {
+  // Whether to return numbers as a string instead of converting them to native JavaScript numbers.
+  wrapNumbers: false, // false, by default.
+};
+
+const translateConfig = { marshallOptions, unmarshallOptions };
+
+export const docClient = DynamoDBDocumentClient.from(client, translateConfig)
 
 export async function handler(
   event: AppSyncResolverEvent<AppSyncInput, AppSyncInput>,
@@ -24,7 +41,7 @@ export async function handler(
     case 'createUser':
       console.log('createUser');
       try {
-        let user = await getUser(userId)
+        let user = await getUser(userId, true)
         console.log('1st', user)
         if (user != null){
           return user
@@ -32,7 +49,7 @@ export async function handler(
 
         const input = event.arguments.input as CreateUserInput
         await createUser(input, userId)
-        user = await getUser(userId)
+        user = await getUser(userId, true)
         if (user != null){
           console.log(user)
           return user
@@ -43,7 +60,7 @@ export async function handler(
     
     case 'getUser':
       console.log('getUser');
-      const user = await getUser(userId)
+      const user = await getUser(userId, true)
       if (user != null){
         console.log('user', user)
         return user
@@ -109,7 +126,7 @@ export async function handler(
       console.log('call createNamecard')
       try {
         const input = event.arguments.input as CreateNamecardInput
-        return await createNamecard(input);
+        return await createNamecard(input, userId);
       } catch (err) {
         throw err
       }
