@@ -8,10 +8,10 @@
 <div class="container mx-auto">
 	<div class="relative aspect-w-2 aspect-h-1">
 		<div class="relative">
-			<div class="top absolute z-10 w-1/2 opacity-75 border-2 border-gray-600 bg-gray-100">top</div>
-			<div class="bottom absolute z-0 top-0 w-1/2 opacity-75 border-2 border-gray-600 bg-gray-100">
-				bottom
-			</div>
+			<div class="top absolute z-10 w-1/2 opacity-75 border-2 border-gray-600 bg-gray-100" />
+			<div
+				class="bottom absolute z-0 top-0 w-1/2 opacity-75 border-2 border-gray-600 bg-gray-100"
+			/>
 			<div class="catch-copy absolute z-20">
 				<p>名刺でつながる、</p>
 				<p>名刺がつなげる。</p>
