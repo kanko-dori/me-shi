@@ -32,7 +32,7 @@ jobs:
         run: npm run build
 
       - name: Zip package
-        run: zip -r app.zip build package.json
+        run: zip -r app.zip .
 
       - name: Azure Login
         uses: azure/login@v1
