@@ -40,7 +40,6 @@ export const getNamecard = async (namecardId: string) => {
     if (namecardRes.Item == null) {
         throw new Error(`namecard: ${namecardId} does not exist`)
     }
-
     const user = await getUser(namecardRes.Item.ownerId, false)
     const team = await getTeam(namecardRes.Item.teamId)
     const event: Event = {
@@ -49,7 +48,7 @@ export const getNamecard = async (namecardId: string) => {
     }
     const namecard: Namecard = {
         id: namecardRes.Item.id,
-        memberOf: namecardRes.Item.affiliation,
+        memberOf: namecardRes.Item.memberOf,
         usedTechnologies: namecardRes.Item.usedTechnologies,
         preferTechnologies: namecardRes.Item.preferTechnologies,
         event: event,
@@ -78,12 +77,12 @@ export const createNamecard = async (input: CreateNamecardInput, userId: string)
         namecardParam.Item = {...namecardParam.Item, memberOf: input.affiliation}
     }
     if(input.preferTechnologies) {
-        await Promise.all(input.preferTechnologies.map(t => createTechnology))
-        namecardParam.Item = {...namecardParam.Item, preferTechnologies: [input.preferTechnologies]}
+        await Promise.all(input.preferTechnologies.map(t => createTechnology(t)))
+        namecardParam.Item = {...namecardParam.Item, preferTechnologies: input.preferTechnologies}
     }
     if(input.usedTechnologies) {
-        await Promise.all(input.usedTechnologies.map(t => createTechnology))
-        namecardParam.Item = {...namecardParam.Item, usedTechnologies: [input.usedTechnologies]}
+        await Promise.all(input.usedTechnologies.map(t => createTechnology(t)))
+        namecardParam.Item = {...namecardParam.Item, usedTechnologies: input.usedTechnologies}
     }
     await docClient.send(new PutCommand(namecardParam))
 
