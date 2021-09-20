@@ -22,7 +22,7 @@ export const query = <TProps extends Record<string, unknown>, TResult extends un
 		headers
 	);
 	if (res instanceof Promise) return res as Promise<GraphQLResult<TResult>>;
-	throw new Error('This query is maybe subscripotion');
+	throw new Error('This query is maybe subscription');
 };
 
 export const mutation = query;
@@ -40,5 +40,5 @@ export const subscription = <TProps extends Record<string, unknown>, TResult ext
 		headers
 	);
 	if (!(res instanceof Promise)) return res as Observable<TResult>;
-	throw new Error('This query is not maybe subscripotion');
+	throw new Error('This query is not maybe subscription');
 };
