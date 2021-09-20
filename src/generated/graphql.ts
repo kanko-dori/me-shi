@@ -69,7 +69,7 @@ export type Event = {
 export type Mutation = {
   __typename?: 'Mutation';
   addComment: Team;
-  addNamecard: User;
+  addNamecard: Namecard;
   createEvent: Event;
   createNamecard: Namecard;
   createTeam: Team;
@@ -85,7 +85,6 @@ export type MutationAddCommentArgs = {
 
 export type MutationAddNamecardArgs = {
   namecardId: Scalars['ID'];
-  ownerId: Scalars['ID'];
 };
 
 
@@ -143,6 +142,7 @@ export type Query = {
   __typename?: 'Query';
   getNamecard?: Maybe<Namecard>;
   getUser?: Maybe<User>;
+  getZukan?: Maybe<Zukan>;
   listAffiliation?: Maybe<Array<Maybe<Affiliation>>>;
   listEvent?: Maybe<Array<Maybe<Event>>>;
   listTeam?: Maybe<Array<Maybe<Team>>>;
@@ -160,13 +160,18 @@ export type QueryGetUserArgs = {
 };
 
 
+export type QueryGetZukanArgs = {
+  eventId: Scalars['ID'];
+};
+
+
 export type QueryListTeamArgs = {
   eventID: Scalars['ID'];
 };
 
 export type Subscription = {
   __typename?: 'Subscription';
-  onAddedNamecard: User;
+  onAddedNamecard: Namecard;
 };
 
 
@@ -204,6 +209,24 @@ export type User = {
   myNamecards?: Maybe<Array<Namecard>>;
   name?: Maybe<Scalars['String']>;
   twitterId?: Maybe<Scalars['String']>;
+};
+
+export type Zukan = {
+  __typename?: 'Zukan';
+  event: Event;
+  namecards?: Maybe<Array<ZukanNamecard>>;
+};
+
+export type ZukanNamecard = {
+  __typename?: 'ZukanNamecard';
+  event: Event;
+  id: Scalars['ID'];
+  isOwn?: Maybe<Scalars['Boolean']>;
+  memberOf?: Maybe<Scalars['String']>;
+  owner: User;
+  preferTechnologies?: Maybe<Array<Scalars['String']>>;
+  team: Team;
+  usedTechnologies?: Maybe<Array<Scalars['String']>>;
 };
 
 
@@ -297,6 +320,8 @@ export type ResolversTypes = {
   Technology: ResolverTypeWrapper<Technology>;
   UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<User>;
+  Zukan: ResolverTypeWrapper<Zukan>;
+  ZukanNamecard: ResolverTypeWrapper<ZukanNamecard>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -323,6 +348,8 @@ export type ResolversParentTypes = {
   Technology: Technology;
   UpdateUserInput: UpdateUserInput;
   User: User;
+  Zukan: Zukan;
+  ZukanNamecard: ZukanNamecard;
 };
 
 export type AffiliationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Affiliation'] = ResolversParentTypes['Affiliation']> = {
@@ -346,7 +373,7 @@ export type EventResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addComment?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationAddCommentArgs, never>>;
-  addNamecard?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAddNamecardArgs, 'namecardId' | 'ownerId'>>;
+  addNamecard?: Resolver<ResolversTypes['Namecard'], ParentType, ContextType, RequireFields<MutationAddNamecardArgs, 'namecardId'>>;
   createEvent?: Resolver<ResolversTypes['Event'], ParentType, ContextType, RequireFields<MutationCreateEventArgs, never>>;
   createNamecard?: Resolver<ResolversTypes['Namecard'], ParentType, ContextType, RequireFields<MutationCreateNamecardArgs, never>>;
   createTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationCreateTeamArgs, never>>;
@@ -376,6 +403,7 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getNamecard?: Resolver<Maybe<ResolversTypes['Namecard']>, ParentType, ContextType, RequireFields<QueryGetNamecardArgs, 'namecardId'>>;
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'userId'>>;
+  getZukan?: Resolver<Maybe<ResolversTypes['Zukan']>, ParentType, ContextType, RequireFields<QueryGetZukanArgs, 'eventId'>>;
   listAffiliation?: Resolver<Maybe<Array<Maybe<ResolversTypes['Affiliation']>>>, ParentType, ContextType>;
   listEvent?: Resolver<Maybe<Array<Maybe<ResolversTypes['Event']>>>, ParentType, ContextType>;
   listTeam?: Resolver<Maybe<Array<Maybe<ResolversTypes['Team']>>>, ParentType, ContextType, RequireFields<QueryListTeamArgs, 'eventID'>>;
@@ -383,7 +411,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  onAddedNamecard?: SubscriptionResolver<ResolversTypes['User'], "onAddedNamecard", ParentType, ContextType, RequireFields<SubscriptionOnAddedNamecardArgs, 'namecardId'>>;
+  onAddedNamecard?: SubscriptionResolver<ResolversTypes['Namecard'], "onAddedNamecard", ParentType, ContextType, RequireFields<SubscriptionOnAddedNamecardArgs, 'namecardId'>>;
 };
 
 export type TeamResolvers<ContextType = any, ParentType extends ResolversParentTypes['Team'] = ResolversParentTypes['Team']> = {
@@ -411,6 +439,24 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ZukanResolvers<ContextType = any, ParentType extends ResolversParentTypes['Zukan'] = ResolversParentTypes['Zukan']> = {
+  event?: Resolver<ResolversTypes['Event'], ParentType, ContextType>;
+  namecards?: Resolver<Maybe<Array<ResolversTypes['ZukanNamecard']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ZukanNamecardResolvers<ContextType = any, ParentType extends ResolversParentTypes['ZukanNamecard'] = ResolversParentTypes['ZukanNamecard']> = {
+  event?: Resolver<ResolversTypes['Event'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isOwn?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  memberOf?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  preferTechnologies?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  team?: Resolver<ResolversTypes['Team'], ParentType, ContextType>;
+  usedTechnologies?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Affiliation?: AffiliationResolvers<ContextType>;
   Comment?: CommentResolvers<ContextType>;
@@ -423,5 +469,7 @@ export type Resolvers<ContextType = any> = {
   Team?: TeamResolvers<ContextType>;
   Technology?: TechnologyResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  Zukan?: ZukanResolvers<ContextType>;
+  ZukanNamecard?: ZukanNamecardResolvers<ContextType>;
 };
 

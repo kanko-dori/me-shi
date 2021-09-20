@@ -110,6 +110,10 @@ export class NamecardBackendStack extends cdk.Stack {
       typeName: 'Query',
       fieldName: 'getNamecard',
     })
+    meShiFnDataSource.createResolver({
+      typeName: 'Query',
+      fieldName: 'getZukan',
+    })
 
     // DynamoDB
 
