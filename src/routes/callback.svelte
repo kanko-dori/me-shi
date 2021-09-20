@@ -22,7 +22,7 @@
 				)
 			)
 			.then(() => {
-				goto('/components_demo').then(auth.reload);
+				goto('/tsunageru').then(auth.reload);
 			})
 			.catch(() => goto('/'));
 	});
