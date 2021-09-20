@@ -20,39 +20,28 @@
 		</div>
 	</div>
 </div>
-<div class="m-4 p-8 bg-gray-200">
+<div class="container mx-auto m-4 p-8 bg-gray-200">
 	<p>参加したイベントの名刺</p>
 	<div class="border-gray-500 border-2" />
-	<div class="mt-1 w-full ">
-		<a
-			href="/event"
-			class="flex justify-center items-center outline-none focus:ring-2 w-full h-full"
-		>
-			<p>新しくイベントの名刺を作る+</p>
+	<div class="container relative m-2 w-full top-0 bg-red-500">
+		<a href="/event" class="outline-none focus:ring-2 w-full h-full flex ">
+			<p>新しくイベントの名刺を作る</p>
+			<p class="absolute right-2">+</p>
 		</a>
 	</div>
-
-	<p>イベント名→</p>
+	<div class="container relative m-2 w-full top-0 flex ">
+		<p>イベント名</p>
+		<p class="absolute right-1">→</p>
+	</div>
 </div>
 
-<div class="m-4 p-8 bg-gray-200">
+<div class="container mx-auto m-4 p-8 bg-gray-200">
 	<p>いままでにもらった名刺</p>
 	<div class="border-gray-500 border-2" />
-	<div class="mt-1 w-full ">
-		<a
-			href="/event"
-			class="flex justify-center items-center outline-none focus:ring-2 w-full h-full"
-		>
-			<p>新しくイベントの名刺を作る+</p>
-		</a>
+	<div class="container relative m-2 w-full top-0 flex bg-red-500 ">
+		<p>イベント名</p>
+		<p class="absolute  right-1">→</p>
 	</div>
-
-	<p>イベント名→</p>
-</div>
-<div class="">
-	<p>いままでにもらった名刺</p>
-	<p>onsd</p>
-	<p>→</p>
 </div>
 
 <style>
