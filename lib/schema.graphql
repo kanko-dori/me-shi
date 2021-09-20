@@ -16,7 +16,7 @@ type Mutation {
 type Subscription {
     # addNamecard が呼ばれたら発火する
     # 登録した人が返ってくるので、それをもとに名刺を探して登録する
-    onAddedNamecard(namecardId: ID!): User!
+    onAddedNamecard(namecardId: ID!): Namecard!
         @aws_subscribe(mutations: ["addNamecard"])
 }
 
