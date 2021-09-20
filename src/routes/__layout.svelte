@@ -10,7 +10,7 @@
 		rel="stylesheet"
 	/>
 </svelte:head>
-
+<svelte:body class="font-body" />
 <slot />
 
 <style>
