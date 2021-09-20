@@ -2,11 +2,11 @@ import { AppSyncResolverEvent, AppSyncIdentityOIDC } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { CreateUserInput, CreateEventInput, Event, CreateTeamInput, AddCommentInput, CreateNamecardInput } from '../../generated/graphql'
-import { createUser, getUser } from './user';
+import { addOwnNamecard, createUser, getUser } from './user';
 import { createEvent, listEvent } from './event';
 import { addComment, createTeam, getTeam, listTeam } from './team';
 import { listAffiliation } from './affiliation';
-import { createNamecard, getNamecard } from './namecard';
+import { addNamecard, createNamecard, getNamecard } from './namecard';
 
 const client = new DynamoDBClient({
   apiVersion: '2012-08-10',
@@ -138,7 +138,15 @@ export async function handler(
       } catch(err){
         throw err
       }
-
+    
+    case 'addNamecard':
+      console.log('call addNamecard')
+      try {
+        const namecardId = event.arguments.namecardId
+        return await addNamecard(namecardId, userId)
+      } catch (err) {
+        throw err
+      }
     default:
       console.log(event.info.fieldName)
   }

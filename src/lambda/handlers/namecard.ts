@@ -1,12 +1,12 @@
 import { GetCommand, GetCommandInput, PutCommand, PutCommandInput } from "@aws-sdk/lib-dynamodb";
-import { NamecardTableName } from "../../../lib/namecard-backend-stack";
-import { CreateNamecardInput, Event, Namecard } from "../../generated/graphql";
 
+import { NamecardTableName } from "../../../lib/namecard-backend-stack";
+import { CreateNamecardInput, Event, Namecard, User } from "../../generated/graphql";
 import { createAffiliation } from "./affiliation";
 import { docClient } from "./me_shi";
 import { createTechnology } from "./technology";
 import { getTeam } from "./team";
-import { addOwnNamecard, getUser } from "./user";
+import { addGivenNamecard, addOwnNamecard, getUser } from "./user";
 
 // type Namecard {
 // 	id: ID!
@@ -89,4 +89,35 @@ export const createNamecard = async (input: CreateNamecardInput, userId: string)
     // 作った名刺を登録
     await addOwnNamecard(namecardParam.Item as Namecard, userId)
     return await getNamecard(namecardId)
+}
+
+export const addNamecard = async (namecardId: string, userId: string): Promise<Namecard> => {
+    // 登録するユーザを取得
+    const me = await getUser(userId, true) as User
+
+    // 登録したい名刺を取得
+    const targetNamecard = await getNamecard(namecardId) as Namecard
+
+    // 自分のカードは登録できない
+    if (targetNamecard.owner.id === me.id) {
+        throw new Error(`You can't add your own card.`)
+    }
+
+    // すでに持っていたら
+    const alreadyGivenNamecard = await me.givenNamecards?.find((n: Namecard) => n.id === targetNamecard.id)
+    if(alreadyGivenNamecard != null){
+        throw new Error(`${me.id} already have namecard ${targetNamecard.id}`)
+    }
+
+    // 登録するユーザがつくった名刺が、登録したい名刺と同じイベントにあることを確認
+    const myNamecard = me.myNamecards?.find((n: Namecard) => n.event.id === targetNamecard.event.id)
+    if (myNamecard  == null) {
+        throw new Error(`${me.name} and ${targetNamecard.owner.name} didn't attend on same event`)
+    }
+
+    // givenNamecard に登録
+    await addGivenNamecard(targetNamecard, me.id)
+
+    // 登録したい名刺と同じイベントにある名刺を返す
+    return myNamecard
 }

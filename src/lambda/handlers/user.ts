@@ -74,6 +74,34 @@ export const addOwnNamecard = async (namecard: Namecard, userId: string): Promis
     return newUser
 }
 
+export const addGivenNamecard = async (namecard: Namecard, userId: string): Promise<User> => {
+    console.log('call addGivenNamecard', namecard, userId)
+    const user = await getUser(userId, false)
+    if(user == null) {
+        throw new Error(`user: ${userId} does not exist`)
+    }
+    const newGivenCardIdMap = user.givenCardIdMap as {[namecardId: string]: boolean}
+    newGivenCardIdMap[namecard.id] = true
+
+    console.log("user", user, newGivenCardIdMap)
+    const userParam: UpdateCommandInput = {
+        TableName: UserTableName,
+        Key: {
+            id: user.id
+        },
+        UpdateExpression: "set #givenCardIdMap = :newGivenCardIdMap",
+        ExpressionAttributeNames: {
+            "#givenCardIdMap": "newGivenCardIdMap"
+        },
+        ExpressionAttributeValues: {
+            ":givenCardIdMap": newGivenCardIdMap
+        },
+    }
+    await docClient.send(new UpdateCommand(userParam))
+    const newUser = await getUser(userId, true)
+    return newUser
+}
+
 export const getUser = async (userId: string, mustGetNamecard: boolean): Promise<any> => {
     const userParams: GetCommandInput = {
         TableName: UserTableName,
