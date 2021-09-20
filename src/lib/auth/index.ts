@@ -1,6 +1,7 @@
 import { auth0 } from './auth0';
 import { writable, derived } from 'svelte/store';
 import type { RedirectLoginResult, User } from '@auth0/auth0-spa-js';
+import { path } from '$lib/path';
 
 export const getUser = (): Promise<User | undefined> =>
 	auth0.then((a) => a.getUser()).catch(() => undefined);
@@ -21,7 +22,8 @@ export const auth = (() => {
 			.then((isSignedIn) => set(isSignedIn))
 			.catch(() => set(false));
 	const signIn = () => auth0.then((a) => a.loginWithRedirect().catch(() => undefined));
-	const signOut = () => auth0.then((a) => Promise.resolve(a.logout()).catch(() => undefined));
+	const signOut = () =>
+		auth0.then((a) => Promise.resolve(a.logout({ returnTo: path })).catch(() => undefined));
 
 	reload();
 
