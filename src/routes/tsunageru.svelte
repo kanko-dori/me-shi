@@ -2,6 +2,77 @@
 	import Header from '$lib/components/Header.svelte';
 	import { Static } from '$lib/svg';
 	import { Pen16 } from 'carbon-icons-svelte';
+	const user = {
+		name: 'Taka',
+		githubId: 'onsd',
+		twitterId: 'onsd_',
+		myNamecards: [
+			{
+				id: 'github|29172177-testEvent-テストチーム',
+				event: {
+					name: 'testEvent'
+				},
+				team: {
+					name: 'テストチーム',
+					product: {
+						name: 'kubesmas',
+						comments: [
+							{
+								body: '007'
+							},
+							{
+								body: '008'
+							}
+						]
+					}
+				}
+			}
+		],
+		givenNamecards: [
+			{
+				id: 'github|1111111-testEvent-テストチーム',
+				owner: 'onsd',
+				event: {
+					name: 'ハックツハッカソン プレシオ'
+				},
+				team: {
+					name: '閑古鳥',
+					product: {
+						name: 'kubesmas',
+						comments: [
+							{
+								body: '007'
+							},
+							{
+								body: '008'
+							}
+						]
+					}
+				}
+			},
+			{
+				id: 'github|1111111-testEvent-テストチーム',
+				owner: 'ssssota',
+				event: {
+					name: 'ハックツハッカソン プレシオ杯'
+				},
+				team: {
+					name: '閑古鳥',
+					product: {
+						name: 'kubesmas',
+						comments: [
+							{
+								body: '007'
+							},
+							{
+								body: '008'
+							}
+						]
+					}
+				}
+			}
+		]
+	};
 </script>
 
 <Header />
@@ -29,19 +100,39 @@
 			<p class="absolute right-2">+</p>
 		</a>
 	</div>
-	<div class="container relative m-2 w-full top-0 flex ">
-		<p>イベント名</p>
-		<p class="absolute right-1">→</p>
-	</div>
+
+	<ul>
+		{#each user.myNamecards as mycard}
+			<li>
+				<div class="container relative m-2 w-full top-0 flex ">
+					<a href="/event" class="outline-none focus:ring-2 w-full h-full flex ">
+						{mycard.event.name}
+						<p class="absolute right-1">→</p>
+					</a>
+				</div>
+			</li>
+		{/each}
+	</ul>
 </div>
 
 <div class="container mx-auto m-4 p-8 bg-gray-200">
 	<p>いままでにもらった名刺</p>
 	<div class="border-gray-500 border-2" />
-	<div class="container relative m-2 w-full top-0 flex bg-red-500 ">
-		<p>イベント名</p>
-		<p class="absolute  right-1">→</p>
-	</div>
+	<ul>
+		{#each user.givenNamecards as givencard}
+			<li>
+				<div class="container relative m-2 w-full top-0 flex ">
+					<a href="/event" class="outline-none focus:ring-2 w-full h-full flex ">
+						<div class="flex-col bg-gray-100">
+							<p>{givencard.owner}</p>
+							<p>{givencard.event.name}</p>
+						</div>
+						<p class="absolute right-1 bg-red-500">→</p>
+					</a>
+				</div>
+			</li>
+		{/each}
+	</ul>
 </div>
 
 <style>

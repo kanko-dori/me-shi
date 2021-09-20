@@ -2,10 +2,10 @@ const config = {
 	mode: 'jit',
 	purge: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
-		extend: {}
-	},
-	corePlugins: {
-		fontFamily: false
+		extend: {},
+		fontFamily: {
+			body: ['"Noto Sans JP"', 'Meiryo', 'Arial', 'Helvetica', 'sans-serif']
+		}
 	},
 	plugins: [require('@tailwindcss/aspect-ratio')]
 };
