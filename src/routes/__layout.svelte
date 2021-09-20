@@ -13,7 +13,7 @@
 		if (global === undefined) var global = window;
 	</script>
 </svelte:head>
-
+<svelte:body class="font-body" />
 <slot />
 
 <style>
