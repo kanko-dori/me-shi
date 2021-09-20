@@ -1,4 +1,5 @@
 <script>
+	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import { Static } from '$lib/svg';
 	import { Pen16 } from 'carbon-icons-svelte';
@@ -154,6 +155,8 @@
 		{/each}
 	</ul>
 </div>
+
+<Footer />
 
 <style>
 	.edit-possition {
