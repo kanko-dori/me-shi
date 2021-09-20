@@ -8,7 +8,7 @@
 	export let twitter: string | undefined = undefined;
 </script>
 
-<Svg width={1200} height={630}>
+<Svg width={1200} height={630} class={$$props.class}>
 	<path
 		fill="#999999"
 		d="M 951.3848 0 L 782.57617 630 L 834.33789 630 L 1003.1504 0 L 951.3848 0 z"
