@@ -4,7 +4,7 @@ const config = {
 	theme: {
 		extend: {},
 		fontFamily: {
-			body: ['"Noto Sans JP"', 'Meiryo', 'Arial', 'Helvetica', 'sans-serif']
+			body: ['"Noto Sans JP"', '"Meiryo"', '"Arial"', '"Helvetica"', '"sans-serif"']
 		}
 	},
 	plugins: [require('@tailwindcss/aspect-ratio')]

@@ -2,6 +2,7 @@
 	import Header from '$lib/components/Header.svelte';
 	import { Static } from '$lib/svg';
 	import { Pen16 } from 'carbon-icons-svelte';
+	// 値の仮置き
 	const user = {
 		name: 'Taka',
 		githubId: 'onsd',
@@ -26,6 +27,26 @@
 						]
 					}
 				}
+			},
+			{
+				id: 'github|29172177-testEvent-テストチーム',
+				event: {
+					name: 'サマーハッカソン'
+				},
+				team: {
+					name: 'テストチーム',
+					product: {
+						name: 'kubesmas',
+						comments: [
+							{
+								body: '007'
+							},
+							{
+								body: '008'
+							}
+						]
+					}
+				}
 			}
 		],
 		givenNamecards: [
@@ -33,7 +54,7 @@
 				id: 'github|1111111-testEvent-テストチーム',
 				owner: 'onsd',
 				event: {
-					name: 'ハックツハッカソン プレシオ'
+					name: 'ハックツハッカソン スピノカップ'
 				},
 				team: {
 					name: '閑古鳥',
@@ -91,45 +112,44 @@
 		</div>
 	</div>
 </div>
-<div class="container mx-auto m-4 p-8 bg-gray-200">
-	<p>参加したイベントの名刺</p>
-	<div class="border-gray-500 border-2" />
-	<div class="container relative m-2 w-full top-0 bg-red-500">
-		<a href="/event" class="outline-none focus:ring-2 w-full h-full flex ">
-			<p>新しくイベントの名刺を作る</p>
-			<p class="absolute right-2">+</p>
-		</a>
-	</div>
+<div class="container mx-auto m-4 p-8 ">
+	<p class="t-size">参加したイベントの名刺</p>
+	<div class="border-gray-400 border mb-6" />
+	<a href="/" class="relative t-size outline-none focus:ring-2 w-full h-full flex ">
+		<p>新しくイベントの名刺を作る</p>
+		<div class="flex-grow" />
+		<p>+</p>
+	</a>
 
 	<ul>
 		{#each user.myNamecards as mycard}
 			<li>
-				<div class="container relative m-2 w-full top-0 flex ">
-					<a href="/event" class="outline-none focus:ring-2 w-full h-full flex ">
-						{mycard.event.name}
-						<p class="absolute right-1">→</p>
-					</a>
-				</div>
+				<a href="/" class="outline-none focus:ring-2 mt-2 w-full h-full flex t-size">
+					<p>{mycard.event.name}</p>
+					<div class="flex-grow" />
+					<p class="t-size">→</p>
+				</a>
 			</li>
 		{/each}
 	</ul>
 </div>
 
-<div class="container mx-auto m-4 p-8 bg-gray-200">
-	<p>いままでにもらった名刺</p>
-	<div class="border-gray-500 border-2" />
+<div class="container mx-auto m-4 p-8">
+	<p class="t-size">いままでにもらった名刺</p>
+	<div class="border-gray-400 border mb-6" />
 	<ul>
 		{#each user.givenNamecards as givencard}
 			<li>
-				<div class="container relative m-2 w-full top-0 flex ">
-					<a href="/event" class="outline-none focus:ring-2 w-full h-full flex ">
-						<div class="flex-col bg-gray-100">
-							<p>{givencard.owner}</p>
-							<p>{givencard.event.name}</p>
-						</div>
-						<p class="absolute right-1 bg-red-500">→</p>
-					</a>
-				</div>
+				<a href="/" class="outline-none focus:ring-2 mt-2 w-full h-full flex">
+					<div class="flex-col">
+						<p class="t-size">{givencard.owner}</p>
+						<p>{givencard.event.name}</p>
+					</div>
+					<div class="flex-grow" />
+					<div class="flex h-hull items-center">
+						<p class="t-size ">→</p>
+					</div>
+				</a>
 			</li>
 		{/each}
 	</ul>
@@ -143,5 +163,8 @@
 	.edit-bt {
 		height: 6vw;
 		width: 6vw;
+	}
+	.t-size {
+		font-size: 3vw;
 	}
 </style>
