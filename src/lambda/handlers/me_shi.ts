@@ -2,7 +2,7 @@ import { AppSyncResolverEvent, AppSyncIdentityOIDC } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { CreateUserInput, CreateEventInput, Event, CreateTeamInput, AddCommentInput, CreateNamecardInput } from '../../generated/graphql'
-import { addOwnNamecard, createUser, getUser } from './user';
+import { createUser, getUser } from './user';
 import { createEvent, listEvent } from './event';
 import { addComment, createTeam, getTeam, listTeam } from './team';
 import { listAffiliation } from './affiliation';
