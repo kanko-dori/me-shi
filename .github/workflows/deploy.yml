@@ -21,11 +21,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          # cache: pnpm
-      # - name: Install deps
-      #   run: pnpm install
-      # - name: Build SvelteKit
-      #   run: pnpm build
+          cache: npm
       - name: Install deps
         run: npm install
       - name: Build SvelteKit
