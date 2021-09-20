@@ -2,7 +2,6 @@ import { GetCommand, GetCommandInput, PutCommand, PutCommandInput } from "@aws-s
 import { NamecardTableName } from "../../../lib/namecard-backend-stack";
 import { CreateNamecardInput, Event, Namecard } from "../../generated/graphql";
 
-import { v4 as uuidv4 } from 'uuid'
 import { createAffiliation } from "./affiliation";
 import { docClient } from "./me_shi";
 import { createTechnology } from "./technology";
