@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { Header, Input, Footer } from '$lib/components';
+	import { Header, Input, Button, Footer } from '$lib/components';
 	import Static from '$lib/svg/Static.svelte';
 	let myname: string = '';
 	let githubId: undefined | string = undefined;
 	let twitterId: undefined | string = undefined;
-	function cancel() {}
-	function apply() {}
 </script>
 
 <Header />
@@ -27,10 +25,10 @@
 	<Input bind:value={twitterId} placeholder="" class="m-2 w-full" />
 </div>
 
-<div class="container mx-auto flex">
-	<button class="border" on:click={cancel}>Cancel</button>
+<div class="flex px-8">
+	<Button class="bg-gray-300">Cancel</Button>
 	<div class="flex-grow" />
-	<button class="border" on:click={apply}>Apply</button>
+	<Button class="bg-blue-600 text-white">Apply</Button>
 </div>
 
 <Footer />
