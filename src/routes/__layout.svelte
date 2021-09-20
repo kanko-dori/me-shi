@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import '../app.postcss';
 </script>
 
@@ -9,6 +9,9 @@
 		href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap"
 		rel="stylesheet"
 	/>
+	<script>
+		if (global === undefined) var global = window;
+	</script>
 </svelte:head>
 
 <slot />
