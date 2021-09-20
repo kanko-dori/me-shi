@@ -5,7 +5,7 @@
 		"dev": "svelte-kit dev",
 		"build": "svelte-kit build",
 		"preview": "svelte-kit preview",
-		"start": "node build/index --unhandled-rejections=warn",
+		"start": "node build/index",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
@@ -40,5 +40,8 @@
 		"aws-amplify": "^4.2.10",
 		"@tailwindcss/aspect-ratio": "^0.2.1",
 		"carbon-icons-svelte": "^10.38.0"
+	},
+	"engines": {
+		"node": "14.x"
 	}
 }

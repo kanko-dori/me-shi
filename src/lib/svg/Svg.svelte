@@ -8,6 +8,7 @@
 	width="{width}px"
 	height="{height}px"
 	viewBox="0 0 {width} {height}"
+	class={$$props.class}
 >
 	<slot />
 </svg>
