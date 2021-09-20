@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { auth, getToken, getUser } from '$lib/auth';
+	import { auth, getToken, getUser, waitForSignIn } from '$lib/auth';
 	import { auth0 } from '$lib/auth/auth0';
 	import { login } from '$lib/graphql/query';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		auth0
-			.handleRedirectCallback()
+		waitForSignIn()
 			.then(() => Promise.all([getUser(), getToken()]))
 			.then(([user, token]) =>
 				login(
