@@ -15,10 +15,6 @@
 	let value = '';
 	let event = '';
 	let tags: string[] = [];
-
-	onMount(() => {
-		auth.subscribe(console.log);
-	});
 </script>
 
 <Header />

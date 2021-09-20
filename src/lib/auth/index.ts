@@ -25,8 +25,6 @@ export const auth = (() => {
 	};
 })();
 
-auth.subscribe(console.log);
-
 export const signedIn = auth;
 
 export const token = derived<typeof auth, string | undefined>(
