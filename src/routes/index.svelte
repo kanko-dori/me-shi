@@ -2,57 +2,61 @@
 	import { Static } from '$lib/svg';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import { auth } from '$lib/auth';
+
+	let eyecatchWidth = 100;
 </script>
 
 <Header />
-<div class="container mx-auto">
-	<div class="relative aspect-w-2 aspect-h-1">
-		<div class="relative">
-			<div class="top absolute z-10 w-1/2 opacity-75 border-2 border-gray-600 bg-gray-100" />
-			<div
-				class="bottom absolute z-0 top-0 w-1/2 opacity-75 border-2 border-gray-600 bg-gray-100"
-			/>
-			<div class="catch-copy absolute z-20">
-				<p>名刺でつながる、</p>
-				<p>名刺がつなげる。</p>
-			</div>
+<main class="container max-w-screen-xl mx-auto px-4">
+	<section class="relative aspect-w-3 aspect-h-2" bind:clientWidth={eyecatchWidth}>
+		<div class="card card1 absolute border-2 border-gray-300 bg-gray-100 opacity-50" />
+		<div class="card card2 absolute border-2 border-gray-300 bg-gray-100 opacity-50" />
+		<div class="catch-copy absolute z-20 font-bold" style="--parent-width: {eyecatchWidth}px">
+			<p>名刺でつながる、</p>
+			<p>名刺がつなげる。</p>
 		</div>
+	</section>
+	<div class="text-lg p-4">
+		<p>イベントで見つけたあの人ともう少しだけつながってみませんか？</p>
+		<p>me-shiは、あと「少しだけ」つながる場を提供します。</p>
 	</div>
-</div>
-<div class="containar mx-auto relative">
-	<div class="aspect-w-6 aspect-h-1">
-		<div class="absolute p-left">
-			<p>イベントで見つけたあの人ともう少しだけつながってみませんか？</p>
-			<p>me-shiは、あと「少しだけ」つながる場を提供します。</p>
-		</div>
-	</div>
-</div>
-<div class="aspect-w-2 aspect-h-1 w-3/4 mx-auto">
-	<Static name="閑古鳥" github="kanko-dori" />
-</div>
-<div class="absolute p-left">
-	<p>つながった人には感想を残しましょう</p>
-	<p>成果物の感想欲しくない？？</p>
-</div>
+	<section class="aspect-w-3 aspect-h-1 mx-auto">
+		<Static name="閑古鳥" github="kanko-dori" class="w-3/5 mx-auto border-gray-300 border-2" />
+	</section>
+	<section class="text-lg p-4">
+		<p>つながった人には感想を残しましょう</p>
+		<p>成果物の感想欲しくない？？</p>
+	</section>
+	<section class="text-lg p-4">
+		<p>もし、今日がイベント最終日なら少しだけ繋がってみましょう！</p>
+		<p class="text-center p-8">
+			<button on:click={auth.signIn} class="bg-black text-white px-8 py-4 rounded-2xl">
+				Sign in with GitHub
+			</button>
+		</p>
+	</section>
+</main>
 
 <Footer />
 
 <style>
-	.top {
-		padding-top: 20vw;
-		margin-top: 10vw;
-		left: 5vw;
+	.card {
+		width: 60%;
+		height: 0;
+		padding-top: 40%;
 	}
-	.bottom {
-		padding-top: 20vw;
-		right: 10vw;
+	.card1 {
+		top: 10%;
+		left: 30%;
+	}
+	.card2 {
+		top: 30%;
+		left: 10%;
 	}
 	.catch-copy {
-		left: 10vw;
-		margin-top: 10vw;
-		font-size: 6vw;
-	}
-	.p-left {
-		left: 10vw;
+		font-size: calc(var(--parent-width) / 10);
+		top: 25%;
+		left: 5%;
 	}
 </style>
