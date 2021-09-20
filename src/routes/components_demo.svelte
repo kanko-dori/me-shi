@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { auth } from '$lib/auth';
 	import {
 		Button,
 		Footer,
@@ -11,7 +10,6 @@
 	import Event16 from 'carbon-icons-svelte/lib/Event16';
 	import Search16 from 'carbon-icons-svelte/lib/Search16';
 	import Tag16 from 'carbon-icons-svelte/lib/Tag16';
-	import { onMount } from 'svelte';
 	let value = '';
 	let event = '';
 	let tags: string[] = [];
