@@ -1,4 +1,4 @@
-import { GetCommand, GetCommandInput, PutCommand, PutCommandInput } from "@aws-sdk/lib-dynamodb";
+import { GetCommand, GetCommandInput, PutCommand, PutCommandInput, ScanCommand, ScanCommandInput } from "@aws-sdk/lib-dynamodb";
 
 import { NamecardTableName } from "../../../lib/namecard-backend-stack";
 import { CreateNamecardInput, Event, Namecard, User } from "../../generated/graphql";
@@ -120,4 +120,27 @@ export const addNamecard = async (namecardId: string, userId: string): Promise<N
 
     // 登録したい名刺と同じイベントにある名刺を返す
     return myNamecard
+}
+
+export const listNamecards = async (): Promise<any> => {
+    const namecardParam: ScanCommandInput = {
+        TableName: NamecardTableName,
+    }
+
+    console.log(namecardParam)
+    const namecards: any = []
+
+    let res = await docClient.send(new ScanCommand(namecardParam))
+    if (res.Items) {
+        namecards.push(...res.Items)
+    }
+    while (res.LastEvaluatedKey) {
+        namecardParam.ExclusiveStartKey = res.LastEvaluatedKey
+        res = await docClient.send(new ScanCommand(namecardParam))
+        if (res.Items) {
+            namecards.push(...res.Items)
+        }
+    }
+    console.log('namecards', namecards.length, namecards)
+    return namecards
 }
