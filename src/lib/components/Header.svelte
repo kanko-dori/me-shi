@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { auth, signedIn } from '$lib/auth';
+	import { auth, signedIn, user } from '$lib/auth';
 	import Logo from '$lib/svg/Logo.svelte';
 	import Svg from '$lib/svg/Svg.svelte';
 
@@ -20,11 +20,7 @@
 			{:else if showSignOut}
 				<button on:click={auth.signOut}>Sign out</button>
 			{:else}
-				<img
-					class="h-10 rounded-full ring-2 focus:ring-4"
-					src="https://github.com/{'octocat'}.png"
-					alt="user icon"
-				/>
+				<img class="h-10 rounded-full ring-2 focus:ring-4" src={$user?.picture} alt="user icon" />
 			{/if}
 		</p>
 	</div>
