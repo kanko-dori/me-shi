@@ -16,7 +16,21 @@ const config = {
 	kit: {
 		// hydrate the <div id="svelte"> element in src/app.html
 		target: '#svelte',
-		adapter: adapt()
+		adapter: adapt(),
+		vite: {
+			resolve: {
+				alias: {
+					'./runtimeConfig': './runtimeConfig.browser'
+				}
+			},
+			build: {
+				rollupOptions: {
+					output: {
+						intro: 'if(exports === undefined){var exports ={}; var self = {}}'
+					}
+				}
+			}
+		}
 	}
 };
 

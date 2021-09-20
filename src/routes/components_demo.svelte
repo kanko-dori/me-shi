@@ -1,11 +1,11 @@
 <script lang="ts">
 	import {
+		Button,
 		Footer,
 		Header,
 		Input,
 		SuggestableInput,
-		SuggestableTagInput,
-		Button
+		SuggestableTagInput
 	} from '$lib/components';
 	import Event16 from 'carbon-icons-svelte/lib/Event16';
 	import Search16 from 'carbon-icons-svelte/lib/Search16';
@@ -17,7 +17,7 @@
 
 <Header />
 
-<Header githubId="ssssota" />
+<Header showSignOut={true} />
 
 <div class="container mx-auto">
 	<div class="m-4 p-8 rounded-lg bg-pink-200">

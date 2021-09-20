@@ -1,8 +1,9 @@
 <script lang="ts">
+	import { auth, signedIn, user } from '$lib/auth';
 	import Logo from '$lib/svg/Logo.svelte';
 	import Svg from '$lib/svg/Svg.svelte';
 
-	export let githubId: string | undefined = undefined;
+	export let showSignOut = false;
 </script>
 
 <header class="py-4" role="banner" aria-label="me-shi">
@@ -14,14 +15,12 @@
 		</a>
 		<div class="flex-grow" />
 		<p class="pr-4 text-right">
-			{#if githubId === undefined}
-				Sign in with GitHub
+			{#if $signedIn === false}
+				<button on:click={auth.signIn}>Sign in with GitHub</button>
+			{:else if showSignOut}
+				<button on:click={auth.signOut}>Sign out</button>
 			{:else}
-				<img
-					class="h-10 rounded-full ring-2 focus:ring-4"
-					src="https://github.com/{githubId}.png"
-					alt="user icon"
-				/>
+				<img class="h-10 rounded-full ring-2 focus:ring-4" src={$user?.picture} alt="user icon" />
 			{/if}
 		</p>
 	</div>
