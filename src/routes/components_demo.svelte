@@ -5,7 +5,8 @@
 		Header,
 		Input,
 		SuggestableInput,
-		SuggestableTagInput
+		SuggestableTagInput,
+		QRcode
 	} from '$lib/components';
 	import Event16 from 'carbon-icons-svelte/lib/Event16';
 	import Search16 from 'carbon-icons-svelte/lib/Search16';
@@ -18,6 +19,24 @@
 <Header />
 
 <Header showSignOut={true} />
+
+<div class="container mx-auto flex">
+	<QRcode content="This is sample text." class="w-2/5 h-2/5" />
+	<QRcode
+		content="This is sample text."
+		class="w-2/5 h-2/5"
+		color={[
+			{
+				color: '#3b82f6',
+				offset: 0
+			},
+			{
+				color: '#34d399',
+				offset: 100
+			}
+		]}
+	/>
+</div>
 
 <div class="container mx-auto">
 	<div class="m-4 p-8 rounded-lg bg-pink-200">
