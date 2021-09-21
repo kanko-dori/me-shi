@@ -70,7 +70,7 @@
 	});
 </script>
 
-<Header showSignOut={true} />
+<Header />
 
 <main class="container mx-auto px-4 max-w-3xl">
 	<div class="flex flex-col gap-2 w-full mx-auto p-4">
