@@ -1,6 +1,7 @@
+import { Update } from '@aws-sdk/client-dynamodb'
 import { GetCommand, GetCommandInput, PutCommand, PutCommandInput, UpdateCommand, UpdateCommandInput } from '@aws-sdk/lib-dynamodb'
 import { UserTableName } from '../../../../lib/namecard-backend-stack'
-import { CreateUserInput, GetNamecardInput, GetUserInput, Namecard, User } from '../../../generated/graphql'
+import { CreateUserInput, GetNamecardInput, GetUserInput, Namecard, UpdateUserInput, User } from '../../../generated/graphql'
 import { docClient } from '../me_shi'
 import { getNamecard } from './namecard'
 
@@ -44,6 +45,45 @@ export const createUser = async (input: CreateUserInput, userId: string) => {
 
     console.log('createUser', userParams)
     return await docClient.send(new PutCommand(userParams))
+}
+
+export const updateUser = async (input: UpdateUserInput, userId: string): Promise<User> => {
+    console.log('updateUser', input, userId)
+    const getUserInput: GetUserInput = { userId }
+    const user = await getUser(getUserInput, false) as User
+    if(user == null) {
+        throw new Error(`user: ${userId} does not exist`)
+    }
+
+    user.name = input.name ?? user.name
+    user.githubId = input.githubId ?? user.githubId
+    user.twitterId = input.twitterId ?? user.twitterId
+    user.iconURL = input.iconURL ?? user.iconURL
+
+    console.log('new user data', user)
+    const userParam: UpdateCommandInput = {
+        TableName: UserTableName,
+        Key: {
+            id: user.id
+        },
+        UpdateExpression: "set #name = :newName, #github = :newGithub, #twitter = :newTwitter, #icon = :newIcon",
+        ExpressionAttributeNames: {
+            "#name": "name",
+            "#github": "githubId",
+            '#twitter': "twitterId",
+            '#icon': "iconURL"
+        },
+        ExpressionAttributeValues: {
+            ":newName": user.name,
+            ":newGithub": user.githubId,
+            ":newTwitter": user.twitterId,
+            ":newIcon": user.iconURL
+        },
+    }
+    await docClient.send(new UpdateCommand(userParam))
+    const newUser = await getUser(getUserInput, true)
+    return newUser
+    
 }
 
 export const addOwnNamecard = async (namecard: Namecard, userId: string): Promise<User> => {

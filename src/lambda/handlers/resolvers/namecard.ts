@@ -1,12 +1,13 @@
 import { GetCommand, GetCommandInput, PutCommand, PutCommandInput, ScanCommand, ScanCommandInput } from "@aws-sdk/lib-dynamodb";
 
 import { NamecardTableName } from "../../../../lib/namecard-backend-stack";
-import { AddNamecardInput, CreateNamecardInput, Event, GetNamecardInput, GetUserInput, GetZukanInput, Namecard, User, Zukan, ZukanNamecard } from "../../../generated/graphql";
+import { AddNamecardInput, CreateNamecardInput, CreateTeamInput, Event, GetNamecardInput, GetUserInput, GetZukanInput, Namecard, User, Zukan, ZukanNamecard } from "../../../generated/graphql";
 import { createAffiliation } from "./affiliation";
 import { docClient } from "../me_shi";
 import { createTechnology } from "./technology";
 import { getTeam } from "./team";
 import { addGivenNamecard, addOwnNamecard, getUser } from "./user";
+import { createEvent, getEvent } from "./event";
 
 // type Namecard {
 // 	id: ID!
@@ -68,6 +69,27 @@ export const createNamecard = async (input: CreateNamecardInput, userId: string)
     console.log('call createNamecard')
 
     const namecardId = `${userId}-${input.teamId}`
+
+    // // check event
+    // let event = await getEvent(input.eventId) as Event | null
+    // if (event == null) {
+    //     console.log(`event ${input.eventId} does not exists. create it now.`)
+    //     const createEventInput: CreateEventInput = {
+    //         name: input.eventId
+    //     }
+    //     event = await createEvent(createEventInput)
+    // }
+
+    // // check team
+    // const team = await getTeam(input.teamId)
+    // if (team == null) {
+    //     console.log(`team ${input.teamId} does not exists. create it now.`)
+    //     const createTeamInput: CreateTeamInput = {
+    //         eventId: event.id,
+    //         name: input.teamId,
+    //         product: input
+    //     }
+    // }
     const namecardParam: PutCommandInput = {
         TableName: NamecardTableName,
         Item: {
@@ -93,7 +115,8 @@ export const createNamecard = async (input: CreateNamecardInput, userId: string)
 
     // 作った名刺を登録
     await addOwnNamecard(namecardParam.Item as Namecard, userId)
-    const getNamecardInput: GetNamecardInput = {namecardId}
+    
+    const getNamecardInput: GetNamecardInput = {namecardId} 
     return await getNamecard(getNamecardInput)
 }
 

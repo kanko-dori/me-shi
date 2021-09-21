@@ -26,6 +26,7 @@ export const listTechnology = async (): Promise<Technology> => {
     const technologies: any = []
 
     let res = await docClient.send(new ScanCommand(technologyParam))
+    console.log(res)
     if (res.Items) {
         technologies.push(...res.Items)
     }

@@ -1,12 +1,13 @@
 import { AppSyncResolverEvent, AppSyncIdentityOIDC } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { CreateUserInput, CreateEventInput, Event, CreateTeamInput, AddCommentInput, CreateNamecardInput, GetNamecardInput, AddNamecardInput, GetZukanInput, ListTeamInput, GetUserInput } from '../../generated/graphql'
-import { createUser, getUser } from './resolvers/user';
+import { CreateUserInput, CreateEventInput, CreateTeamInput, AddCommentInput, CreateNamecardInput, GetNamecardInput, AddNamecardInput, GetZukanInput, ListTeamInput, GetUserInput, UpdateUserInput } from '../../generated/graphql'
+import { createUser, getUser, updateUser } from './resolvers/user';
 import { createEvent, listEvent } from './resolvers/event';
-import { addComment, createTeam, getTeam, listTeam } from './resolvers/team';
+import { addComment, createTeam, getTeam, listTeam, listTeamAll } from './resolvers/team';
 import { listAffiliation } from './resolvers/affiliation';
 import { addNamecard, createNamecard, getNamecard, getZukan } from './resolvers/namecard';
+import { listTechnology } from './resolvers/technology';
 
 const client = new DynamoDBClient({
   apiVersion: '2012-08-10',
@@ -73,8 +74,7 @@ export async function handler(
       console.log('call createEvent')
       try {
         const input = event.arguments.input as CreateEventInput
-        const eventParam = await createEvent(input)
-        return eventParam.Item as Event
+        return await createEvent(input)
       } catch (err) {
         throw err
       }
@@ -158,9 +158,35 @@ export async function handler(
       } catch (err) {
         throw err
       }
+    
+    case 'updateUser':
+      console.log('call updateUser')
+      try {
+        const input = event.arguments.input as UpdateUserInput
+        return await updateUser(input, userId)
+      }catch(err) {
+        throw err
+      }
+
+    case 'listTeamAll':
+      console.log('call listTeamAll')
+      try {
+        return await listTeamAll()
+      }catch(err) {
+        throw err
+      }
+
+    case 'listTechnology':
+      console.log('call listTechnology')
+      try {
+        return await listTechnology()
+      }catch(err) {
+        throw err
+      }
 
     default:
       console.log(event.info.fieldName)
+      throw new Error(`${event.info.fieldName} is not vaild method`)
   }
     
   
