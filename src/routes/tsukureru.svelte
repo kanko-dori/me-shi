@@ -20,6 +20,7 @@
 	} from '$lib/graphql/query';
 	import { createEvent } from '$lib/graphql/query/createEvent';
 	import { createTeam } from '$lib/graphql/query/createTeam';
+	import { user } from '$lib/store';
 	import { Dynamic } from '$lib/svg';
 	import Event16 from 'carbon-icons-svelte/lib/Event16';
 	import Tag16 from 'carbon-icons-svelte/lib/Tag16';
@@ -41,6 +42,11 @@
 
 	let processing = true;
 	let createdNamecardId: string | undefined;
+
+	user.subscribe((u) => {
+		if (u.type === 'failure') goto('/');
+		return;
+	});
 
 	onMount(() => {
 		getToken()
