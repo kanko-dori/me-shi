@@ -8,6 +8,11 @@
 	import { QrCode16, SendFilled32 } from 'carbon-icons-svelte';
 	import type { AddNamecardInput, Comment, Product, Team } from 'src/generated/graphql';
 
+	const twitterShareUrl = new URL('https://twitter.com/share');
+	twitterShareUrl.searchParams.append('url', `https://me-shi.ga${$page.path}`);
+	twitterShareUrl.searchParams.append('text', `イベントに参加してきました！`);
+	twitterShareUrl.searchParams.append('hashtags', 'me_shi');
+
 	let namecardId = '';
 	let ownerId = '';
 	let name = '';
@@ -104,6 +109,13 @@
 				class="w-full shadow-xl"
 			/>
 			{#if $user.type === 'success' && $user.value.id === ownerId}
+				<a
+					href={twitterShareUrl.toString()}
+					target="_blank"
+					class="absolute flex justify-center items-center outline-none focus:ring-2 w-12 h-12 right-2 bottom-16"
+				>
+					<img src="/static/twitter.svg" alt="twitter" />
+				</a>
 				<a
 					href="/wataseru/{namecardId}"
 					class="absolute flex justify-center items-center outline-none focus:ring-2 w-12 h-12 rounded-md opacity-75 bg-gray-800 right-2 bottom-2"
