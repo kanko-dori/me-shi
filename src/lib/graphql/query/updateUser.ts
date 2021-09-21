@@ -5,11 +5,11 @@ import type { AuthHeader } from './types';
 export const updateUser = (
 	variables: { input: UpdateUserInput },
 	headers: AuthHeader
-): Promise<User> =>
-	mutation<{ input: UpdateUserInput }, User>(
+): Promise<{ updateUser: User }> =>
+	mutation<{ input: UpdateUserInput }, { updateUser: User }>(
 		`
       mutation updateUser($input: UpdateUserInput!) {
-        createUser(input: $input){
+        updateUser(input: $input){
           id
           iconURL
           name
@@ -21,6 +21,7 @@ export const updateUser = (
 		variables,
 		headers
 	).then((res) => {
+		console.log('updateUser', res);
 		if (res.errors !== undefined) throw res.errors;
 		if (res.data === undefined) throw new Error('Blank data');
 		return res.data;
