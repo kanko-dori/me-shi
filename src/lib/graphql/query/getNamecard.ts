@@ -44,7 +44,6 @@ export const getNamecard = (
 				}
 			}
 		}
-	}
 		`,
 		variables,
 		headers
