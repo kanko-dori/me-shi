@@ -13,6 +13,7 @@
 	let showOnUpdateModal = false;
 
 	user.subscribe((u) => {
+		if (u.type === 'failure') goto('/');
 		if (u.type !== 'success') return;
 		processing = false;
 		name = u.value.name ?? 'Error';

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import Loading from '$lib/components/Loading.svelte';
@@ -8,6 +9,11 @@
 	import { Pen16 } from 'carbon-icons-svelte';
 	import Add16 from 'carbon-icons-svelte/lib/Add16';
 	import ArrowRight16 from 'carbon-icons-svelte/lib/ArrowRight16';
+
+	user.subscribe((u) => {
+		if (u.type === 'failure') goto('/');
+		return;
+	});
 </script>
 
 <Header showSignOut={true} />

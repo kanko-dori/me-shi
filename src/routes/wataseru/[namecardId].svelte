@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
 	import { page } from '$app/stores';
 	import { token } from '$lib/auth';
 
@@ -6,6 +8,7 @@
 	import Loading from '$lib/components/Loading.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import { getNamecard } from '$lib/graphql/query';
+	import { user } from '$lib/store';
 	import { Dynamic } from '$lib/svg';
 
 	let event = '';
@@ -15,6 +18,11 @@
 	let preferTechnologies: Array<string> = [];
 
 	let loading = true;
+	user.subscribe((u) => {
+		if (u.type === 'failure') goto('/');
+		return;
+	});
+
 	token.subscribe((t) => {
 		if (t.type !== 'success') return;
 		getNamecard(
