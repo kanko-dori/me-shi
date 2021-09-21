@@ -1,13 +1,13 @@
 import { GetCommand, GetCommandInput, PutCommand, PutCommandInput, ScanCommand, ScanCommandInput } from "@aws-sdk/lib-dynamodb";
 
 import { NamecardTableName } from "../../../../lib/namecard-backend-stack";
-import { AddNamecardInput, CreateNamecardInput, CreateTeamInput, Event, GetNamecardInput, GetUserInput, GetZukanInput, Namecard, User, Zukan, ZukanNamecard } from "../../../generated/graphql";
+import { AddNamecardInput, AddNamecardResult, CreateNamecardInput, CreateTeamInput, Event, GetNamecardInput, GetUserInput, GetZukanInput, Namecard, User, Zukan, ZukanNamecard } from "../../../generated/graphql";
 import { createAffiliation } from "./affiliation";
 import { docClient } from "../me_shi";
 import { createTechnology } from "./technology";
 import { getTeam } from "./team";
 import { addGivenNamecard, addOwnNamecard, getUser } from "./user";
-import { createEvent, getEvent } from "./event";
+import { createHash } from "crypto";
 
 // type Namecard {
 // 	id: ID!
@@ -67,9 +67,9 @@ export const getNamecard = async (input: GetNamecardInput) => {
 
 export const createNamecard = async (input: CreateNamecardInput, userId: string) => {
     console.log('call createNamecard')
-
-    const namecardId = `${userId}-${input.teamId}`
-
+    const md5 = createHash('md5')
+    const namecardId = md5.update(`${userId}-${input.teamId}`, 'utf8').digest('hex').slice(0, 15)
+    
     // // check event
     // let event = await getEvent(input.eventId) as Event | null
     // if (event == null) {
@@ -120,7 +120,8 @@ export const createNamecard = async (input: CreateNamecardInput, userId: string)
     return await getNamecard(getNamecardInput)
 }
 
-export const addNamecard = async (input: AddNamecardInput, userId: string): Promise<Namecard> => {
+export const addNamecard = async (input: AddNamecardInput, userId: string): Promise<AddNamecardResult> => {
+    console.log('addNamecard', input, userId)
     // 登録するユーザを取得
     const getUserInput: GetUserInput = { userId }
     const me = await getUser(getUserInput, true) as User
@@ -149,8 +150,12 @@ export const addNamecard = async (input: AddNamecardInput, userId: string): Prom
     // givenNamecard に登録
     await addGivenNamecard(targetNamecard, me.id)
 
-    // 登録したい名刺と同じイベントにある名刺を返す
-    return myNamecard
+    const res: AddNamecardResult = {
+        ownerNamecardId: input.namecardId,
+        getterNamecardId: myNamecard.id
+    }
+
+    return res
 }
 
 export const listNamecards = async (): Promise<any> => {

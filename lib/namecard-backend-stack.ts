@@ -62,6 +62,7 @@ export class NamecardBackendStack extends cdk.Stack {
       }
     })
 
+
     const meShiFnDataSource = appsync.addLambdaDataSource(
       'MeShiDataSource',
       meShiFn

@@ -122,7 +122,7 @@ export const addGivenNamecard = async (namecard: Namecard, userId: string): Prom
     if(user == null) {
         throw new Error(`user: ${userId} does not exist`)
     }
-    const newGivenCardIdMap = user.givenCardIdMap as {[namecardId: string]: boolean}
+    const newGivenCardIdMap = user.givenCardIdMap ?? {} as {[namecardId: string]: boolean}
     newGivenCardIdMap[namecard.id] = true
 
     console.log("user", user, newGivenCardIdMap)
@@ -131,9 +131,9 @@ export const addGivenNamecard = async (namecard: Namecard, userId: string): Prom
         Key: {
             id: user.id
         },
-        UpdateExpression: "set #givenCardIdMap = :newGivenCardIdMap",
+        UpdateExpression: "set #givenCardIdMap = :givenCardIdMap",
         ExpressionAttributeNames: {
-            "#givenCardIdMap": "newGivenCardIdMap"
+            "#givenCardIdMap": "givenCardIdMap"
         },
         ExpressionAttributeValues: {
             ":givenCardIdMap": newGivenCardIdMap

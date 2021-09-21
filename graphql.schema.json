@@ -82,6 +82,41 @@
       },
       {
         "kind": "OBJECT",
+        "name": "AddNamecardResult",
+        "description": null,
+        "fields": [
+          {
+            "name": "getterNamecardId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ownerNamecardId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "Affiliation",
         "description": null,
         "fields": [
@@ -651,14 +686,14 @@
             "description": null,
             "args": [
               {
-                "name": "input",
+                "name": "namecardId",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "AddNamecardInput",
+                    "kind": "SCALAR",
+                    "name": "String",
                     "ofType": null
                   }
                 },
@@ -672,7 +707,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "Namecard",
+                "name": "AddNamecardResult",
                 "ofType": null
               }
             },
@@ -1274,20 +1309,16 @@
         "description": null,
         "fields": [
           {
-            "name": "onAddedNamecard",
+            "name": "onAddNamecard",
             "description": null,
             "args": [
               {
-                "name": "namecardId",
+                "name": "ownerNamecardId",
                 "description": null,
                 "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
@@ -1295,13 +1326,9 @@
               }
             ],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Namecard",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "AddNamecardResult",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
