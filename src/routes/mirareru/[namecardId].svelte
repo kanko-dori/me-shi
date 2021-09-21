@@ -127,8 +127,8 @@
 		<p class="text-2xl p-2 border-b-2 border-gray-300">コメント</p>
 		{#if $user.type === 'success' && $user.value.id !== ownerId}
 			<div class="py-6">
-				<form on:submit|preventDefault={send} class="flex gap-2">
-					<Input bind:value={comment} placeholder="" class="flex-grow" required />
+				<form on:submit|preventDefault={send} class="flex ">
+					<Input bind:value={comment} placeholder="" class="flex w-full " required />
 					<Button class="bg-blue-600 px-2 py-2 active:bg-blue-700 text-white">
 						<SendFilled32 class="h-6 w-6" style="fill:white " />
 					</Button>
