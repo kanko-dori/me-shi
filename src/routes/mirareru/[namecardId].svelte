@@ -117,7 +117,7 @@
 			href="/zukan/{eventId}"
 			class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
 		>
-			<p>{eventName}の名刺図鑑をひらく</p>
+			<p class="text-sm lg:text-lg">{eventName}の名刺図鑑をひらく</p>
 			<div class="flex-grow" />
 			<Book16 class="transition-transform duration-200 ease-out group-hover:scale-150" />
 		</a>
@@ -127,7 +127,7 @@
 		<p class="text-2xl p-2 border-b-2 border-gray-300">コメント</p>
 		{#if $user.type === 'success' && $user.value.id !== ownerId}
 			<div class="py-6">
-				<form on:submit|preventDefault={send} class="flex ">
+				<form on:submit|preventDefault={send} class="flex gap-2">
 					<Input bind:value={comment} placeholder="" class="flex w-full " required />
 					<Button class="bg-blue-600 px-2 py-2 active:bg-blue-700 text-white">
 						<SendFilled32 class="h-6 w-6" style="fill:white " />
