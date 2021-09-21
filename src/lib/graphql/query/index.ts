@@ -7,3 +7,6 @@ export * from './listTechnology';
 export * from './listAffiliation';
 export * from './createNamecard';
 export * from './createEvent';
+export * from './addNamecard';
+export * from './addComment';
+export * from './getNamecard';
