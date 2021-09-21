@@ -5,6 +5,10 @@
 	export let name = '';
 	export let github = '';
 	export let twitter = '';
+
+	const onSubmit = () => {
+		console.log('submitted', { name, github, twitter });
+	};
 </script>
 
 <Header />
@@ -14,7 +18,7 @@
 			<Static {name} {github} twitter={twitter || undefined} class="w-full shadow-xl" />
 		</div>
 	</div>
-	<form class="block p-4 max-w-2xl mx-auto" on:submit|preventDefault={() => {}}>
+	<form class="block p-4 max-w-2xl mx-auto" on:submit|preventDefault={onSubmit}>
 		<div class="p-4">
 			<p class="text-sm text-gray-500">名前</p>
 			<Input class="w-full" bind:value={name} />
