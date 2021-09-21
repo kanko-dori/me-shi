@@ -73,9 +73,18 @@
 					</div>
 					<div class="p-4">
 						<ul class="flex flex-wrap gap-4">
-							{#each namecardList as n}
+							{#each namecardList.filter((c) => c.team.name === teamname) as n}
 								<li class="flex">
-									{#if n.team.name === teamname}
+									{#if n.isOwn}
+										<a href="/mirareru">
+											<ZukanCard
+												name={n.owner.name || undefined}
+												icon={n.owner.iconURL || undefined}
+												isOwn={n.isOwn || undefined}
+												class="w-32 lg:w-48 hover:bg-gray-200 transform motion-safe:hover:-translate-y-1 motion-safe:hover:scale-110 transition ease-in-out duration-300"
+											/>
+										</a>
+									{:else}
 										<ZukanCard
 											name={n.owner.name || undefined}
 											icon={n.owner.iconURL || undefined}
@@ -83,6 +92,7 @@
 											class="w-32 lg:w-48"
 										/>
 									{/if}
+									<a href="/mirareru/" />
 								</li>
 							{/each}
 						</ul>
