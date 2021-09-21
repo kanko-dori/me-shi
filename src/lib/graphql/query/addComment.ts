@@ -5,32 +5,30 @@ import type { AuthHeader } from './types';
 export const addComment = (
 	variables: { input: AddCommentInput },
 	headers: AuthHeader
-): Promise<Team> =>
-	mutation<{ input: AddCommentInput }, Team>(
+): Promise<{ addComment: Team }> =>
+	mutation<{ input: AddCommentInput }, { addComment: Team }>(
 		`
-        mutation addComment($input: AddCommentInput!) {
-            createEvent(input: $input){
-				team {
+		mutation addComment($input: AddCommentInput!) {
+			addComment(input: $input){
+				id
+				name
+				event {
 					id
 					name
-					event {
+				}
+				product {
+					name
+					repository
+					description
+					comments {
 						id
-						name
-					}
-					product {
-						name
-						repository
-						description
-						comments {
-							id
-							body
-							commenterId
-						}
+						body
+						commenterId
 					}
 				}
-            }
-        }
-        `,
+			}
+		}
+		`,
 		variables,
 		headers
 	).then((res) => {

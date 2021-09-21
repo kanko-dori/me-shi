@@ -24,6 +24,13 @@ export const getUser = (
 						id
 						name
 					}
+					owner {
+						id
+						name
+						githubId
+						twitterId
+						iconURL
+					}
 					team {
 						id
 						name
@@ -50,6 +57,13 @@ export const getUser = (
 					event {
 						id
 						name
+					}
+					owner {
+						id
+						name
+						githubId
+						twitterId
+						iconURL
 					}
 					team {
 						id
