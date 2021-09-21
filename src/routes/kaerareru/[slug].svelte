@@ -12,7 +12,7 @@
 </script>
 
 <Header />
-<main class="container max-w-screen-lg px-4">
+<main class="container max-auto max-w-screen-lg px-4">
 	<div class="p-8">
 		<div class="max-w-3xl w-full mx-auto">
 			<Static {name} {github} twitter={twitter || undefined} class="w-full shadow-xl" />
