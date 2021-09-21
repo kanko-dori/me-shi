@@ -1,8 +1,37 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { token } from '$lib/auth';
 
 	import { QRcode, Header, Footer } from '$lib/components';
+	import { getNamecard } from '$lib/graphql/query';
 	import { Dynamic } from '$lib/svg';
+	import { onMount } from 'svelte';
+
+	let event = '';
+	let team = '';
+	let product = { name: '' };
+	let usedTechnologies: Array<string> = [];
+	let preferTechnologies: Array<string> = [];
+
+	token.subscribe((t) => {
+		if (t.type !== 'success') return;
+		getNamecard(
+			{
+				input: {
+					namecardId: $page.params.namecardId
+				}
+			},
+			{
+				Authorization: t.value ?? ''
+			}
+		).then(({ getNamecard: namecard }) => {
+			event = namecard.event.name ?? '';
+			team = namecard.team.name ?? '';
+			product = namecard.team.product ?? { name: '' };
+			usedTechnologies = namecard.usedTechnologies ?? [];
+			preferTechnologies = namecard.preferTechnologies ?? [];
+		});
+	});
 </script>
 
 <Header />
@@ -25,11 +54,11 @@
 	</div>
 	<p class="p-8 shadow-xl">
 		<Dynamic
-			event="テストハッカソン"
-			team="あ"
-			product={{ name: 'いのちのかがやき' }}
-			usedTechnologies={['日本の叡智']}
-			preferedTechnologies={['自分の頭']}
+			{event}
+			{team}
+			{product}
+			{usedTechnologies}
+			preferedTechnologies={preferTechnologies}
 			class="max-w-3xl mx-auto"
 		/>
 	</p>
