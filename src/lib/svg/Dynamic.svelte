@@ -6,7 +6,7 @@
 	export let event: string;
 	export let team: string;
 	export let product: Product;
-	export let usedTechnologies: string[];
+	export let usedTechnologies: string[] | undefined = undefined;
 	export let preferedTechnologies: string[] | undefined = undefined;
 	export let memberOf: string | undefined = undefined;
 </script>
@@ -21,10 +21,12 @@
 		<text y="50" fill="#4d4d4d" font-size="24">{team}</text>
 		<text y="140" font-size="72" font-weight="bold">{product.name}</text>
 	</g>
-	<g transform="translate(110, 390)">
-		<text fill="#4d4d4d" font-size="24">今回使った技術</text>
-		<text x="250" font-size="32">{[...new Set(usedTechnologies)].join(', ')}</text>
-	</g>
+	{#if usedTechnologies !== undefined && usedTechnologies.length > 0}
+		<g transform="translate(110, 390)">
+			<text fill="#4d4d4d" font-size="24">今回使った技術</text>
+			<text x="250" font-size="32">{[...new Set(usedTechnologies)].join(', ')}</text>
+		</g>
+	{/if}
 	{#if preferedTechnologies !== undefined && preferedTechnologies.length > 0}
 		<g transform="translate(110, 450)">
 			<text fill="#4d4d4d" font-size="24">いつも使ってる技術</text>

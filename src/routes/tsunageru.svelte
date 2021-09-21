@@ -38,7 +38,7 @@
 			<ul>
 				<li>
 					<a
-						href="/tsukuritai"
+						href="/tsukureru"
 						class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
 					>
 						<p>新しくイベントの名刺を作る</p>
