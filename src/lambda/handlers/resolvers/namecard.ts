@@ -7,7 +7,7 @@ import { docClient } from "../me_shi";
 import { createTechnology } from "./technology";
 import { getTeam } from "./team";
 import { addGivenNamecard, addOwnNamecard, getUser } from "./user";
-import { createEvent, getEvent } from "./event";
+import { createHash } from "crypto";
 
 // type Namecard {
 // 	id: ID!
@@ -67,9 +67,9 @@ export const getNamecard = async (input: GetNamecardInput) => {
 
 export const createNamecard = async (input: CreateNamecardInput, userId: string) => {
     console.log('call createNamecard')
-
-    const namecardId = `${userId}-${input.teamId}`
-
+    const md5 = createHash('md5')
+    const namecardId = md5.update(`${userId}-${input.teamId}`, 'utf8').digest('hex').slice(0, 15)
+    
     // // check event
     // let event = await getEvent(input.eventId) as Event | null
     // if (event == null) {
