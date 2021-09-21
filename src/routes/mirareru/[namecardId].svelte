@@ -117,9 +117,9 @@
 			href="/zukan/{eventId}"
 			class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
 		>
-			<p class="text-sm lg:text-lg">{eventName}の名刺図鑑をひらく</p>
+			<p class="text-sm lg:text-lg">{eventName} の名刺図鑑をひらく</p>
 			<div class="flex-grow" />
-			<Book16 class="transition-transform duration-200 ease-out group-hover:scale-150" />
+			<Book16 class="h-6 w-6 transition-transform duration-200 ease-out group-hover:scale-150" />
 		</a>
 	</div>
 
