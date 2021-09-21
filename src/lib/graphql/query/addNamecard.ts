@@ -8,8 +8,8 @@ export const addNamecard = (
 ): Promise<Namecard> =>
 	mutation<{ input: AddNamecardInput }, Namecard>(
 		`
-        mutation addNamecard($input: AddNamecardInput!) {
-            addNamecard(input: $input){
+		mutation addNamecard($input: AddNamecardInput!) {
+			addNamecard(input: $input){
 				id
 				memberOf
 				preferTechnologies
@@ -43,8 +43,7 @@ export const addNamecard = (
 					}
 				}
 			}
-            }
-        }
+		} 
         `,
 		variables,
 		headers
