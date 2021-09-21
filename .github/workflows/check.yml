@@ -27,4 +27,6 @@ jobs:
         run: npm run build
       - name: poop ignore amplify error
         if: always()
-        run: sed  's|import "aws-amplify/lib";|// import "aws-amplify/lib";|g' build/middlewares.js  > build/middlewares.js
+        run: sed  -i 's|import "aws-amplify/lib";|// import "aws-amplify/lib";|g' build/middlewares.js  
+      - name: cat
+        run: cat build/middlewares.js | grep aws-amplify
