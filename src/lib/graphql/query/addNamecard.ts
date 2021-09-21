@@ -1,12 +1,12 @@
-import { query } from '../client';
+import { mutation } from '../client';
 import type { AddNamecardInput, Namecard } from 'src/generated/graphql';
 import type { AuthHeader } from './types';
 
-export const getNamecard = (variables: AddNamecardInput, headers: AuthHeader): Promise<Namecard> =>
-	query<AddNamecardInput, Namecard>(
+export const addNamecard = (variables: AddNamecardInput, headers: AuthHeader): Promise<Namecard> =>
+	mutation<AddNamecardInput, Namecard>(
 		`
-        mutation getNamecard($input: AddNamecardInput!) {
-            getNamecard(input: $input){
+        mutation addNamecard($input: AddNamecardInput!) {
+            addNamecard(input: $input){
 				id
 				memberOf
 				preferTechnologies
