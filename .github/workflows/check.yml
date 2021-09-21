@@ -29,4 +29,5 @@ jobs:
         if: always()
         run: sed  -i 's|import "aws-amplify/lib";|// import "aws-amplify/lib";|g' build/middlewares.js
       - name: cat
+        if: always()
         run: cat build/middlewares.js | grep aws-amplify
