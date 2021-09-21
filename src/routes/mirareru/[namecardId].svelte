@@ -64,7 +64,8 @@
 	import { user } from '$lib/store';
 	import { Dynamic, Static } from '$lib/svg';
 	import { QrCode16, SendFilled32 } from 'carbon-icons-svelte';
-	import type { AddNamecardInput, Comment, Namecard, Product, Team } from 'src/generated/graphql';
+	import type { Namecard } from 'src/generated/graphql';
+	import { Book16 } from 'carbon-icons-svelte';
 	import { appsyncApiKey } from '$lib/env';
 
 	export let namecard: Namecard;
@@ -86,6 +87,7 @@
 	let preferedTechnologies = namecard.preferTechnologies ?? undefined;
 	let memberOf = namecard.memberOf ?? undefined;
 	let comments = namecard.team.product.comments ?? [];
+	let eventId = namecard.event.id;
 
 	let comment = '';
 
@@ -130,6 +132,7 @@
 				if (owner.githubId != null) github = owner.githubId;
 				if (owner.twitterId != null) twitter = owner.twitterId;
 				if (event.name != null) eventName = event.name;
+				if (event.id != null) eventId = event.id;
 				team = t;
 				product = team.product;
 				usedTechnologies = getNamecard.usedTechnologies ?? [];
@@ -144,11 +147,9 @@
 					console.log('This card is mine. skip addNamecards...');
 					return;
 				}
-				const addNamecardInput: AddNamecardInput = {
-					namecardId
-				};
+
 				console.log('call addNamecard');
-				addNamecard({ input: addNamecardInput }, { Authorization: t.value ?? '' }).then((res) =>
+				addNamecard({ input: namecardId }, { Authorization: t.value ?? '' }).then((res) =>
 					console.log('addNamecard done', res)
 				);
 			});
@@ -197,6 +198,14 @@
 				</a>
 			{/if}
 		</div>
+		<a
+			href="/zukan/{eventId}"
+			class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
+		>
+			<p class="text-sm lg:text-lg">{eventName} の名刺図鑑をひらく</p>
+			<div class="flex-grow" />
+			<Book16 class="h-6 w-6 transition-transform duration-200 ease-out group-hover:scale-150" />
+		</a>
 	</div>
 
 	<div class="mx-auto px-8 py-4">
@@ -204,8 +213,8 @@
 		{#if $user.type === 'success' && $user.value.id !== ownerId}
 			<div class="py-6">
 				<form on:submit|preventDefault={send} class="flex gap-2">
-					<Input bind:value={comment} placeholder="" class="flex-grow" required />
-					<Button class="bg-blue-600 px-2 py-2">
+					<Input bind:value={comment} placeholder="" class="flex w-full " required />
+					<Button class="bg-blue-600 px-2 py-2 active:bg-blue-700 text-white">
 						<SendFilled32 class="h-6 w-6" style="fill:white " />
 					</Button>
 				</form>

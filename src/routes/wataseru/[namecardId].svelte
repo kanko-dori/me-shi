@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-
 	import { page } from '$app/stores';
 	import { token } from '$lib/auth';
-
 	import { QRcode, Header, Footer } from '$lib/components';
+	import { subscription } from '$lib/graphql';
 	import Loading from '$lib/components/Loading.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import { getNamecard } from '$lib/graphql/query';
@@ -43,6 +42,23 @@
 				preferTechnologies = namecard.preferTechnologies ?? [];
 			})
 			.then(() => {
+				console.log('try subscribe onAddNamecard...');
+				subscription(
+					`
+						subscription OnAddNameListener($input: String!) {
+							onAddNamecard(ownerNamecardId: $input) {
+								getterNamecardId
+								ownerNamecardId
+							}
+						}
+					`,
+					{
+						input: $page.params.namecardId
+					},
+					{
+						Authorization: t.value ?? ''
+					}
+				).subscribe(console.log, console.warn, console.log);
 				loading = false;
 			});
 	});
@@ -79,7 +95,6 @@
 		/>
 	</p>
 </main>
-
 <Modal open={loading}>
 	<div class="z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
 		<Loading />

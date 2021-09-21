@@ -1,15 +1,37 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { auth0 } from '$lib/auth/auth0';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import { goto } from '$app/navigation';
 	import Loading from '$lib/components/Loading.svelte';
 	import Modal from '$lib/components/Modal.svelte';
+
 	import { user } from '$lib/store';
 	import { Static } from '$lib/svg';
+	import { Auth } from 'aws-amplify/lib';
 	import { Pen16 } from 'carbon-icons-svelte';
 	import Add16 from 'carbon-icons-svelte/lib/Add16';
 	import ArrowRight16 from 'carbon-icons-svelte/lib/ArrowRight16';
+	import { onMount } from 'svelte';
 
+	onMount(() => {
+		auth0
+			.then((a) => Promise.all([a.getUser(), a.getIdTokenClaims()]))
+			.then(([user, claim]) => {
+				if (user === undefined) throw new Error('user not found');
+				return Auth.federatedSignIn(
+					'kanko-dori.us.auth0.com',
+					{
+						token: claim.__raw,
+						expires_at: (claim.exp ?? 0) * 1000
+					},
+					{
+						name: user.name ?? ''
+					}
+				);
+			})
+			.catch(console.error);
+	});
 	user.subscribe((u) => {
 		if (u.type === 'failure') goto('/');
 		return;

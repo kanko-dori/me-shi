@@ -26,7 +26,7 @@
 <span class="p-2 rounded shadow focus-within:ring inline-flex bg-white {$$props.class}">
 	<slot name="prefix" />
 	<input
-		class="focus:outline-none flex-grow"
+		class="focus:outline-none w-full"
 		type={computedType}
 		value={computedValue}
 		{placeholder}
