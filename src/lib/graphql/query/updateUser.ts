@@ -21,7 +21,6 @@ export const updateUser = (
 		variables,
 		headers
 	).then((res) => {
-		console.log('updateUser', res);
 		if (res.errors !== undefined) throw res.errors;
 		if (res.data === undefined) throw new Error('Blank data');
 		return res.data;
