@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Product, ProductInput, Team } from 'src/generated/graphql';
-	import { getToken, token } from '$lib/auth';
+	import { getToken } from '$lib/auth';
 	import {
 		Header,
 		Footer,
@@ -64,6 +64,7 @@
 			repository: product.repository
 		};
 		try {
+			const token = await getToken();
 			const event = await createEvent(
 				{
 					input: {
@@ -71,7 +72,7 @@
 					}
 				},
 				{
-					Authorization: $token || ''
+					Authorization: token ?? ''
 				}
 			);
 			const team = await createTeam(
@@ -83,7 +84,7 @@
 					}
 				},
 				{
-					Authorization: $token || ''
+					Authorization: token || ''
 				}
 			);
 			const namecard = await createNamecard(
@@ -97,7 +98,7 @@
 					}
 				},
 				{
-					Authorization: $token || ''
+					Authorization: token || ''
 				}
 			);
 			console.log('createNamecard done!', namecard.createNamecard);
