@@ -5,11 +5,11 @@ import type { AuthHeader } from './types';
 export const updateUser = (
 	variables: { input: UpdateUserInput },
 	headers: AuthHeader
-): Promise<User> =>
-	mutation<{ input: UpdateUserInput }, User>(
+): Promise<{ updateUser: User }> =>
+	mutation<{ input: UpdateUserInput }, { updateUser: User }>(
 		`
       mutation updateUser($input: UpdateUserInput!) {
-        createUser(input: $input){
+        updateUser(input: $input){
           id
           iconURL
           name
