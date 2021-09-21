@@ -51,7 +51,7 @@
 				{#each $user.type === 'success' ? $user.value.myNamecards ?? [] : [] as mycard}
 					<li>
 						<a
-							href="/mirareru"
+							href="/mirareru/{mycard.id}"
 							class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
 						>
 							<p>{mycard.event.name}</p>
