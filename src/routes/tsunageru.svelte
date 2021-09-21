@@ -1,11 +1,7 @@
 <script lang="ts">
-	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
-	import { Footer, Header, Loading, Modal } from '$lib/components';
-
-	import { token } from '$lib/auth';
 	import { auth0 } from '$lib/auth/auth0';
-	import { subscription } from '$lib/graphql';
+	import { Footer, Header, Loading, Modal } from '$lib/components';
 	import { user } from '$lib/store';
 	import { Static } from '$lib/svg';
 	import { Auth } from 'aws-amplify/lib';
@@ -32,7 +28,6 @@
 			})
 			.catch(console.error);
 	});
-
 	user.subscribe((u) => {
 		if (u.type === 'failure') goto('/');
 		return;

@@ -1,15 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-
 	import { page } from '$app/stores';
 	import { token } from '$lib/auth';
-
-	import { QRcode, Header, Footer, Modal, Loading } from '$lib/components';
+	import { Footer, Header, Loading, Modal, QRcode } from '$lib/components';
 	import { subscription } from '$lib/graphql';
 	import { addNamecard, getNamecard } from '$lib/graphql/query';
 	import { user } from '$lib/store';
 	import { Dynamic } from '$lib/svg';
-	import type { AddNamecardResult, AddNamecardResultResolvers } from 'src/generated/graphql';
+	import type { AddNamecardResult } from 'src/generated/graphql';
 
 	let event = '';
 	let team = '';

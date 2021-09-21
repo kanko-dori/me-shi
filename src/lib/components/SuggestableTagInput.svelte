@@ -53,7 +53,7 @@
 	};
 </script>
 
-<span class="p-2 rounded shadow focus-within:ring inline-flex relative bg-white {$$props.class}">
+<span class=" p-2 rounded shadow focus-within:ring inline-flex relative bg-white {$$props.class}">
 	<slot name="prefix" />
 	<div class="inline-flex flex-wrap flex-grow">
 		{#each value as tag}
@@ -68,7 +68,7 @@
 			</span>
 		{/each}
 		<input
-			class="focus:outline-none flex-grow"
+			class="focus:outline-none w-full"
 			value={currentInput}
 			{placeholder}
 			readonly={max > 0 && value.length >= max}
