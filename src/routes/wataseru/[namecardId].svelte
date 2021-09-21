@@ -3,6 +3,7 @@
 	import { token } from '$lib/auth';
 
 	import { QRcode, Header, Footer } from '$lib/components';
+	import { subscription } from '$lib/graphql';
 	import { getNamecard } from '$lib/graphql/query';
 	import { Dynamic } from '$lib/svg';
 
@@ -23,13 +24,33 @@
 			{
 				Authorization: t.value ?? ''
 			}
-		).then(({ getNamecard: namecard }) => {
-			event = namecard.event.name ?? '';
-			team = namecard.team.name ?? '';
-			product = namecard.team.product ?? { name: '' };
-			usedTechnologies = namecard.usedTechnologies ?? [];
-			preferTechnologies = namecard.preferTechnologies ?? [];
-		});
+		)
+			.then(({ getNamecard: namecard }) => {
+				event = namecard.event.name ?? '';
+				team = namecard.team.name ?? '';
+				product = namecard.team.product ?? { name: '' };
+				usedTechnologies = namecard.usedTechnologies ?? [];
+				preferTechnologies = namecard.preferTechnologies ?? [];
+			})
+			.then(() => {
+				console.log('try subscribe onAddNamecard...');
+				subscription(
+					`
+						subscription OnAddNameListener($input: String!) {
+							onAddNamecard(ownerNamecardId: $input) {
+								getterNamecardId
+								ownerNamecardId
+							}
+						}
+					`,
+					{
+						input: $page.params.namecardId
+					},
+					{
+						Authorization: t.value ?? ''
+					}
+				).subscribe(console.log, console.warn, console.log);
+			});
 	});
 </script>
 
