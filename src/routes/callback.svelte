@@ -12,7 +12,7 @@
 				login(
 					{
 						input: {
-							name: user?.name ?? user?.nickname ?? 'octocat',
+							name: user?.nickname ?? user?.name ?? 'octocat',
 							githubId: user?.nickname ?? 'octocat',
 							iconURL: user?.picture ?? `https://github.com/${user?.nickname ?? 'octocat'}`
 						}
