@@ -93,6 +93,49 @@ export const listTeam = async (input: ListTeamInput): Promise<any> => {
     return teams
 }
 
+export const listTeamAll = async (): Promise<any> => {
+    const teamParams: ScanCommandInput = {
+        TableName: TeamTableName,
+    }
+
+    console.log(teamParams)
+    const teams: any = []
+
+    let res = await docClient.send(new ScanCommand(teamParams))
+    if (res.Items) {
+        res.Items.forEach(item => {
+            teams.push({
+                id: item.id,
+                name: item.name,
+                product: item.product,
+                event: {
+                    id: item.eventId,
+                    name: item.eventId
+                }
+            })
+        })
+    }
+    while (res.LastEvaluatedKey) {
+        teamParams.ExclusiveStartKey = res.LastEvaluatedKey
+        res = await docClient.send(new ScanCommand(teamParams))
+        if (res.Items) {
+            res.Items.forEach(item => {
+                teams.push({
+                    id: item.id,
+                    name: item.name,
+                    product: item.product,
+                    event: {
+                        id: item.eventId,
+                        name: item.eventId
+                    }
+                })
+            })
+        }
+    }
+    console.log(teams)
+    return teams
+}
+
 export const addComment = async (input: AddCommentInput, userId: string) => {
     const team = await getTeam(input.teamId)
     const comment: Comment = {

@@ -1,9 +1,9 @@
 import { ScanCommand, PutCommand, PutCommandInput, ScanCommandInput, GetCommandInput, GetCommand } from '@aws-sdk/lib-dynamodb'
 import { EventTableName } from '../../../../lib/namecard-backend-stack'
-import { CreateEventInput } from '../../../generated/graphql'
+import { CreateEventInput, Event } from '../../../generated/graphql'
 import { docClient } from '../me_shi'
 
-export const createEvent = async (input: CreateEventInput) => {
+export const createEvent = async (input: CreateEventInput): Promise<Event> => {
     console.log('eventname', input)
     const eventParam: PutCommandInput = {
         TableName: EventTableName,
@@ -15,7 +15,11 @@ export const createEvent = async (input: CreateEventInput) => {
 
     console.log('createEvent', eventParam)
     await docClient.send(new PutCommand(eventParam))
-    return eventParam
+    const event: Event = {
+        id: input.name,
+        name: input.name
+    }
+    return event
 }
 
 export const listEvent = async (): Promise<any> => {
