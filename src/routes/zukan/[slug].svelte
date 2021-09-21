@@ -67,7 +67,7 @@
 							{#each namecardList.filter((c) => c.team.name === teamname) as n}
 								<li class="flex">
 									{#if n.isOwn}
-										<a href="/mirareru">
+										<a href="/mirareru/{n.id}">
 											<ZukanCard
 												name={n.owner.name || undefined}
 												icon={n.owner.iconURL || undefined}
@@ -83,7 +83,6 @@
 											class="w-32 lg:w-48"
 										/>
 									{/if}
-									<a href="/mirareru/" />
 								</li>
 							{/each}
 						</ul>

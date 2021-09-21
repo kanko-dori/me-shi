@@ -185,7 +185,14 @@
 			</SuggestableInput>
 		</div>
 		<div class="p-4 flex">
-			<Button class="hover:shadow transition-shadow bg-gray-300">Cancel</Button>
+			<Button
+				class="hover:shadow transition-shadow bg-gray-300"
+				on:click={() => {
+					goto(`/tsunageru`);
+				}}
+			>
+				Cancel</Button
+			>
 			<div class="flex-grow" />
 			<Button class="hover:shadow transition-shadow bg-blue-500 text-white" on:click={onSubmit}>
 				Apply

@@ -3,7 +3,7 @@
 	import Header from '$lib/components/Header.svelte';
 	import { user } from '$lib/store';
 	import { Static } from '$lib/svg';
-	import { Pen16 } from 'carbon-icons-svelte';
+	import { Pen16, Book16 } from 'carbon-icons-svelte';
 	import Add16 from 'carbon-icons-svelte/lib/Add16';
 	import ArrowRight16 from 'carbon-icons-svelte/lib/ArrowRight16';
 </script>
@@ -84,6 +84,14 @@
 						</a>
 					</li>
 				{/each}
+				<a
+					href="/zukan/"
+					class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
+				>
+					<p>名刺図鑑をひらく</p>
+					<div class="flex-grow" />
+					<Book16 class="transition-transform duration-200 ease-out group-hover:scale-150" />
+				</a>
 			</ul>
 		</section>
 	</div>

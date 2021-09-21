@@ -120,7 +120,7 @@
 			<div class="py-6">
 				<form on:submit|preventDefault={send} class="flex gap-2">
 					<Input bind:value={comment} placeholder="" class="flex-grow" required />
-					<Button class="bg-blue-600 px-2 py-2">
+					<Button class="bg-blue-600 px-2 py-2 active:bg-blue-700 text-white">
 						<SendFilled32 class="h-6 w-6" style="fill:white " />
 					</Button>
 				</form>
