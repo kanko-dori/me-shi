@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { browser } from '$app/env';
-
-	import { token } from '$lib/auth';
 	import { auth0 } from '$lib/auth/auth0';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
-	import { subscription } from '$lib/graphql';
+	import { goto } from '$app/navigation';
+	import Loading from '$lib/components/Loading.svelte';
+	import Modal from '$lib/components/Modal.svelte';
+
 	import { user } from '$lib/store';
 	import { Static } from '$lib/svg';
 	import { Book16 } from 'carbon-icons-svelte';
@@ -32,6 +32,9 @@
 				);
 			})
 			.catch(console.error);
+	user.subscribe((u) => {
+		if (u.type === 'failure') goto('/');
+		return;
 	});
 </script>
 
@@ -41,12 +44,8 @@
 	<div class="p-8">
 		<div class="max-w-3xl w-full mx-auto relative">
 			<Static
-				name={$user.type === 'success'
-					? $user.value.name ?? 'Loading failure'
-					: `Loading ${$user.type}`}
-				github={$user.type === 'success'
-					? $user.value.githubId ?? 'Loadgin failure'
-					: `Loading ${$user.type}`}
+				name={$user.type === 'success' ? $user.value.name ?? 'Loading failure' : ''}
+				github={$user.type === 'success' ? $user.value.githubId ?? 'Loadgin failure' : ''}
 				twitter={$user.type === 'success' ? $user.value.twitterId ?? undefined : undefined}
 				class="w-full shadow-xl"
 			/>
@@ -115,5 +114,11 @@
 		</section>
 	</div>
 </main>
+
+<Modal open={$user.type !== 'success'}>
+	<div class="z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+		<Loading />
+	</div>
+</Modal>
 
 <Footer />

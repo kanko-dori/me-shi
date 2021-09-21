@@ -4,12 +4,19 @@
 	import { getZukan } from '$lib/graphql/query/getZukan';
 	import { onMount } from 'svelte';
 	import type { ZukanNamecard } from 'src/generated/graphql';
-	const eventId = 'testevent';
+	import { user } from '$lib/store';
+	import { goto } from '$app/navigation';
+	const eventId = 'testEvent';
 	let eventname = '';
 	let namecardList: ZukanNamecard[] = [];
 	let teamList: string[] = [];
 	let team: string[] = [];
 	let path: string = '';
+
+	user.subscribe((u) => {
+		if (u.type === 'failure') goto('/');
+		return;
+	});
 
 	onMount(() => {
 		getToken().then((token) => {

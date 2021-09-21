@@ -2,12 +2,19 @@
 	import { page } from '$app/stores';
 	import { authUser, token } from '$lib/auth';
 	import { Button, Footer, Header, Input } from '$lib/components';
+	import Loading from '$lib/components/Loading.svelte';
+	import Modal from '$lib/components/Modal.svelte';
 	import { addNamecard, addComment, getNamecard } from '$lib/graphql/query';
 	import { user } from '$lib/store';
 	import { Dynamic, Static } from '$lib/svg';
 	import { QrCode16, SendFilled32 } from 'carbon-icons-svelte';
 	import type { AddNamecardInput, Comment, Product, Team } from 'src/generated/graphql';
 	import { Book16 } from 'carbon-icons-svelte';
+
+	const twitterShareUrl = new URL('https://twitter.com/share');
+	twitterShareUrl.searchParams.append('url', `https://me-shi.ga${$page.path}`);
+	twitterShareUrl.searchParams.append('text', `イベントに参加してきました！`);
+	twitterShareUrl.searchParams.append('hashtags', 'me_shi');
 
 	let namecardId = '';
 	let ownerId = '';
@@ -24,6 +31,8 @@
 	let comments: Array<Comment> = [];
 
 	let comment = '';
+
+	let processing = true;
 	const send = () => {
 		if ($token.type !== 'success') {
 			console.log('Auth isnot initialized');
@@ -73,6 +82,7 @@
 				memberOf = getNamecard.memberOf ?? undefined;
 			})
 			.then(() => {
+				processing = false;
 				if ($authUser.type !== 'success') return;
 				if ($authUser.value?.sub === ownerId) {
 					console.log('This card is mine. skip addNamecards...');
@@ -105,6 +115,13 @@
 				class="w-full shadow-xl"
 			/>
 			{#if $user.type === 'success' && $user.value.id === ownerId}
+				<a
+					href={twitterShareUrl.toString()}
+					target="_blank"
+					class="absolute flex justify-center items-center outline-none focus:ring-2 w-12 h-12 right-2 bottom-16"
+				>
+					<img src="/static/twitter.svg" alt="twitter" />
+				</a>
 				<a
 					href="/wataseru/{namecardId}"
 					class="absolute flex justify-center items-center outline-none focus:ring-2 w-12 h-12 rounded-md opacity-75 bg-gray-800 right-2 bottom-2"
@@ -151,5 +168,11 @@
 		</ul>
 	</div>
 </main>
+
+<Modal open={processing}>
+	<div class="z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+		<Loading />
+	</div>
+</Modal>
 
 <Footer />
