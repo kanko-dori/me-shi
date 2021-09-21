@@ -2,8 +2,11 @@ import { mutation } from '../client';
 import type { CreateTeamInput, Team } from 'src/generated/graphql';
 import type { AuthHeader } from './types';
 
-export const createTeam = (variables: CreateTeamInput, headers: AuthHeader): Promise<Team> =>
-	mutation<CreateTeamInput, Team>(
+export const createTeam = (
+	variables: { input: CreateTeamInput },
+	headers: AuthHeader
+): Promise<Team> =>
+	mutation<{ input: CreateTeamInput }, Team>(
 		`
         mutation createTeam($input: CreateTeamInput!) {
             createTeam(input: $input){

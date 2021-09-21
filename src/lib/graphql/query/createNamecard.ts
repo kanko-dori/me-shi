@@ -3,10 +3,10 @@ import type { CreateNamecardInput, Namecard } from 'src/generated/graphql';
 import type { AuthHeader } from './types';
 
 export const createNamecard = (
-	variables: CreateNamecardInput,
+	variables: { input: CreateNamecardInput },
 	headers: AuthHeader
 ): Promise<Namecard> =>
-	mutation<CreateNamecardInput, Namecard>(
+	mutation<{ input: CreateNamecardInput }, Namecard>(
 		`
         mutation createNamecard($input: CreateNamecardInput!) {
             createNamecard(input: $input){

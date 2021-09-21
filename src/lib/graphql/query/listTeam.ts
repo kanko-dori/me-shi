@@ -2,8 +2,11 @@ import { query } from '../client';
 import type { ListTeamInput, Team } from 'src/generated/graphql';
 import type { AuthHeader } from './types';
 
-export const listTeam = (variables: ListTeamInput, headers: AuthHeader): Promise<Team[]> =>
-	query<ListTeamInput, Team[]>(
+export const listTeam = (
+	variables: { input: ListTeamInput },
+	headers: AuthHeader
+): Promise<Team[]> =>
+	query<{ input: ListTeamInput }, Team[]>(
 		`
         query listTeam($input: ListTeamInput) {
             listTeam(input: $input){

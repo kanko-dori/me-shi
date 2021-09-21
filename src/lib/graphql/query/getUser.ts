@@ -3,7 +3,7 @@ import type { GetUserInput, User } from 'src/generated/graphql';
 import type { AuthHeader } from './types';
 
 export const getUser = (variables: GetUserInput, headers: AuthHeader): Promise<User> =>
-	query<GetUserInput, User>(
+	query<{ input: GetUserInput }, User>(
 		`
         query getUser($input: GetUserInput) {
             getUser(input: $input){

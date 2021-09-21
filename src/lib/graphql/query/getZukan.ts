@@ -3,7 +3,7 @@ import type { GetZukanInput, Zukan } from 'src/generated/graphql';
 import type { AuthHeader } from './types';
 
 export const getZukan = (variables: GetZukanInput, headers: AuthHeader): Promise<Zukan> =>
-	query<GetZukanInput, Zukan>(
+	query<{ input: GetZukanInput }, Zukan>(
 		`
         query getZukan($input: GetZukanInput) {
             getZukan(input: $input){
