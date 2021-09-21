@@ -22,6 +22,12 @@ export type AddNamecardInput = {
   namecardId: Scalars['ID'];
 };
 
+export type AddNamecardResult = {
+  __typename?: 'AddNamecardResult';
+  getterNamecardId?: Maybe<Scalars['String']>;
+  ownerNamecardId?: Maybe<Scalars['String']>;
+};
+
 export type Affiliation = {
   __typename?: 'Affiliation';
   id: Scalars['ID'];
@@ -89,7 +95,7 @@ export type ListTeamInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   addComment: Team;
-  addNamecard: Namecard;
+  addNamecard: AddNamecardResult;
   createEvent: Event;
   createNamecard: Namecard;
   createTeam: Team;
@@ -104,7 +110,7 @@ export type MutationAddCommentArgs = {
 
 
 export type MutationAddNamecardArgs = {
-  input: AddNamecardInput;
+  namecardId: Scalars['String'];
 };
 
 
@@ -191,12 +197,12 @@ export type QueryListTeamArgs = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  onAddedNamecard: Namecard;
+  onAddNamecard?: Maybe<AddNamecardResult>;
 };
 
 
-export type SubscriptionOnAddedNamecardArgs = {
-  namecardId: Scalars['ID'];
+export type SubscriptionOnAddNamecardArgs = {
+  ownerNamecardId?: Maybe<Scalars['String']>;
 };
 
 export type Team = {
@@ -320,6 +326,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   AddCommentInput: AddCommentInput;
   AddNamecardInput: AddNamecardInput;
+  AddNamecardResult: ResolverTypeWrapper<AddNamecardResult>;
   Affiliation: ResolverTypeWrapper<Affiliation>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Comment: ResolverTypeWrapper<Comment>;
@@ -353,6 +360,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   AddCommentInput: AddCommentInput;
   AddNamecardInput: AddNamecardInput;
+  AddNamecardResult: AddNamecardResult;
   Affiliation: Affiliation;
   Boolean: Scalars['Boolean'];
   Comment: Comment;
@@ -382,6 +390,12 @@ export type ResolversParentTypes = {
   ZukanNamecard: ZukanNamecard;
 };
 
+export type AddNamecardResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['AddNamecardResult'] = ResolversParentTypes['AddNamecardResult']> = {
+  getterNamecardId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  ownerNamecardId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type AffiliationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Affiliation'] = ResolversParentTypes['Affiliation']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -403,7 +417,7 @@ export type EventResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addComment?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationAddCommentArgs, never>>;
-  addNamecard?: Resolver<ResolversTypes['Namecard'], ParentType, ContextType, RequireFields<MutationAddNamecardArgs, 'input'>>;
+  addNamecard?: Resolver<ResolversTypes['AddNamecardResult'], ParentType, ContextType, RequireFields<MutationAddNamecardArgs, 'namecardId'>>;
   createEvent?: Resolver<ResolversTypes['Event'], ParentType, ContextType, RequireFields<MutationCreateEventArgs, never>>;
   createNamecard?: Resolver<ResolversTypes['Namecard'], ParentType, ContextType, RequireFields<MutationCreateNamecardArgs, never>>;
   createTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationCreateTeamArgs, never>>;
@@ -442,7 +456,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  onAddedNamecard?: SubscriptionResolver<ResolversTypes['Namecard'], "onAddedNamecard", ParentType, ContextType, RequireFields<SubscriptionOnAddedNamecardArgs, 'namecardId'>>;
+  onAddNamecard?: SubscriptionResolver<Maybe<ResolversTypes['AddNamecardResult']>, "onAddNamecard", ParentType, ContextType, RequireFields<SubscriptionOnAddNamecardArgs, never>>;
 };
 
 export type TeamResolvers<ContextType = any, ParentType extends ResolversParentTypes['Team'] = ResolversParentTypes['Team']> = {
@@ -489,6 +503,7 @@ export type ZukanNamecardResolvers<ContextType = any, ParentType extends Resolve
 };
 
 export type Resolvers<ContextType = any> = {
+  AddNamecardResult?: AddNamecardResultResolvers<ContextType>;
   Affiliation?: AffiliationResolvers<ContextType>;
   Comment?: CommentResolvers<ContextType>;
   Event?: EventResolvers<ContextType>;

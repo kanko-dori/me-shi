@@ -23,14 +23,14 @@ type Mutation {
 
 	# この関数を呼んだ人の givenNamecards に指定した名刺を登録する
 	# 登録した人の、同じイベントに参加している Namecard が返ってくる
-	addNamecard(input: AddNamecardInput!): Namecard!
+	# AがBのカードを登録 addNamecard(namecardId: BのカードのID):
+	addNamecard(namecardId: String!): AddNamecardResult!
 }
 
-# AがBのカードを登録 addNamecard(namecardId: BのカードのID):
+# AがBのカードを登録 addNamecard(ownerNamecardId: BのカードのID):
 type Subscription {
-	# addNamecard が呼ばれたら発火する
-	# 登録した人が返ってくるので、それをもとに名刺を探して登録する
-	onAddedNamecard(namecardId: ID!): Namecard! @aws_subscribe(mutations: ["addNamecard"])
+	onAddNamecard(ownerNamecardId: String): AddNamecardResult
+		@aws_subscribe(mutations: ["addNamecard"])
 }
 
 type User {
@@ -105,6 +105,11 @@ type Namecard {
 	memberOf: String # affiliation name
 	usedTechnologies: [String!] # Technology names
 	preferTechnologies: [String!] #  Technology names
+}
+
+type AddNamecardResult {
+	ownerNamecardId: String
+	getterNamecardId: String
 }
 
 input AddNamecardInput {
