@@ -1,5 +1,6 @@
 export * from './login';
 export * from './getUser';
+export * from './getNamecard';
 export * from './listEvent';
 export * from './listTeamAll';
 export * from './listTechnology';

@@ -30,6 +30,7 @@
 		type={computedType}
 		value={computedValue}
 		{placeholder}
+		required={$$props.required}
 		on:input={handleInput}
 		on:blur
 		on:change

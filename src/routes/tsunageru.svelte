@@ -51,7 +51,7 @@
 				{#each $user.type === 'success' ? $user.value.myNamecards ?? [] : [] as mycard}
 					<li>
 						<a
-							href="/mirareru"
+							href="/mirareru/{mycard.id}"
 							class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
 						>
 							<p>{mycard.event.name}</p>
@@ -70,11 +70,11 @@
 				{#each $user.type === 'success' ? $user.value.givenNamecards ?? [] : [] as givencard}
 					<li>
 						<a
-							href="/"
+							href="/mirareru/{givencard.id}"
 							class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
 						>
 							<div class="flex-col">
-								<p>{givencard.owner}</p>
+								<p>{givencard.owner?.name ?? 'Error'}</p>
 								<p class="text-sm text-gray-500">{givencard.event.name}</p>
 							</div>
 							<div class="flex-grow" />
