@@ -2,8 +2,11 @@ import { mutation } from '../client';
 import type { CreateEventInput, Event } from 'src/generated/graphql';
 import type { AuthHeader } from './types';
 
-export const createEvent = (variables: CreateEventInput, headers: AuthHeader): Promise<Event> =>
-	mutation<CreateEventInput, Event>(
+export const createEvent = (
+	variables: { input: CreateEventInput },
+	headers: AuthHeader
+): Promise<Event> =>
+	mutation<{ input: CreateEventInput }, Event>(
 		`
         mutation createEvent($input: CreateEventInput!) {
             createEvent(input: $input){
