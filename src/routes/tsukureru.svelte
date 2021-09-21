@@ -1,27 +1,30 @@
 <script lang="ts">
-	import type { Product, ProductInput, Team } from 'src/generated/graphql';
+	import { goto } from '$app/navigation';
 	import { getToken } from '$lib/auth';
 	import {
-		Header,
+		Button,
 		Footer,
+		Header,
 		Input,
+		Loading,
+		Modal,
 		SuggestableInput,
-		SuggestableTagInput,
-		Button
+		SuggestableTagInput
 	} from '$lib/components';
 	import {
+		createNamecard,
 		listAffiliation,
 		listEvent,
 		listTeamAll,
-		listTechnology,
-		createNamecard
+		listTechnology
 	} from '$lib/graphql/query';
-	import { Dynamic } from '$lib/svg';
-	import { onMount } from 'svelte';
-	import Tag16 from 'carbon-icons-svelte/lib/Tag16';
-	import Event16 from 'carbon-icons-svelte/lib/Event16';
 	import { createEvent } from '$lib/graphql/query/createEvent';
 	import { createTeam } from '$lib/graphql/query/createTeam';
+	import { Dynamic } from '$lib/svg';
+	import Event16 from 'carbon-icons-svelte/lib/Event16';
+	import Tag16 from 'carbon-icons-svelte/lib/Tag16';
+	import type { Product, ProductInput, Team } from 'src/generated/graphql';
+	import { onMount } from 'svelte';
 
 	let eventName = '';
 	let teamName = '';
@@ -35,6 +38,9 @@
 	let showTeamNameList: string[] = [];
 	let technologyList: string[] = [];
 	let affiliationList: string[] = [];
+
+	let processing = true;
+	let createdNamecardId: string | undefined;
 
 	onMount(() => {
 		getToken()
@@ -54,7 +60,10 @@
 				console.log(technologies);
 				affiliationList = affiliations.listAffiliation.map((a) => a.id);
 			})
-			.catch(console.error);
+			.catch(console.error)
+			.finally(() => {
+				processing = false;
+			});
 	});
 
 	const onSubmit = async () => {
@@ -64,6 +73,7 @@
 			repository: product.repository
 		};
 		try {
+			processing = true;
 			const token = await getToken();
 			const event = await createEvent(
 				{
@@ -102,8 +112,11 @@
 				}
 			);
 			console.log('createNamecard done!', namecard.createNamecard);
+			createdNamecardId = namecard.createNamecard.id;
 		} catch (err) {
 			console.error(err);
+		} finally {
+			processing = false;
 		}
 	};
 
@@ -123,7 +136,7 @@
 				event={eventName}
 				team={teamName}
 				{product}
-				usedTechnologies={usedTechnologies || undefined}
+				usedTechnologies={usedTechnologies || []}
 				preferedTechnologies={preferedTechnologies || undefined}
 				memberOf={memberOf || undefined}
 				class="w-full shadow-xl"
@@ -180,4 +193,29 @@
 		</div>
 	</div>
 </main>
+
+<Modal open={processing}>
+	<div class="z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+		<Loading />
+	</div>
+</Modal>
+<Modal open={createdNamecardId !== undefined}>
+	<div
+		class="max-w-4xl p-8 bg-white rounded-md shadow-md z-20 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+	>
+		<h3 class="py-4">作成しました！</h3>
+		<div class="flex">
+			<div class="flex-grow" />
+			<button
+				class="bg-blue-500 rounded text-white py-2 px-4"
+				on:click={() => {
+					goto(`/mirareru/${createdNamecardId}`);
+					createdNamecardId = undefined;
+				}}
+			>
+				OK
+			</button>
+		</div>
+	</div>
+</Modal>
 <Footer />

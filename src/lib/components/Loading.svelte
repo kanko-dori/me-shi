@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { Svg, Logo } from '$lib/svg';
 	import Connect16 from 'carbon-icons-svelte/lib/Connect16';
+
+	export let message = 'Processing...';
 </script>
 
 <div class="flex flex-col items-center">
@@ -11,7 +13,7 @@
 	<p class="rota">
 		<Connect16 class="w-12 h-12" />
 	</p>
-	<p>Signing in...</p>
+	<p>{message}</p>
 </div>
 
 <style lang="postcss">
