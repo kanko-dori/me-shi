@@ -5,7 +5,7 @@ import type { User } from 'src/generated/graphql';
 import { derived } from 'svelte/store';
 import type { StatusStore } from '.';
 
-export const user = derived<[typeof token, typeof authUser], StatusStore<User | null, unknown>>(
+export const user = derived<[typeof token, typeof authUser], StatusStore<User, unknown>>(
 	[token, authUser],
 	([t, u], set) => {
 		if (!browser) return; // node can't use graphql with amplify
