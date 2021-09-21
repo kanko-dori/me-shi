@@ -75,11 +75,9 @@
 					console.log('This card is mine. skip addNamecards...');
 					return;
 				}
-				const addNamecardInput: AddNamecardInput = {
-					namecardId
-				};
+
 				console.log('call addNamecard');
-				addNamecard({ input: addNamecardInput }, { Authorization: t.value ?? '' }).then((res) =>
+				addNamecard({ input: namecardId }, { Authorization: t.value ?? '' }).then((res) =>
 					console.log('addNamecard done', res)
 				);
 			});

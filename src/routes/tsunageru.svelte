@@ -1,11 +1,41 @@
 <script lang="ts">
+	import { browser } from '$app/env';
+
+	import { token } from '$lib/auth';
+	import { auth0 } from '$lib/auth/auth0';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import { subscription } from '$lib/graphql';
 	import { user } from '$lib/store';
 	import { Static } from '$lib/svg';
+<<<<<<< HEAD
 	import { Pen16, Book16 } from 'carbon-icons-svelte';
+=======
+	import { Auth } from 'aws-amplify/lib';
+	import { Pen16 } from 'carbon-icons-svelte';
+>>>>>>> d48c606f2f2d821a9f31bcb3cd96cfdc87a69e0e
 	import Add16 from 'carbon-icons-svelte/lib/Add16';
 	import ArrowRight16 from 'carbon-icons-svelte/lib/ArrowRight16';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		auth0
+			.then((a) => Promise.all([a.getUser(), a.getIdTokenClaims()]))
+			.then(([user, claim]) => {
+				if (user === undefined) throw new Error('user not found');
+				return Auth.federatedSignIn(
+					'kanko-dori.us.auth0.com',
+					{
+						token: claim.__raw,
+						expires_at: (claim.exp ?? 0) * 1000
+					},
+					{
+						name: user.name ?? ''
+					}
+				);
+			})
+			.catch(console.error);
+	});
 </script>
 
 <Header showSignOut={true} />
