@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
 	import type { Load } from '@sveltejs/kit';
-
+	import { appsyncApiKey } from '$lib/env';
 	export const load: Load = ({ fetch, page }) =>
 		fetch('https://h6qrtrf4hrdl5pt5z2ojjomstq.appsync-api.ap-northeast-1.amazonaws.com/graphql', {
 			headers: {
@@ -60,13 +60,12 @@
 	import { Button, Footer, Header, Input } from '$lib/components';
 	import Loading from '$lib/components/Loading.svelte';
 	import Modal from '$lib/components/Modal.svelte';
-	import { addNamecard, addComment, getNamecard } from '$lib/graphql/query';
+	import { addComment, addNamecard, getNamecard } from '$lib/graphql/query';
 	import { user } from '$lib/store';
 	import { Dynamic, Static } from '$lib/svg';
 	import { QrCode16, SendFilled32 } from 'carbon-icons-svelte';
 	import type { Namecard } from 'src/generated/graphql';
 	import { Book16 } from 'carbon-icons-svelte';
-	import { appsyncApiKey } from '$lib/env';
 
 	export let namecard: Namecard;
 
@@ -147,7 +146,6 @@
 					console.log('This card is mine. skip addNamecards...');
 					return;
 				}
-
 				console.log('call addNamecard');
 				addNamecard({ input: namecardId }, { Authorization: t.value ?? '' }).then((res) =>
 					console.log('addNamecard done', res)

@@ -1,11 +1,7 @@
 <script lang="ts">
-	import { auth0 } from '$lib/auth/auth0';
-	import Footer from '$lib/components/Footer.svelte';
-	import Header from '$lib/components/Header.svelte';
 	import { goto } from '$app/navigation';
-	import Loading from '$lib/components/Loading.svelte';
-	import Modal from '$lib/components/Modal.svelte';
-
+	import { auth0 } from '$lib/auth/auth0';
+	import { Footer, Header, Loading, Modal } from '$lib/components';
 	import { user } from '$lib/store';
 	import { Static } from '$lib/svg';
 	import { Auth } from 'aws-amplify/lib';

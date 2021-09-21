@@ -25,14 +25,17 @@ jobs:
         run: npm run build
 
       - name: Zip package
+        if: always()
         run: zip -r app.zip .
 
       - name: Azure Login
+        if: always()
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Azure CLI script
+        if: always()
         uses: azure/CLI@v1
         with:
           inlineScript: |
