@@ -6,7 +6,7 @@
 	import { user } from '$lib/store';
 	import { Dynamic, Static } from '$lib/svg';
 	import { QrCode16, SendFilled32 } from 'carbon-icons-svelte';
-	import type { AddNamecardInput, Comment, Product, Team } from 'src/generated/graphql';
+	import type { Comment, Product, Team } from 'src/generated/graphql';
 
 	let namecardId = '';
 	let ownerId = '';
@@ -75,7 +75,6 @@
 					console.log('This card is mine. skip addNamecards...');
 					return;
 				}
-
 				console.log('call addNamecard');
 				addNamecard({ input: namecardId }, { Authorization: t.value ?? '' }).then((res) =>
 					console.log('addNamecard done', res)
