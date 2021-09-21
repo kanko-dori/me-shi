@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { Header, Footer, Input, Button } from '$lib/components';
 	import { Dynamic, Static } from '$lib/svg';
 	import { QrCode16, SendFilled32 } from 'carbon-icons-svelte';
@@ -12,7 +12,9 @@
 	let product = { name: 'kubesmas' };
 	let usedTechnologies = ['kubernetes', 'html'];
 	let comment = '';
-	function send() {}
+	const send = () => {
+		console.log('send!');
+	};
 	let coments = ['いいね', 'さいこー'];
 </script>
 
