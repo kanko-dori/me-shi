@@ -1,7 +1,7 @@
 import { AppSyncResolverEvent, AppSyncIdentityOIDC } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { CreateUserInput, CreateEventInput, Event, CreateTeamInput, AddCommentInput, CreateNamecardInput } from '../../generated/graphql'
+import { CreateUserInput, CreateEventInput, Event, CreateTeamInput, AddCommentInput, CreateNamecardInput, GetNamecardInput, AddNamecardInput, GetZukanInput, ListTeamInput, GetUserInput } from '../../generated/graphql'
 import { createUser, getUser } from './resolvers/user';
 import { createEvent, listEvent } from './resolvers/event';
 import { addComment, createTeam, getTeam, listTeam } from './resolvers/team';
@@ -40,15 +40,16 @@ export async function handler(
     case 'createUser':
       console.log('createUser');
       try {
-        let user = await getUser(userId, true)
+        const getUserInput: GetUserInput =  { userId }
+        let user = await getUser(getUserInput, true)
         console.log('1st', user)
         if (user != null){
           return user
         }
 
-        const input = event.arguments.input as CreateUserInput
-        await createUser(input, userId)
-        user = await getUser(userId, true)
+        const createUserInput = event.arguments.input as CreateUserInput
+        await createUser(createUserInput, userId)
+        user = await getUser(getUserInput, true)
         if (user != null){
           console.log(user)
           return user
@@ -59,20 +60,20 @@ export async function handler(
     
     case 'getUser':
       console.log('getUser');
-      const targetUserId = event.arguments.userId
-      const user = await getUser(targetUserId, true)
+      const getUserInput = event.arguments.input as GetUserInput
+      const user = await getUser(getUserInput, true)
       if (user != null){
         console.log('user', user)
         return user
       }else{
-        throw new Error(`failed to get user id ${targetUserId}`)
+        throw new Error(`failed to get user ${getUserInput}`)
       }
 
     case 'createEvent':
       console.log('call createEvent')
       try {
         const input = event.arguments.input as CreateEventInput
-        const eventParam = await createEvent(input.name)
+        const eventParam = await createEvent(input)
         return eventParam.Item as Event
       } catch (err) {
         throw err
@@ -99,8 +100,8 @@ export async function handler(
     case 'listTeam':
       console.log('call listTeam')
       try {
-        const eventId = event.arguments.eventID as string
-        return await listTeam(eventId)
+        const input = event.arguments.input as ListTeamInput
+        return await listTeam(input)
       } catch(err) {
         throw err
       }
@@ -134,8 +135,8 @@ export async function handler(
     case 'getNamecard':
       console.log('call getNamecard')
       try {
-        const namecardId = event.arguments.namecardId
-        return await getNamecard(namecardId)
+        const input = event.arguments.input as GetNamecardInput
+        return await getNamecard(input)
       } catch(err){
         throw err
       }
@@ -143,8 +144,8 @@ export async function handler(
     case 'addNamecard':
       console.log('call addNamecard')
       try {
-        const namecardId = event.arguments.namecardId
-        return await addNamecard(namecardId, userId)
+        const input = event.arguments.input as AddNamecardInput
+        return await addNamecard(input, userId)
       } catch (err) {
         throw err
       }
@@ -152,8 +153,8 @@ export async function handler(
     case 'getZukan':
       console.log('call getZukan')
       try {
-        const eventId = event.arguments.eventId
-        return await getZukan(eventId, userId)
+        const input = event.arguments.input as GetZukanInput
+        return await getZukan(input, userId)
       } catch (err) {
         throw err
       }

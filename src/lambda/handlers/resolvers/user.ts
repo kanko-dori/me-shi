@@ -1,6 +1,6 @@
 import { GetCommand, GetCommandInput, PutCommand, PutCommandInput, UpdateCommand, UpdateCommandInput } from '@aws-sdk/lib-dynamodb'
 import { UserTableName } from '../../../../lib/namecard-backend-stack'
-import { CreateUserInput, Namecard, User } from '../../../generated/graphql'
+import { CreateUserInput, GetNamecardInput, GetUserInput, Namecard, User } from '../../../generated/graphql'
 import { docClient } from '../me_shi'
 import { getNamecard } from './namecard'
 
@@ -48,7 +48,8 @@ export const createUser = async (input: CreateUserInput, userId: string) => {
 
 export const addOwnNamecard = async (namecard: Namecard, userId: string): Promise<User> => {
     console.log('call addOwnNamecard', namecard, userId)
-    const user = await getUser(userId, false)
+    const getUserInput: GetUserInput = { userId }
+    const user = await getUser(getUserInput, false)
     if(user == null) {
         throw new Error(`user: ${userId} does not exist`)
     }
@@ -70,13 +71,14 @@ export const addOwnNamecard = async (namecard: Namecard, userId: string): Promis
         },
     }
     await docClient.send(new UpdateCommand(userParam))
-    const newUser = await getUser(userId, true)
+    const newUser = await getUser(getUserInput, true)
     return newUser
 }
 
 export const addGivenNamecard = async (namecard: Namecard, userId: string): Promise<User> => {
     console.log('call addGivenNamecard', namecard, userId)
-    const user = await getUser(userId, false)
+    const getUserInput: GetUserInput = { userId }
+    const user = await getUser(getUserInput, false)
     if(user == null) {
         throw new Error(`user: ${userId} does not exist`)
     }
@@ -98,32 +100,38 @@ export const addGivenNamecard = async (namecard: Namecard, userId: string): Prom
         },
     }
     await docClient.send(new UpdateCommand(userParam))
-    const newUser = await getUser(userId, true)
+    const newUser = await getUser(getUserInput, true)
     return newUser
 }
 
-export const getUser = async (userId: string, mustGetNamecard: boolean): Promise<any> => {
+export const getUser = async (input: GetUserInput, mustGetNamecard: boolean): Promise<any> => {
     const userParams: GetCommandInput = {
         TableName: UserTableName,
         Key: {
-            id: userId
+            id: input.userId
         }
     }
-    console.log('getUser', userId, mustGetNamecard, userParams)
+    console.log('getUser', input.userId, mustGetNamecard, userParams)
 
     const res = await docClient.send(new GetCommand(userParams))
     const user = res.Item
     if(user == null) {
         return null
     }
-    console.log("getUser", user)
+
+    console.log("const user = res.Item", res, user)
     if (mustGetNamecard) {
         console.log("namecardIdMap", user.namecardIdMap, typeof user.namecardIdMap)
         console.log("givenCardIdMap", user.givenCardIdMap, typeof user.givenCardIdMap)
-
-        const myNamecardList = await Promise.all(Object.keys(user.namecardIdMap).map((id: string) => getNamecard(id)))
-
-        const givenNamecardList = await Promise.all(Object.keys(user.givenCardIdMap).map((id: string) => getNamecard(id)))
+        
+        const myNamecardList = await Promise.all(Object.keys(user.namecardIdMap).map((id: string) => {
+            const getNamecardInput: GetNamecardInput = {namecardId: id}
+            return getNamecard(getNamecardInput)
+        }))
+        const givenNamecardList = await Promise.all(Object.keys(user.givenCardIdMap).map((id: string) => {
+            const getNamecardInput: GetNamecardInput = {namecardId: id}
+            return getNamecard(getNamecardInput)
+        }))
 
         user.myNamecards = myNamecardList
         user.givenNamecards = givenNamecardList

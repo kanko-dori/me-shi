@@ -1,6 +1,6 @@
 import { ScanCommand, PutCommand, PutCommandInput, ScanCommandInput, GetCommandInput, GetCommand, UpdateCommandInput, UpdateCommand } from '@aws-sdk/lib-dynamodb'
 import { TeamTableName } from '../../../../lib/namecard-backend-stack'
-import { AddCommentInput, CreateTeamInput, Event, Team, Comment } from '../../../generated/graphql'
+import { AddCommentInput, CreateTeamInput, Event, Team, Comment, ListTeamInput } from '../../../generated/graphql'
 import { docClient } from '../me_shi'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -46,7 +46,7 @@ export const getTeam = async (id: string): Promise<Team> => {
     }
 }
 
-export const listTeam = async (eventId: string): Promise<any> => {
+export const listTeam = async (input: ListTeamInput): Promise<any> => {
     const teamParams: ScanCommandInput = {
         TableName: TeamTableName,
     }
@@ -57,7 +57,7 @@ export const listTeam = async (eventId: string): Promise<any> => {
     let res = await docClient.send(new ScanCommand(teamParams))
     if (res.Items) {
         res.Items.forEach(item => {
-            if(item.eventId === eventId) {
+            if(item.eventId === input.eventId) {
                 teams.push({
                     id: item.id,
                     name: item.name,
@@ -75,7 +75,7 @@ export const listTeam = async (eventId: string): Promise<any> => {
         res = await docClient.send(new ScanCommand(teamParams))
         if (res.Items) {
             res.Items.forEach(item => {
-                if(item.eventId === eventId) {
+                if(item.eventId === input.eventId) {
                     teams.push({
                         id: item.id,
                         name: item.name,

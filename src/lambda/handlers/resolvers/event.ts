@@ -1,14 +1,15 @@
 import { ScanCommand, PutCommand, PutCommandInput, ScanCommandInput, GetCommandInput, GetCommand } from '@aws-sdk/lib-dynamodb'
 import { EventTableName } from '../../../../lib/namecard-backend-stack'
+import { CreateEventInput } from '../../../generated/graphql'
 import { docClient } from '../me_shi'
 
-export const createEvent = async (name: String) => {
-    console.log('eventname', name)
+export const createEvent = async (input: CreateEventInput) => {
+    console.log('eventname', input)
     const eventParam: PutCommandInput = {
         TableName: EventTableName,
         Item: {
-            id: name,
-            name: name,
+            id: input.name,
+            name: input.name,
         }
     }
 
