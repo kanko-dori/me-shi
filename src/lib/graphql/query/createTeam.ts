@@ -5,8 +5,8 @@ import type { AuthHeader } from './types';
 export const createTeam = (
 	variables: { input: CreateTeamInput },
 	headers: AuthHeader
-): Promise<Team> =>
-	mutation<{ input: CreateTeamInput }, Team>(
+): Promise<{ createTeam: Team }> =>
+	mutation<{ input: CreateTeamInput }, { createTeam: Team }>(
 		`
         mutation createTeam($input: CreateTeamInput!) {
             createTeam(input: $input){
