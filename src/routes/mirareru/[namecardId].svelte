@@ -1,27 +1,94 @@
+<script lang="ts" context="module">
+	import type { Load } from '@sveltejs/kit';
+	import { appsyncApiKey } from '$lib/env';
+	export const load: Load = ({ fetch, page }) =>
+		fetch('https://h6qrtrf4hrdl5pt5z2ojjomstq.appsync-api.ap-northeast-1.amazonaws.com/graphql', {
+			headers: {
+				'x-api-key': appsyncApiKey
+			},
+			body: JSON.stringify({
+				query: /* GraphQL */ `
+					query getNamecard($input: GetNamecardInput) {
+						getNamecard(input: $input) {
+							id
+							memberOf
+							preferTechnologies
+							usedTechnologies
+							event {
+								id
+								name
+							}
+							owner {
+								id
+								iconURL
+								name
+								twitterId
+								githubId
+							}
+							team {
+								id
+								name
+								event {
+									id
+									name
+								}
+								product {
+									name
+									description
+									repository
+									comments {
+										id
+										body
+									}
+								}
+							}
+						}
+					}
+				`,
+				variables: { input: { namecardId: page.params['namecardId'] } }
+			}),
+			method: 'POST'
+		})
+			.then((res) => res.json())
+			.then((r: { data: { getNamecard: Namecard } }) => r.data.getNamecard)
+			.then((namecard) => ({ props: { namecard } }));
+</script>
+
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { authUser, token } from '$lib/auth';
 	import { Button, Footer, Header, Input } from '$lib/components';
-	import { addNamecard, addComment, getNamecard } from '$lib/graphql/query';
+	import Loading from '$lib/components/Loading.svelte';
+	import Modal from '$lib/components/Modal.svelte';
+	import { addComment, addNamecard, getNamecard } from '$lib/graphql/query';
 	import { user } from '$lib/store';
 	import { Dynamic, Static } from '$lib/svg';
 	import { QrCode16, SendFilled32 } from 'carbon-icons-svelte';
-	import type { Comment, Product, Team } from 'src/generated/graphql';
+	import type { Namecard } from 'src/generated/graphql';
 
-	let namecardId = '';
-	let ownerId = '';
-	let name = '';
-	let github = '';
-	let twitter: string | undefined;
-	let eventName = '';
-	let team: Team | undefined;
-	let product: Product | undefined;
-	let usedTechnologies: string[] = [];
-	let preferedTechnologies: string[] | undefined = undefined;
-	let memberOf: string | undefined = undefined;
-	let comments: Array<Comment> = [];
+	export let namecard: Namecard;
+
+	const twitterShareUrl = new URL('https://twitter.com/share');
+	twitterShareUrl.searchParams.append('url', `https://me-shi.ga${$page.path}`);
+	twitterShareUrl.searchParams.append('text', `イベントに参加してきました！`);
+	twitterShareUrl.searchParams.append('hashtags', 'me_shi');
+
+	let namecardId = namecard.id ?? '';
+	let ownerId = namecard.owner.id ?? '';
+	let name = namecard.owner.name ?? '';
+	let github = namecard.owner.githubId ?? '';
+	let twitter = namecard.owner.twitterId ?? undefined;
+	let eventName = namecard.event.name ?? '';
+	let team = namecard.team;
+	let product = team.product;
+	let usedTechnologies = namecard.usedTechnologies ?? [];
+	let preferedTechnologies = namecard.preferTechnologies ?? undefined;
+	let memberOf = namecard.memberOf ?? undefined;
+	let comments = namecard.team.product.comments ?? [];
 
 	let comment = '';
+
+	let processing = true;
 	const send = () => {
 		if ($token.type !== 'success') {
 			console.log('Auth isnot initialized');
@@ -70,6 +137,7 @@
 				memberOf = getNamecard.memberOf ?? undefined;
 			})
 			.then(() => {
+				processing = false;
 				if ($authUser.type !== 'success') return;
 				if ($authUser.value?.sub === ownerId) {
 					console.log('This card is mine. skip addNamecards...');
@@ -82,6 +150,15 @@
 			});
 	});
 </script>
+
+<svelte:head>
+	<title>{eventName}での{name}のme-shi</title>
+	<meta property="og:url" content="https://me-shi.ga{$page.path}" />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="me-shi" />
+	<meta property="og:image" content="https://me-shi.ga/ogp.png" />
+	<meta name="twitter:card" content="summary_large_image" />
+</svelte:head>
 
 <Header />
 
@@ -101,6 +178,13 @@
 				class="w-full shadow-xl"
 			/>
 			{#if $user.type === 'success' && $user.value.id === ownerId}
+				<a
+					href={twitterShareUrl.toString()}
+					target="_blank"
+					class="absolute flex justify-center items-center outline-none focus:ring-2 w-12 h-12 right-2 bottom-16"
+				>
+					<img src="/static/twitter.svg" alt="twitter" />
+				</a>
 				<a
 					href="/wataseru/{namecardId}"
 					class="absolute flex justify-center items-center outline-none focus:ring-2 w-12 h-12 rounded-md opacity-75 bg-gray-800 right-2 bottom-2"
@@ -139,5 +223,11 @@
 		</ul>
 	</div>
 </main>
+
+<Modal open={processing}>
+	<div class="z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+		<Loading />
+	</div>
+</Modal>
 
 <Footer />

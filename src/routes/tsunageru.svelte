@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { browser } from '$app/env';
+	import { goto } from '$app/navigation';
+	import { Footer, Header, Loading, Modal } from '$lib/components';
 
 	import { token } from '$lib/auth';
 	import { auth0 } from '$lib/auth/auth0';
-	import Footer from '$lib/components/Footer.svelte';
-	import Header from '$lib/components/Header.svelte';
 	import { subscription } from '$lib/graphql';
 	import { user } from '$lib/store';
 	import { Static } from '$lib/svg';
@@ -32,6 +32,11 @@
 			})
 			.catch(console.error);
 	});
+
+	user.subscribe((u) => {
+		if (u.type === 'failure') goto('/');
+		return;
+	});
 </script>
 
 <Header showSignOut={true} />
@@ -40,12 +45,8 @@
 	<div class="p-8">
 		<div class="max-w-3xl w-full mx-auto relative">
 			<Static
-				name={$user.type === 'success'
-					? $user.value.name ?? 'Loading failure'
-					: `Loading ${$user.type}`}
-				github={$user.type === 'success'
-					? $user.value.githubId ?? 'Loadgin failure'
-					: `Loading ${$user.type}`}
+				name={$user.type === 'success' ? $user.value.name ?? 'Loading failure' : ''}
+				github={$user.type === 'success' ? $user.value.githubId ?? 'Loadgin failure' : ''}
 				twitter={$user.type === 'success' ? $user.value.twitterId ?? undefined : undefined}
 				class="w-full shadow-xl"
 			/>
@@ -114,5 +115,11 @@
 		</section>
 	</div>
 </main>
+
+<Modal open={$user.type !== 'success'}>
+	<div class="z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+		<Loading />
+	</div>
+</Modal>
 
 <Footer />

@@ -1,7 +1,7 @@
 <script lang="ts">
-	export let name: string;
-	export let icon: string;
-	export let isOwn: boolean;
+	export let name: string | undefined;
+	export let icon: string | undefined;
+	export let isOwn: boolean | undefined;
 </script>
 
 <div
