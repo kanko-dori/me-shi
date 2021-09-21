@@ -1,7 +1,7 @@
 import { GetCommand, GetCommandInput, PutCommand, PutCommandInput, ScanCommand, ScanCommandInput } from "@aws-sdk/lib-dynamodb";
 
 import { NamecardTableName } from "../../../../lib/namecard-backend-stack";
-import { CreateNamecardInput, Event, Namecard, User, Zukan, ZukanNamecard } from "../../../generated/graphql";
+import { AddNamecardInput, CreateNamecardInput, Event, GetNamecardInput, GetUserInput, GetZukanInput, Namecard, User, Zukan, ZukanNamecard } from "../../../generated/graphql";
 import { createAffiliation } from "./affiliation";
 import { docClient } from "../me_shi";
 import { createTechnology } from "./technology";
@@ -28,19 +28,24 @@ import { addGivenNamecard, addOwnNamecard, getUser } from "./user";
 // 	preferTechnologies: [String!]
 // }
 
-export const getNamecard = async (namecardId: string) => {
-    console.log('call getNamecard', namecardId)
+export const getNamecard = async (input: GetNamecardInput) => {
+    console.log('call getNamecard', input)
     const namecardParam: GetCommandInput = {
         TableName: NamecardTableName,
         Key: {
-            id: namecardId,
+            id: input.namecardId,
         }
     }
+
     const namecardRes = await docClient.send(new GetCommand(namecardParam))
     if (namecardRes.Item == null) {
-        throw new Error(`namecard: ${namecardId} does not exist`)
+        throw new Error(`namecard: ${input.namecardId} does not exist`)
     }
-    const user = await getUser(namecardRes.Item.ownerId, false)
+
+    console.log('getNamecard, namecardRes', namecardRes)
+    const getUserInput: GetUserInput = { userId: namecardRes.Item.ownerId }
+    const user = await getUser(getUserInput, false)
+
     const team = await getTeam(namecardRes.Item.teamId)
     const event: Event = {
         id: namecardRes.Item.eventId,
@@ -88,15 +93,18 @@ export const createNamecard = async (input: CreateNamecardInput, userId: string)
 
     // 作った名刺を登録
     await addOwnNamecard(namecardParam.Item as Namecard, userId)
-    return await getNamecard(namecardId)
+    const getNamecardInput: GetNamecardInput = {namecardId}
+    return await getNamecard(getNamecardInput)
 }
 
-export const addNamecard = async (namecardId: string, userId: string): Promise<Namecard> => {
+export const addNamecard = async (input: AddNamecardInput, userId: string): Promise<Namecard> => {
     // 登録するユーザを取得
-    const me = await getUser(userId, true) as User
+    const getUserInput: GetUserInput = { userId }
+    const me = await getUser(getUserInput, true) as User
 
     // 登録したい名刺を取得
-    const targetNamecard = await getNamecard(namecardId) as Namecard
+    const getNamecardInput: GetNamecardInput = {namecardId: input.namecardId}
+    const targetNamecard = await getNamecard(getNamecardInput) as Namecard
 
     // 自分のカードは登録できない
     if (targetNamecard.owner.id === me.id) {
@@ -123,6 +131,7 @@ export const addNamecard = async (namecardId: string, userId: string): Promise<N
 }
 
 export const listNamecards = async (): Promise<any> => {
+    console.log('call listNamecards')
     const namecardParam: ScanCommandInput = {
         TableName: NamecardTableName,
     }
@@ -133,7 +142,8 @@ export const listNamecards = async (): Promise<any> => {
     let res = await docClient.send(new ScanCommand(namecardParam))
     if (res.Items) {
         for (const namecard of res.Items) {
-            const user = await getUser(namecard.ownerId, false)
+            const getUserInput: GetUserInput = { userId: namecard.ownerId }
+            const user = await getUser(getUserInput, false)
             const team = await getTeam(namecard.teamId)
             const event: Event = {
                 id: namecard.eventId,
@@ -155,7 +165,8 @@ export const listNamecards = async (): Promise<any> => {
         res = await docClient.send(new ScanCommand(namecardParam))
         if (res.Items) {
             for (const namecard of res.Items) {
-                const user = await getUser(namecard.ownerId, false)
+                const getUserInput: GetUserInput = { userId: namecard.ownerId }
+                const user = await getUser(getUserInput, false)
                 const team = await getTeam(namecard.teamId)
                 const event: Event = {
                     id: namecard.eventId,
@@ -178,19 +189,21 @@ export const listNamecards = async (): Promise<any> => {
 }
 
 // イベント(eventId) ごとに名刺をリストし、持ってる・持っていないを判断する
-export const getZukan = async (eventId: string, userId: string) => {
-    console.log('getZukan', eventId, userId)
+export const getZukan = async (input: GetZukanInput, userId: string) => {
+    console.log('getZukan', input, userId)
     const allNamecards = await listNamecards()
     // イベントにある名刺をリストする
-    const namecards = allNamecards.filter((n: Namecard) => n.event.id === eventId)
+    const namecards = allNamecards.filter((n: Namecard) => n.event.id === input.eventId)
     console.log(namecards)
 
     // イベントにある名刺のIDの map
     const namecardIDMap = Object.fromEntries(namecards.map((namecard: Namecard) => [namecard['id'], {...namecard, isOwn: false}]))
 
     console.log('created namecardIDMap', namecardIDMap)
+
     // 自分の持っている名刺を取得
-    const me = await getUser(userId, true) as User
+    const getUserInput: GetUserInput = { userId }
+    const me = await getUser(getUserInput, true) as User
     
     // 自分が持っている名刺を true にする
     me.givenNamecards?.forEach((n: Namecard) => {
@@ -206,8 +219,8 @@ export const getZukan = async (eventId: string, userId: string) => {
     const zukanNamecards = Object.values(namecardIDMap)
     return {
         event: {
-            id: eventId,
-            name: eventId
+            id: input.eventId,
+            name: input.eventId
         },
         namecards: zukanNamecards
     }
