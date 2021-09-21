@@ -1,3 +1,15 @@
+type Query {
+    # サジェストするために使う
+	listEvent: [Event]
+	listTeam(input: ListTeamInput): [Team]
+	listAffiliation: [Affiliation]
+	listTechnology: [Technology]
+
+	getUser(input: GetUserInput): User
+	getNamecard(input: GetNamecardInput): Namecard
+	getZukan(input: GetZukanInput): Zukan
+}
+
 type Mutation {
 	createEvent(input: CreateEventInput): Event!
 	createTeam(input: CreateTeamInput): Team!
@@ -9,9 +21,9 @@ type Mutation {
     
     # この関数を呼んだ人の givenNamecards に指定した名刺を登録する
     # 登録した人の、同じイベントに参加している Namecard が返ってくる
-    addNamecard(namecardId: ID!): Namecard!
+    addNamecard(input: AddNamecardInput!): Namecard!
 }
-# A, B
+
 # AがBのカードを登録 addNamecard(namecardId: BのカードのID): 
 type Subscription {
     # addNamecard が呼ばれたら発火する
@@ -33,18 +45,6 @@ type User {
 type Technology {
     id: ID!
     name: String!
-}
-
-type Query {
-    # サジェストするために使う
-	listEvent: [Event]
-	listTeam(eventID: ID!): [Team]
-	listAffiliation: [Affiliation]
-	listTechnology: [Technology]
-
-	getUser(userId: ID!): User
-	getNamecard(namecardId: ID!): Namecard
-	getZukan(eventId: ID!): Zukan
 }
 
 type Affiliation {
@@ -106,6 +106,10 @@ type Namecard {
 	preferTechnologies: [String!] #  Technology names
 }
 
+input AddNamecardInput {
+	namecardId: ID!
+}
+
 type Zukan {
 	event: Event!
 	namecards: [ZukanNamecard!]
@@ -152,3 +156,18 @@ input CreateNamecardInput {
     preferTechnologies: [String!]
 }
 
+input ListTeamInput {
+	eventId: ID!
+}
+
+input GetUserInput {
+	userId: ID!
+}
+
+input GetNamecardInput {
+	namecardId: ID!
+}
+
+input GetZukanInput {
+	eventId: ID!
+}
