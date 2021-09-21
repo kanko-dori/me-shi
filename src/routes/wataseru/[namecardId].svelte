@@ -5,7 +5,6 @@
 	import { QRcode, Header, Footer } from '$lib/components';
 	import { getNamecard } from '$lib/graphql/query';
 	import { Dynamic } from '$lib/svg';
-	import { onMount } from 'svelte';
 
 	let event = '';
 	let team = '';
