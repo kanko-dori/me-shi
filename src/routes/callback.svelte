@@ -30,5 +30,5 @@
 </script>
 
 <div class="w-screen h-screen flex justify-center items-center">
-	<Loading />
+	<Loading message="Signing in..." />
 </div>

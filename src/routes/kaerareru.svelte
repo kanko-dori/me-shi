@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { auth, token } from '$lib/auth';
-	import { Button, Footer, Header, Input, Modal } from '$lib/components';
+	import { Button, Footer, Header, Input, Modal, Loading } from '$lib/components';
 	import { updateUser } from '$lib/graphql/query/updateUser';
 	import { user } from '$lib/store';
 	import { Static } from '$lib/svg';
@@ -9,10 +9,12 @@
 	let name = '';
 	let githubId = '';
 	let twitterId = '';
+	let processing = true;
 	let showOnUpdateModal = false;
 
 	user.subscribe((u) => {
 		if (u.type !== 'success') return;
+		processing = false;
 		name = u.value.name ?? 'Error';
 		githubId = u.value.githubId ?? 'Error';
 		twitterId = u.value.twitterId ?? '';
@@ -24,6 +26,7 @@
 			return;
 		}
 		console.log('submitted', { name, githubId, twitterId });
+		processing = true;
 		updateUser(
 			{
 				input: {
@@ -43,6 +46,9 @@
 			})
 			.catch((e: Error) => {
 				console.error(e);
+			})
+			.finally(() => {
+				processing = false;
 			});
 	};
 </script>
@@ -82,6 +88,11 @@
 	</form>
 </main>
 
+<Modal open={processing}>
+	<div class="z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+		<Loading />
+	</div>
+</Modal>
 <Modal open={showOnUpdateModal}>
 	<div
 		class="max-w-4xl p-8 bg-white rounded-md shadow-md z-20 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"

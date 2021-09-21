@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-
 	import { getToken } from '$lib/auth';
 	import {
 		Button,
 		Footer,
 		Header,
 		Input,
+		Loading,
 		Modal,
 		SuggestableInput,
 		SuggestableTagInput
@@ -39,6 +39,7 @@
 	let technologyList: string[] = [];
 	let affiliationList: string[] = [];
 
+	let processing = true;
 	let createdNamecardId: string | undefined;
 
 	onMount(() => {
@@ -59,7 +60,10 @@
 				console.log(technologies);
 				affiliationList = affiliations.listAffiliation.map((a) => a.id);
 			})
-			.catch(console.error);
+			.catch(console.error)
+			.finally(() => {
+				processing = false;
+			});
 	});
 
 	const onSubmit = async () => {
@@ -69,6 +73,7 @@
 			repository: product.repository
 		};
 		try {
+			processing = true;
 			const token = await getToken();
 			const event = await createEvent(
 				{
@@ -110,6 +115,8 @@
 			createdNamecardId = namecard.createNamecard.id;
 		} catch (err) {
 			console.error(err);
+		} finally {
+			processing = false;
 		}
 	};
 
@@ -187,6 +194,11 @@
 	</div>
 </main>
 
+<Modal open={processing}>
+	<div class="z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+		<Loading />
+	</div>
+</Modal>
 <Modal open={createdNamecardId !== undefined}>
 	<div
 		class="max-w-4xl p-8 bg-white rounded-md shadow-md z-20 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
