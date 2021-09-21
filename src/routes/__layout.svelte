@@ -13,11 +13,7 @@
 		if (global === undefined) var global = window;
 	</script>
 </svelte:head>
-<svelte:body class="font-body" />
-<slot />
 
-<style>
-	* {
-		font-family: 'Noto Sans JP', Meiryo, Arial, Helvetica, sans-serif;
-	}
-</style>
+<div class="font-body">
+	<slot />
+</div>
