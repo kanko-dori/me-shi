@@ -105,7 +105,7 @@
 			/>
 			{#if $user.type === 'success' && $user.value.id === ownerId}
 				<a
-					href="/wataseru/${'slug'}"
+					href="/wataseru/{namecardId}"
 					class="absolute flex justify-center items-center outline-none focus:ring-2 w-12 h-12 rounded-md opacity-75 bg-gray-800 right-2 bottom-2"
 				>
 					<QrCode16 class="h-3/5 w-3/5" style="fill:white" />
