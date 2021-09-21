@@ -115,7 +115,7 @@
 			</div>
 		{/if}
 
-		<ul class="flex flex-col gap-6">
+		<ul class="flex flex-col gap-6 mt-4">
 			{#each [...comments].reverse() as comment}
 				<li class="p-2">
 					<span class="text-xl px-4 py-2 rounded shadow border border-gray-200">
