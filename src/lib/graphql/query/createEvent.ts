@@ -5,8 +5,8 @@ import type { AuthHeader } from './types';
 export const createEvent = (
 	variables: { input: CreateEventInput },
 	headers: AuthHeader
-): Promise<Event> =>
-	mutation<{ input: CreateEventInput }, Event>(
+): Promise<{ createEvent: Event }> =>
+	mutation<{ input: CreateEventInput }, { createEvent: Event }>(
 		`
         mutation createEvent($input: CreateEventInput!) {
             createEvent(input: $input){

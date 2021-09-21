@@ -1,15 +1,15 @@
-import { mutation } from '../client';
-import type { AddCommentInput, Team } from 'src/generated/graphql';
+import { query } from '../client';
+import type { Team } from 'src/generated/graphql';
 import type { AuthHeader } from './types';
 
-export const addComment = (
-	variables: { input: AddCommentInput },
+export const listTeamAll = (
+	variables: undefined,
 	headers: AuthHeader
-): Promise<{ addComment: Team }> =>
-	mutation<{ input: AddCommentInput }, { addComment: Team }>(
+): Promise<{ listTeamAll: Team[] }> =>
+	query<undefined, { listTeamAll: Team[] }>(
 		`
-		mutation addComment($input: AddCommentInput!) {
-			addComment(input: $input){
+        query listTeamAll {
+            listTeamAll{
 				id
 				name
 				event {
@@ -26,9 +26,9 @@ export const addComment = (
 						commenterId
 					}
 				}
-			}
-		}
-		`,
+            }
+        }
+        `,
 		variables,
 		headers
 	).then((res) => {

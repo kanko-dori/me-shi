@@ -2,8 +2,11 @@ import { query } from '../client';
 import type { Technology } from 'src/generated/graphql';
 import type { AuthHeader } from './types';
 
-export const listTechnology = (variables: undefined, headers: AuthHeader): Promise<Technology[]> =>
-	query<undefined, Technology[]>(
+export const listTechnology = (
+	variables: undefined,
+	headers: AuthHeader
+): Promise<{ listTechnology: Technology[] }> =>
+	query<undefined, { listTechnology: Technology[] }>(
 		`
         query listTechnology {
             listTechnology{

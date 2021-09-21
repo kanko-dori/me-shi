@@ -4,17 +4,21 @@
 		Footer,
 		Header,
 		Input,
+		QRcode,
 		SuggestableInput,
 		SuggestableTagInput,
-		QRcode,
 		ZukanCard
 	} from '$lib/components';
+	import Modal from '$lib/components/Modal.svelte';
 	import Event16 from 'carbon-icons-svelte/lib/Event16';
 	import Search16 from 'carbon-icons-svelte/lib/Search16';
 	import Tag16 from 'carbon-icons-svelte/lib/Tag16';
 	let value = '';
 	let event = '';
 	let tags: string[] = [];
+
+	let appliedModal = false;
+	let cancelModal = false;
 </script>
 
 <Header />
@@ -91,10 +95,40 @@
 	</div>
 
 	<div class="flex px-8">
-		<Button class="bg-gray-300">Cancel</Button>
+		<Button class="bg-gray-300" on:click={() => (cancelModal = true)}>Cancel</Button>
 		<div class="flex-grow" />
-		<Button class="bg-blue-600 text-white">Apply</Button>
+		<Button class="bg-blue-600 text-white" on:click={() => (appliedModal = true)}>Apply</Button>
 	</div>
 </div>
+
+<Modal open={appliedModal} on:outsideclick={() => (appliedModal = false)}>
+	<div
+		class="max-w-8xl fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-white p-10"
+	>
+		<h3 class="text-2xl">Complete process!</h3>
+		<div class="flex">
+			<div class="flex-grow" />
+			<button class="px-4 py-2 bg-gray-700 text-white" on:click={() => (appliedModal = false)}>
+				close
+			</button>
+		</div>
+	</div>
+</Modal>
+<Modal open={cancelModal} on:outsideclick={() => console.log('ignore')}>
+	<div
+		class="max-w-8xl fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-white p-10"
+	>
+		<h3 class="text-2xl">Are you OK?</h3>
+		<div class="flex">
+			<button class="px-4 py-2 bg-gray-700 text-white" on:click={() => (cancelModal = false)}>
+				No
+			</button>
+			<div class="flex-grow" />
+			<button class="px-4 py-2 bg-gray-700 text-white" on:click={() => (cancelModal = false)}>
+				Yes
+			</button>
+		</div>
+	</div>
+</Modal>
 
 <Footer />

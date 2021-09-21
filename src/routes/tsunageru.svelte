@@ -14,9 +14,13 @@
 	<div class="p-8">
 		<div class="max-w-3xl w-full mx-auto relative">
 			<Static
-				name={$user?.githubId ?? 'Error'}
-				github={$user?.githubId ?? 'Error'}
-				twitter={$user?.twitterId ?? undefined}
+				name={$user.type === 'success'
+					? $user.value.name ?? 'Loading failure'
+					: `Loading ${$user.type}`}
+				github={$user.type === 'success'
+					? $user.value.githubId ?? 'Loadgin failure'
+					: `Loading ${$user.type}`}
+				twitter={$user.type === 'success' ? $user.value.twitterId ?? undefined : undefined}
 				class="w-full shadow-xl"
 			/>
 			<a
@@ -34,7 +38,7 @@
 			<ul>
 				<li>
 					<a
-						href="/tsukuritai"
+						href="/tsukureru"
 						class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
 					>
 						<p>新しくイベントの名刺を作る</p>
@@ -44,10 +48,10 @@
 						/>
 					</a>
 				</li>
-				{#each $user?.myNamecards ?? [] as mycard}
+				{#each $user.type === 'success' ? $user.value.myNamecards ?? [] : [] as mycard}
 					<li>
 						<a
-							href="/mirareru"
+							href="/mirareru/{mycard.id}"
 							class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
 						>
 							<p>{mycard.event.name}</p>
@@ -63,14 +67,14 @@
 		<section class="md:w-1/2 md:px-2 py-4">
 			<p class="text-xl p-2 border-b-2 border-gray-300">いままでにもらった名刺</p>
 			<ul>
-				{#each $user?.givenNamecards ?? [] as givencard}
+				{#each $user.type === 'success' ? $user.value.givenNamecards ?? [] : [] as givencard}
 					<li>
 						<a
-							href="/"
+							href="/mirareru/{givencard.id}"
 							class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
 						>
 							<div class="flex-col">
-								<p>{givencard.owner}</p>
+								<p>{givencard.owner?.name ?? 'Error'}</p>
 								<p class="text-sm text-gray-500">{givencard.event.name}</p>
 							</div>
 							<div class="flex-grow" />
