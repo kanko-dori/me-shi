@@ -88,6 +88,14 @@ export class NamecardBackendStack extends cdk.Stack {
       typeName: 'Mutation',
       fieldName: 'createNamecard',
     })
+    meShiFnDataSource.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'updateUser',
+    })
+    meShiFnDataSource.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'addNamecard',
+    })
 
     // query
     meShiFnDataSource.createResolver({
@@ -104,7 +112,15 @@ export class NamecardBackendStack extends cdk.Stack {
     })
     meShiFnDataSource.createResolver({
       typeName: 'Query',
+      fieldName: 'listTeamAll',
+    })
+    meShiFnDataSource.createResolver({
+      typeName: 'Query',
       fieldName: 'listAffiliation',
+    })
+    meShiFnDataSource.createResolver({
+      typeName: 'Query',
+      fieldName: 'listTechnology',
     })
     meShiFnDataSource.createResolver({
       typeName: 'Query',

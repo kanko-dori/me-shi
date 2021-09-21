@@ -152,7 +152,6 @@ export type Product = {
 };
 
 export type ProductInput = {
-  comment?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   repository?: Maybe<Scalars['String']>;
@@ -166,6 +165,7 @@ export type Query = {
   listAffiliation?: Maybe<Array<Maybe<Affiliation>>>;
   listEvent?: Maybe<Array<Maybe<Event>>>;
   listTeam?: Maybe<Array<Maybe<Team>>>;
+  listTeamAll?: Maybe<Array<Maybe<Team>>>;
   listTechnology?: Maybe<Array<Maybe<Technology>>>;
 };
 
@@ -437,6 +437,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   listAffiliation?: Resolver<Maybe<Array<Maybe<ResolversTypes['Affiliation']>>>, ParentType, ContextType>;
   listEvent?: Resolver<Maybe<Array<Maybe<ResolversTypes['Event']>>>, ParentType, ContextType>;
   listTeam?: Resolver<Maybe<Array<Maybe<ResolversTypes['Team']>>>, ParentType, ContextType, RequireFields<QueryListTeamArgs, never>>;
+  listTeamAll?: Resolver<Maybe<Array<Maybe<ResolversTypes['Team']>>>, ParentType, ContextType>;
   listTechnology?: Resolver<Maybe<Array<Maybe<ResolversTypes['Technology']>>>, ParentType, ContextType>;
 };
 
