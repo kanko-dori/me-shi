@@ -30,23 +30,6 @@
 					}
 				);
 			})
-			.then(() => {
-				subscription(
-					/* GraphQL */ `
-						subscription OnAddNameListener($input: AddNamecardInput!) {
-							onAddNamecard(input: $input) {
-								id
-							}
-						}
-					`,
-					{
-						input: { namecardId: 'github|15074382-ウィンターハッカソン-閑古鳥' }
-					},
-					{
-						Authorization: ($token.type === 'success' && $token.value) || ''
-					}
-				).subscribe(console.log, console.warn, console.log);
-			})
 			.catch(console.error);
 	});
 </script>
