@@ -121,6 +121,7 @@ export const createNamecard = async (input: CreateNamecardInput, userId: string)
 }
 
 export const addNamecard = async (input: AddNamecardInput, userId: string): Promise<Namecard> => {
+    console.log('addNamecard', input, userId)
     // 登録するユーザを取得
     const getUserInput: GetUserInput = { userId }
     const me = await getUser(getUserInput, true) as User
