@@ -2,6 +2,8 @@ type Query {
 	# サジェストするために使う
 	listEvent: [Event]
 	listTeam(input: ListTeamInput): [Team]
+
+	listTeamAll: [Team]
 	listAffiliation: [Affiliation]
 	listTechnology: [Technology]
 
@@ -136,7 +138,6 @@ input ProductInput {
 	name: String!
 	repository: String
 	description: String
-	comment: String
 }
 
 input UpdateUserInput {

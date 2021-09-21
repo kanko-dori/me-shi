@@ -2,8 +2,11 @@ import { query } from '../client';
 import type { Affiliation } from 'src/generated/graphql';
 import type { AuthHeader } from './types';
 
-export const listEvent = (variables: undefined, headers: AuthHeader): Promise<Affiliation[]> =>
-	query<undefined, Affiliation[]>(
+export const listAffiliation = (
+	variables: undefined,
+	headers: AuthHeader
+): Promise<{ listAffiliation: Affiliation[] }> =>
+	query<undefined, { listAffiliation: Affiliation[] }>(
 		`
         query listAffiliation {
             listAffiliation{

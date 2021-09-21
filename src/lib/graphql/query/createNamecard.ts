@@ -5,13 +5,12 @@ import type { AuthHeader } from './types';
 export const createNamecard = (
 	variables: { input: CreateNamecardInput },
 	headers: AuthHeader
-): Promise<Namecard> =>
-	mutation<{ input: CreateNamecardInput }, Namecard>(
+): Promise<{ createNamecard: Namecard }> =>
+	mutation<{ input: CreateNamecardInput }, { createNamecard: Namecard }>(
 		`
         mutation createNamecard($input: CreateNamecardInput!) {
             createNamecard(input: $input){
                 id
-                name
 				owner {
 					id
 					name
