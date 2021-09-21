@@ -1,11 +1,54 @@
 <script lang="ts">
+	import { browser } from '$app/env';
+
+	import { token } from '$lib/auth';
+	import { auth0 } from '$lib/auth/auth0';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import { subscription } from '$lib/graphql';
 	import { user } from '$lib/store';
 	import { Static } from '$lib/svg';
+	import { Auth } from 'aws-amplify/lib';
 	import { Pen16 } from 'carbon-icons-svelte';
 	import Add16 from 'carbon-icons-svelte/lib/Add16';
 	import ArrowRight16 from 'carbon-icons-svelte/lib/ArrowRight16';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		auth0
+			.then((a) => Promise.all([a.getUser(), a.getIdTokenClaims()]))
+			.then(([user, claim]) => {
+				if (user === undefined) throw new Error('user not found');
+				return Auth.federatedSignIn(
+					'kanko-dori.us.auth0.com',
+					{
+						token: claim.__raw,
+						expires_at: (claim.exp ?? 0) * 1000
+					},
+					{
+						name: user.name ?? ''
+					}
+				);
+			})
+			.then(() => {
+				subscription(
+					/* GraphQL */ `
+						subscription OnAddNameListener($input: AddNamecardInput!) {
+							onAddNamecard(input: $input) {
+								id
+							}
+						}
+					`,
+					{
+						input: { namecardId: 'github|15074382-ウィンターハッカソン-閑古鳥' }
+					},
+					{
+						Authorization: ($token.type === 'success' && $token.value) || ''
+					}
+				).subscribe(console.log, console.warn, console.log);
+			})
+			.catch(console.error);
+	});
 </script>
 
 <Header showSignOut={true} />
