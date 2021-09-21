@@ -19,12 +19,12 @@ jobs:
           cache: npm
       - name: Install deps
         run: npm install
-      - name: Build SvelteKit
-        run: npm run build
-
       - name: Lint
         run: npm run lint
       - name: Check
         run: npm run check
-      - name: Build SvelteKit
+      - name: svelte-kit build
         run: npm run build
+      - name: poop ignore amplify error
+        if: always()
+        run: sed  's|import "aws-amplify/lib";|// import "aws-amplify/lib";|g' build/middlewares.js  > build/middlewares.js
