@@ -14,7 +14,7 @@
 	<div class="p-8">
 		<div class="max-w-3xl w-full mx-auto relative">
 			<Static
-				name={$user?.githubId ?? 'Error'}
+				name={$user?.name ?? 'Error'}
 				github={$user?.githubId ?? 'Error'}
 				twitter={$user?.twitterId ?? undefined}
 				class="w-full shadow-xl"
