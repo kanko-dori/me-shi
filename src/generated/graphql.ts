@@ -18,6 +18,10 @@ export type AddCommentInput = {
   teamId: Scalars['String'];
 };
 
+export type AddNamecardInput = {
+  namecardId: Scalars['ID'];
+};
+
 export type Affiliation = {
   __typename?: 'Affiliation';
   id: Scalars['ID'];
@@ -66,6 +70,22 @@ export type Event = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type GetNamecardInput = {
+  namecardId: Scalars['ID'];
+};
+
+export type GetUserInput = {
+  userId: Scalars['ID'];
+};
+
+export type GetZukanInput = {
+  eventId: Scalars['ID'];
+};
+
+export type ListTeamInput = {
+  eventId: Scalars['ID'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addComment: Team;
@@ -84,7 +104,7 @@ export type MutationAddCommentArgs = {
 
 
 export type MutationAddNamecardArgs = {
-  namecardId: Scalars['ID'];
+  input: AddNamecardInput;
 };
 
 
@@ -151,22 +171,22 @@ export type Query = {
 
 
 export type QueryGetNamecardArgs = {
-  namecardId: Scalars['ID'];
+  input?: Maybe<GetNamecardInput>;
 };
 
 
 export type QueryGetUserArgs = {
-  userId: Scalars['ID'];
+  input?: Maybe<GetUserInput>;
 };
 
 
 export type QueryGetZukanArgs = {
-  eventId: Scalars['ID'];
+  input?: Maybe<GetZukanInput>;
 };
 
 
 export type QueryListTeamArgs = {
-  eventID: Scalars['ID'];
+  input?: Maybe<ListTeamInput>;
 };
 
 export type Subscription = {
@@ -299,6 +319,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   AddCommentInput: AddCommentInput;
+  AddNamecardInput: AddNamecardInput;
   Affiliation: ResolverTypeWrapper<Affiliation>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Comment: ResolverTypeWrapper<Comment>;
@@ -308,7 +329,11 @@ export type ResolversTypes = {
   CreateUserInput: CreateUserInput;
   DeleteUserInput: DeleteUserInput;
   Event: ResolverTypeWrapper<Event>;
+  GetNamecardInput: GetNamecardInput;
+  GetUserInput: GetUserInput;
+  GetZukanInput: GetZukanInput;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  ListTeamInput: ListTeamInput;
   Mutation: ResolverTypeWrapper<{}>;
   Namecard: ResolverTypeWrapper<Namecard>;
   Product: ResolverTypeWrapper<Product>;
@@ -327,6 +352,7 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   AddCommentInput: AddCommentInput;
+  AddNamecardInput: AddNamecardInput;
   Affiliation: Affiliation;
   Boolean: Scalars['Boolean'];
   Comment: Comment;
@@ -336,7 +362,11 @@ export type ResolversParentTypes = {
   CreateUserInput: CreateUserInput;
   DeleteUserInput: DeleteUserInput;
   Event: Event;
+  GetNamecardInput: GetNamecardInput;
+  GetUserInput: GetUserInput;
+  GetZukanInput: GetZukanInput;
   ID: Scalars['ID'];
+  ListTeamInput: ListTeamInput;
   Mutation: {};
   Namecard: Namecard;
   Product: Product;
@@ -373,7 +403,7 @@ export type EventResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addComment?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationAddCommentArgs, never>>;
-  addNamecard?: Resolver<ResolversTypes['Namecard'], ParentType, ContextType, RequireFields<MutationAddNamecardArgs, 'namecardId'>>;
+  addNamecard?: Resolver<ResolversTypes['Namecard'], ParentType, ContextType, RequireFields<MutationAddNamecardArgs, 'input'>>;
   createEvent?: Resolver<ResolversTypes['Event'], ParentType, ContextType, RequireFields<MutationCreateEventArgs, never>>;
   createNamecard?: Resolver<ResolversTypes['Namecard'], ParentType, ContextType, RequireFields<MutationCreateNamecardArgs, never>>;
   createTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationCreateTeamArgs, never>>;
@@ -401,12 +431,12 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  getNamecard?: Resolver<Maybe<ResolversTypes['Namecard']>, ParentType, ContextType, RequireFields<QueryGetNamecardArgs, 'namecardId'>>;
-  getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'userId'>>;
-  getZukan?: Resolver<Maybe<ResolversTypes['Zukan']>, ParentType, ContextType, RequireFields<QueryGetZukanArgs, 'eventId'>>;
+  getNamecard?: Resolver<Maybe<ResolversTypes['Namecard']>, ParentType, ContextType, RequireFields<QueryGetNamecardArgs, never>>;
+  getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, never>>;
+  getZukan?: Resolver<Maybe<ResolversTypes['Zukan']>, ParentType, ContextType, RequireFields<QueryGetZukanArgs, never>>;
   listAffiliation?: Resolver<Maybe<Array<Maybe<ResolversTypes['Affiliation']>>>, ParentType, ContextType>;
   listEvent?: Resolver<Maybe<Array<Maybe<ResolversTypes['Event']>>>, ParentType, ContextType>;
-  listTeam?: Resolver<Maybe<Array<Maybe<ResolversTypes['Team']>>>, ParentType, ContextType, RequireFields<QueryListTeamArgs, 'eventID'>>;
+  listTeam?: Resolver<Maybe<Array<Maybe<ResolversTypes['Team']>>>, ParentType, ContextType, RequireFields<QueryListTeamArgs, never>>;
   listTechnology?: Resolver<Maybe<Array<Maybe<ResolversTypes['Technology']>>>, ParentType, ContextType>;
 };
 
