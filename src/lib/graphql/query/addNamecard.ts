@@ -1,47 +1,14 @@
 import { mutation } from '../client';
-import type { AddNamecardInput, Namecard } from 'src/generated/graphql';
+import type { Namecard } from 'src/generated/graphql';
 import type { AuthHeader } from './types';
 
-export const addNamecard = (
-	variables: { input: AddNamecardInput },
-	headers: AuthHeader
-): Promise<Namecard> =>
-	mutation<{ input: AddNamecardInput }, Namecard>(
+export const addNamecard = (variables: { input: string }, headers: AuthHeader): Promise<Namecard> =>
+	mutation<{ input: string }, Namecard>(
 		`
-		mutation addNamecard($input: AddNamecardInput!) {
-			addNamecard(input: $input){
-				id
-				memberOf
-				preferTechnologies
-				usedTechnologies
-				event {
-					id
-					name
-				}
-				owner {
-					id
-					iconURL
-					name
-					twitterId
-					githubId
-				}
-				team {
-					id
-					name
-					event {
-						id
-						name
-					}
-					product {
-						name
-						description
-						repository
-						comments {
-							id
-							body
-						}
-					}
-				}
+		mutation addNamecard($input: String!) {
+			addNamecard(namecardId: $input){
+				getterNamecardId
+				ownerNamecardId
 			}
 		} 
         `,
