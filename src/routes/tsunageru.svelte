@@ -99,7 +99,7 @@
 	};
 </script>
 
-<Header />
+<Header showSignOut={true} />
 <main class="container mx-auto max-w-screen-lg relative px-4">
 	<div class="p-8">
 		<div class="max-w-3xl w-full mx-auto relative">
@@ -114,7 +114,7 @@
 	</div>
 
 	<div class="md:flex">
-		<section class="md:w-1/2 md:px-2">
+		<section class="md:w-1/2 md:px-2 py-4">
 			<p class="text-xl p-2 border-b-2 border-gray-300">参加したイベントの名刺</p>
 			<ul>
 				<li>
@@ -145,7 +145,7 @@
 				{/each}
 			</ul>
 		</section>
-		<section class="md:w-1/2 md:px-2">
+		<section class="md:w-1/2 md:px-2 py-4">
 			<p class="text-xl p-2 border-b-2 border-gray-300">いままでにもらった名刺</p>
 			<ul>
 				{#each user.givenNamecards as givencard}
