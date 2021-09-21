@@ -2,8 +2,8 @@ import type { CreateUserInput, User } from 'src/generated/graphql';
 import { mutation } from '../client';
 import type { AuthHeader } from './types';
 
-export const login = (variables: CreateUserInput, headers: AuthHeader): Promise<User> =>
-	mutation<CreateUserInput, User>(
+export const login = (variables: { input: CreateUserInput }, headers: AuthHeader): Promise<User> =>
+	mutation<{ input: CreateUserInput }, User>(
 		`
       mutation Login($input: CreateUserInput!) {
         createUser(input: $input){
