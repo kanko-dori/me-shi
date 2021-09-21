@@ -23,12 +23,12 @@
 	import { Dynamic } from '$lib/svg';
 	import Event16 from 'carbon-icons-svelte/lib/Event16';
 	import Tag16 from 'carbon-icons-svelte/lib/Tag16';
-	import type { Product, ProductInput, Team } from 'src/generated/graphql';
+	import type { ProductInput, Team } from 'src/generated/graphql';
 	import { onMount } from 'svelte';
 
 	let eventName = '';
 	let teamName = '';
-	let product: Product = { name: '', repository: '', description: '' };
+	let productName = '';
 	let usedTechnologies: string[] | undefined = [];
 	let preferedTechnologies: string[] | undefined = undefined;
 	let memberOf = '';
@@ -68,9 +68,9 @@
 
 	const onSubmit = async () => {
 		const productInput: ProductInput = {
-			name: product.name,
-			description: product.description,
-			repository: product.repository
+			name: productName,
+			description: '',
+			repository: ''
 		};
 		try {
 			processing = true;
@@ -135,7 +135,7 @@
 			<Dynamic
 				event={eventName}
 				team={teamName}
-				{product}
+				product={{ name: productName, repository: '', description: '' }}
 				usedTechnologies={usedTechnologies || []}
 				preferedTechnologies={preferedTechnologies || undefined}
 				memberOf={memberOf || undefined}
@@ -154,7 +154,7 @@
 		</div>
 		<div class="p-4">
 			<p class="text-sm text-gray-500">作品名</p>
-			<Input class="w-full" bind:value={product.name} />
+			<Input class="w-full" bind:value={productName} />
 		</div>
 		<div class="p-4">
 			<p class="text-sm text-gray-500">今回使った技術</p>
