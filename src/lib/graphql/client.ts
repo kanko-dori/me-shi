@@ -9,7 +9,7 @@ amplify.Amplify.configure({
 	}
 });
 
-export const query = <TProps extends Record<string, unknown>, TResult extends unknown>(
+export const query = <TProps extends undefined | Record<string, unknown>, TResult extends unknown>(
 	operation: string,
 	variables?: TProps,
 	headers?: Record<string, string>
