@@ -5,11 +5,11 @@ import type { AuthHeader } from './types';
 export const getNamecard = (
 	variables: { input: GetNamecardInput },
 	headers: AuthHeader
-): Promise<Namecard> =>
-	query<{ input: GetNamecardInput }, Namecard>(
+): Promise<{ getNamecard: Namecard }> =>
+	query<{ input: GetNamecardInput }, { getNamecard: Namecard }>(
 		`
-        query getNamecard($input: GetNamecardInput) {
-            getNamecard(input: $input){
+		query getNamecard($input: GetNamecardInput) {
+			getNamecard(input: $input){
 				id
 				memberOf
 				preferTechnologies
@@ -43,9 +43,9 @@ export const getNamecard = (
 					}
 				}
 			}
-            }
-        }
-        `,
+		}
+	}
+		`,
 		variables,
 		headers
 	).then((res) => {
