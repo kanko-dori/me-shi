@@ -4,18 +4,20 @@
 	import { getZukan } from '$lib/graphql/query/getZukan';
 	import { onMount } from 'svelte';
 	import type { ZukanNamecard } from 'src/generated/graphql';
-	const eventId = 'testEvent';
+	const eventId = 'testevent';
 	let eventname = '';
 	let namecardList: ZukanNamecard[] = [];
 	let teamList: string[] = [];
 	let team: string[] = [];
+	let path: string = '';
 
 	onMount(() => {
 		getToken().then((token) => {
+			path = location.pathname.match(/([^\/.]+)/g)?.pop() ?? '';
 			getZukan(
 				{
 					input: {
-						eventId: eventId
+						eventId: path
 					}
 				},
 				{ Authorization: token ?? '' }

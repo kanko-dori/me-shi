@@ -7,6 +7,7 @@
 	import { Dynamic, Static } from '$lib/svg';
 	import { QrCode16, SendFilled32 } from 'carbon-icons-svelte';
 	import type { AddNamecardInput, Comment, Product, Team } from 'src/generated/graphql';
+	import { Book16 } from 'carbon-icons-svelte';
 
 	let namecardId = '';
 	let ownerId = '';
@@ -14,6 +15,7 @@
 	let github = '';
 	let twitter: string | undefined;
 	let eventName = '';
+	let eventId = '';
 	let team: Team | undefined;
 	let product: Product | undefined;
 	let usedTechnologies: string[] = [];
@@ -62,6 +64,7 @@
 				if (owner.githubId != null) github = owner.githubId;
 				if (owner.twitterId != null) twitter = owner.twitterId;
 				if (event.name != null) eventName = event.name;
+				if (event.id != null) eventId = event.id;
 				team = t;
 				product = team.product;
 				usedTechnologies = getNamecard.usedTechnologies ?? [];
@@ -110,6 +113,14 @@
 				</a>
 			{/if}
 		</div>
+		<a
+			href="/zukan/{eventId}"
+			class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
+		>
+			<p>{eventName}の名刺図鑑をひらく</p>
+			<div class="flex-grow" />
+			<Book16 class="transition-transform duration-200 ease-out group-hover:scale-150" />
+		</a>
 	</div>
 
 	<div class="mx-auto px-8 py-4">
