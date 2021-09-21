@@ -131,6 +131,7 @@ export const addNamecard = async (input: AddNamecardInput, userId: string): Prom
 }
 
 export const listNamecards = async (): Promise<any> => {
+    console.log('call listNamecards')
     const namecardParam: ScanCommandInput = {
         TableName: NamecardTableName,
     }
