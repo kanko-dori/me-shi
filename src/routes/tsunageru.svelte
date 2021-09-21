@@ -99,7 +99,7 @@
 	};
 </script>
 
-<Header />
+<Header showSignOut={true} />
 <main class="container mx-auto max-w-screen-lg relative px-4">
 	<div class="p-8">
 		<div class="max-w-3xl w-full mx-auto relative">
