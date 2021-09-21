@@ -12,6 +12,8 @@
 	import { listAffiliation, listEvent, listTeamAll, listTechnology } from '$lib/graphql/query';
 	import { Dynamic } from '$lib/svg';
 	import { onMount } from 'svelte';
+	import Tag16 from 'carbon-icons-svelte/lib/Tag16';
+	import Event16 from 'carbon-icons-svelte/lib/Event16';
 
 	let event: string = '';
 	let team: string = '';
@@ -70,14 +72,14 @@
 				{event}
 				{team}
 				{product}
-				usedTechnologies={usedTechnologies || []}
+				usedTechnologies={usedTechnologies || undefined}
 				preferedTechnologies={preferedTechnologies || undefined}
 				memberOf={memberOf || undefined}
 				class="w-full shadow-xl"
 			/>
 		</div>
 	</div>
-	<form class="block p-4 max-w-2xl mx-auto" on:submit|preventDefault={onSubmit}>
+	<div class="block p-4 max-w-2xl mx-auto">
 		<div class="p-4">
 			<p class="text-sm text-gray-500">ハッカソン名</p>
 			<SuggestableInput class="w-full" candidates={eventList} bind:value={event} />
@@ -92,11 +94,11 @@
 		</div>
 		<div class="p-4">
 			<p class="text-sm text-gray-500">今回使った技術</p>
-			<SuggestableTagInput
-				class="w-full"
-				candidates={technologyList}
-				bind:value={usedTechnologies}
-			/>
+			<SuggestableTagInput class="w-full" candidates={technologyList} bind:value={usedTechnologies}>
+				<span slot="prefix" class="inline-flex items-center px-1">
+					<Tag16 />
+				</span>
+			</SuggestableTagInput>
 		</div>
 		<div class="p-4">
 			<p class="text-sm text-gray-500">いつも使ってる技術</p>
@@ -104,17 +106,27 @@
 				class="w-full"
 				candidates={technologyList}
 				bind:value={preferedTechnologies}
-			/>
+			>
+				<span slot="prefix" class="inline-flex items-center px-1">
+					<Tag16 />
+				</span>
+			</SuggestableTagInput>
 		</div>
 		<div class="p-4">
 			<p class="text-sm text-gray-500">所属</p>
-			<SuggestableInput class="w-full" candidates={affiliationList} bind:value={memberOf} />
+			<SuggestableInput class="w-full" candidates={affiliationList} bind:value={memberOf}>
+				<span slot="prefix" class="inline-flex items-center px-1">
+					<Event16 />
+				</span>
+			</SuggestableInput>
 		</div>
 		<div class="p-4 flex">
 			<Button class="hover:shadow transition-shadow bg-gray-300">Cancel</Button>
 			<div class="flex-grow" />
-			<Button class="hover:shadow transition-shadow bg-blue-500 text-white">Apply</Button>
+			<Button class="hover:shadow transition-shadow bg-blue-500 text-white" on:click={onSubmit}>
+				Apply
+			</Button>
 		</div>
-	</form>
+	</div>
 </main>
 <Footer />
