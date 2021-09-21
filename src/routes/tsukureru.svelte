@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ProductInput, Team } from 'src/generated/graphql';
+	import type { Product, ProductInput, Team } from 'src/generated/graphql';
 	import { getToken, token } from '$lib/auth';
 	import {
 		Header,
@@ -25,7 +25,7 @@
 
 	let eventName: string = '';
 	let teamName: string = '';
-	let product: ProductInput = { name: '' };
+	let product: Product = { name: '', repository: '', description: '' };
 	let usedTechnologies: string[] | undefined = [];
 	let preferedTechnologies: string[] | undefined = undefined;
 	let memberOf = '';
@@ -107,7 +107,11 @@
 	};
 
 	$: showTeamNameList = teamList.map((t) => (t.event.name === event ? t.name : ''));
-	$: product = teamList.find((t) => t.name === teamName)?.product ?? { name: '' };
+	$: product = teamList.find((t) => t.name === teamName)?.product ?? {
+		name: '',
+		repository: '',
+		description: ''
+	};
 </script>
 
 <Header />

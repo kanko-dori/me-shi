@@ -1,11 +1,7 @@
 <script lang="ts">
 	import Svg from './Svg.svelte';
 	import Logo from './Logo.svelte';
-
-	type Product = {
-		name: string;
-		repository?: string;
-	};
+	import type { Product } from 'src/generated/graphql';
 
 	export let event: string;
 	export let team: string;
