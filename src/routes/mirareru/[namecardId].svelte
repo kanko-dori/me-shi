@@ -1,3 +1,59 @@
+<script lang="ts" context="module">
+	import type { Load } from '@sveltejs/kit';
+
+	export const load: Load = ({ fetch, page }) =>
+		fetch('https://h6qrtrf4hrdl5pt5z2ojjomstq.appsync-api.ap-northeast-1.amazonaws.com/graphql', {
+			headers: {
+				'x-api-key': appsyncApiKey
+			},
+			body: JSON.stringify({
+				query: /* GraphQL */ `
+					query getNamecard($input: GetNamecardInput) {
+						getNamecard(input: $input) {
+							id
+							memberOf
+							preferTechnologies
+							usedTechnologies
+							event {
+								id
+								name
+							}
+							owner {
+								id
+								iconURL
+								name
+								twitterId
+								githubId
+							}
+							team {
+								id
+								name
+								event {
+									id
+									name
+								}
+								product {
+									name
+									description
+									repository
+									comments {
+										id
+										body
+									}
+								}
+							}
+						}
+					}
+				`,
+				variables: { input: { namecardId: page.params['namecardId'] } }
+			}),
+			method: 'POST'
+		})
+			.then((res) => res.json())
+			.then((r: { data: { getNamecard: Namecard } }) => r.data.getNamecard)
+			.then((namecard) => ({ props: { namecard } }));
+</script>
+
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { authUser, token } from '$lib/auth';
@@ -8,25 +64,28 @@
 	import { user } from '$lib/store';
 	import { Dynamic, Static } from '$lib/svg';
 	import { QrCode16, SendFilled32 } from 'carbon-icons-svelte';
-	import type { AddNamecardInput, Comment, Product, Team } from 'src/generated/graphql';
+	import type { AddNamecardInput, Comment, Namecard, Product, Team } from 'src/generated/graphql';
+	import { appsyncApiKey } from '$lib/env';
+
+	export let namecard: Namecard;
 
 	const twitterShareUrl = new URL('https://twitter.com/share');
 	twitterShareUrl.searchParams.append('url', `https://me-shi.ga${$page.path}`);
 	twitterShareUrl.searchParams.append('text', `イベントに参加してきました！`);
 	twitterShareUrl.searchParams.append('hashtags', 'me_shi');
 
-	let namecardId = '';
-	let ownerId = '';
-	let name = '';
-	let github = '';
-	let twitter: string | undefined;
-	let eventName = '';
-	let team: Team | undefined;
-	let product: Product | undefined;
-	let usedTechnologies: string[] = [];
-	let preferedTechnologies: string[] | undefined = undefined;
-	let memberOf: string | undefined = undefined;
-	let comments: Array<Comment> = [];
+	let namecardId = namecard.id ?? '';
+	let ownerId = namecard.owner.id ?? '';
+	let name = namecard.owner.name ?? '';
+	let github = namecard.owner.githubId ?? '';
+	let twitter = namecard.owner.twitterId ?? undefined;
+	let eventName = namecard.event.name ?? '';
+	let team = namecard.team;
+	let product = team.product;
+	let usedTechnologies = namecard.usedTechnologies ?? [];
+	let preferedTechnologies = namecard.preferTechnologies ?? undefined;
+	let memberOf = namecard.memberOf ?? undefined;
+	let comments = namecard.team.product.comments ?? [];
 
 	let comment = '';
 
@@ -95,6 +154,15 @@
 			});
 	});
 </script>
+
+<svelte:head>
+	<title>{eventName}での{name}のme-shi</title>
+	<meta property="og:url" content="https://me-shi.ga{$page.path}" />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="me-shi" />
+	<meta property="og:image" content="https://me-shi.ga/ogp.png" />
+	<meta name="twitter:card" content="summary_large_image" />
+</svelte:head>
 
 <Header />
 
