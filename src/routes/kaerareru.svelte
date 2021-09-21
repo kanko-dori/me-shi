@@ -4,12 +4,13 @@
 	let name: string = '';
 	let github: undefined | string = undefined;
 	let twitter: undefined | string = undefined;
-	function cancelClick() {
+
+	const cancelClick = () => {
 		alert('Cancel Clicked');
-	}
-	function applyClick() {
+	};
+	const applyClick = () => {
 		alert('apply Clicked');
-	}
+	};
 </script>
 
 <Header />
