@@ -86,7 +86,7 @@
 	});
 </script>
 
-<Header showSignOut={true} />
+<Header />
 
 <main class="container mx-auto px-4 max-w-3xl">
 	<div class="flex flex-col gap-2 w-full mx-auto p-4">
@@ -105,7 +105,7 @@
 			/>
 			{#if $user.type === 'success' && $user.value.id === ownerId}
 				<a
-					href="/wataseru/${'slug'}"
+					href="/wataseru/{namecardId}"
 					class="absolute flex justify-center items-center outline-none focus:ring-2 w-12 h-12 rounded-md opacity-75 bg-gray-800 right-2 bottom-2"
 				>
 					<QrCode16 class="h-3/5 w-3/5" style="fill:white" />
@@ -131,7 +131,7 @@
 			</div>
 		{/if}
 
-		<ul class="flex flex-col gap-6">
+		<ul class="flex flex-col gap-6 mt-4">
 			{#each [...comments].reverse() as comment}
 				<li class="p-2">
 					<span class="text-xl px-4 py-2 rounded shadow border border-gray-200">
