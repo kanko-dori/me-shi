@@ -2,6 +2,8 @@
 	import { page } from '$app/stores';
 	import { authUser, token } from '$lib/auth';
 	import { Button, Footer, Header, Input } from '$lib/components';
+	import Loading from '$lib/components/Loading.svelte';
+	import Modal from '$lib/components/Modal.svelte';
 	import { addNamecard, addComment, getNamecard } from '$lib/graphql/query';
 	import { user } from '$lib/store';
 	import { Dynamic, Static } from '$lib/svg';
@@ -27,6 +29,8 @@
 	let comments: Array<Comment> = [];
 
 	let comment = '';
+
+	let processing = true;
 	const send = () => {
 		if ($token.type !== 'success') {
 			console.log('Auth isnot initialized');
@@ -75,6 +79,7 @@
 				memberOf = getNamecard.memberOf ?? undefined;
 			})
 			.then(() => {
+				processing = false;
 				if ($authUser.type !== 'success') return;
 				if ($authUser.value?.sub === ownerId) {
 					console.log('This card is mine. skip addNamecards...');
@@ -154,5 +159,11 @@
 		</ul>
 	</div>
 </main>
+
+<Modal open={processing}>
+	<div class="z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+		<Loading />
+	</div>
+</Modal>
 
 <Footer />
