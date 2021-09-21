@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { Product, Team } from 'src/generated/graphql';
+	import { getToken } from '$lib/auth';
 	import {
 		Header,
 		Footer,
@@ -7,16 +9,43 @@
 		SuggestableTagInput,
 		Button
 	} from '$lib/components';
+	import { listAffiliation, listEvent, listTeamAll, listTechnology } from '$lib/graphql/query';
 	import { Dynamic } from '$lib/svg';
+	import { onMount } from 'svelte';
 
-	let event = '';
-	let team = '';
-	let product = { name: '' };
+	let event: string = '';
+	let team: string = '';
+	let product: Product = { name: '' };
 	let usedTechnologies: string[] | undefined = [];
 	let preferedTechnologies: string[] | undefined = undefined;
 	let memberOf = '';
 
-	let technology = ['Go', 'TypeScript', 'Kubernetes', 'CSS', 'Docker', 'Rust', 'WebAssembly', 'C'];
+	let eventList: string[] = [];
+	let teamList: Team[] = [];
+	let showTeamNameList: string[] = [];
+	let technologyList: string[] = [];
+	let affiliationList: string[] = [];
+
+	onMount(() => {
+		getToken()
+			.then((token) =>
+				Promise.all([
+					listEvent(undefined, { Authorization: token ?? '' }),
+					listTeamAll(undefined, { Authorization: token ?? '' }),
+					listTechnology(undefined, { Authorization: token ?? '' }),
+					listAffiliation(undefined, { Authorization: token ?? '' })
+				])
+			)
+			.then(([event, team, technologies, affiliations]) => {
+				console.log('fetch done.');
+				eventList = event.listEvent.map((e) => e.id);
+				teamList = team.listTeamAll;
+				technologyList = technologies.listTechnology.map((t) => t.name);
+				console.log(technologies);
+				affiliationList = affiliations.listAffiliation.map((a) => a.id);
+			})
+			.catch(console.error);
+	});
 
 	const onSubmit = () => {
 		console.log('submitted', {
@@ -28,6 +57,9 @@
 			memberOf
 		});
 	};
+
+	$: showTeamNameList = teamList.map((t) => (t.event.name === event ? t.name : ''));
+	$: product = teamList.find((t) => t.name === team)?.product ?? { name: '' };
 </script>
 
 <Header />
@@ -48,19 +80,11 @@
 	<form class="block p-4 max-w-2xl mx-auto" on:submit|preventDefault={onSubmit}>
 		<div class="p-4">
 			<p class="text-sm text-gray-500">ハッカソン名</p>
-			<SuggestableInput
-				class="w-full"
-				candidates={[
-					'ハックツハッカソン プレシオ杯',
-					'ハックツハッカソン スピノカップ',
-					'サマーハッカソン'
-				]}
-				bind:value={event}
-			/>
+			<SuggestableInput class="w-full" candidates={eventList} bind:value={event} />
 		</div>
 		<div class="p-4">
 			<p class="text-sm text-gray-500">チーム名</p>
-			<Input class="w-full" bind:value={team} />
+			<SuggestableInput class="w-full" candidates={showTeamNameList} bind:value={team} />
 		</div>
 		<div class="p-4">
 			<p class="text-sm text-gray-500">作品名</p>
@@ -68,19 +92,23 @@
 		</div>
 		<div class="p-4">
 			<p class="text-sm text-gray-500">今回使った技術</p>
-			<SuggestableTagInput class="w-full" candidates={technology} bind:value={usedTechnologies} />
+			<SuggestableTagInput
+				class="w-full"
+				candidates={technologyList}
+				bind:value={usedTechnologies}
+			/>
 		</div>
 		<div class="p-4">
 			<p class="text-sm text-gray-500">いつも使ってる技術</p>
 			<SuggestableTagInput
 				class="w-full"
-				candidates={technology}
+				candidates={technologyList}
 				bind:value={preferedTechnologies}
 			/>
 		</div>
 		<div class="p-4">
 			<p class="text-sm text-gray-500">所属</p>
-			<Input class="w-full" bind:value={memberOf} />
+			<SuggestableInput class="w-full" candidates={affiliationList} bind:value={memberOf} />
 		</div>
 		<div class="p-4 flex">
 			<Button class="hover:shadow transition-shadow bg-gray-300">Cancel</Button>
