@@ -11,7 +11,10 @@
 
 <g transform="translate({x},{y}) scale({scale})">
 	<svelte:component this={type === 'github' ? GitHub : Twitter} />
-	<a href={type === 'github' ? `https://github.com/${value}` : `https://twitter.com/${value}`} target="_blank">
+	<a
+		href={type === 'github' ? `https://github.com/${value}` : `https://twitter.com/${value}`}
+		target="_blank"
+	>
 		<text x="70" y="35" font-size="32">{value}</text>
 	</a>
 </g>
