@@ -8,7 +8,7 @@ export const getNamecard = (
 ): Promise<Namecard> =>
 	query<{ input: GetNamecardInput }, Namecard>(
 		`
-        mutation getNamecard($input: GetNamecardInput) {
+        query getNamecard($input: GetNamecardInput) {
             getNamecard(input: $input){
 				id
 				memberOf
