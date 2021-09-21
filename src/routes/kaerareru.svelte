@@ -1,22 +1,27 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { Header, Footer, Input, Button } from '$lib/components';
-	import { Static } from '$lib/svg';
-	import { user } from '$lib/store';
+	import { auth, token } from '$lib/auth';
+	import { Button, Footer, Header, Input } from '$lib/components';
 	import { updateUser } from '$lib/graphql/query/updateUser';
-	import { auth, getToken, token } from '$lib/auth';
+	import { user } from '$lib/store';
+	import { Static } from '$lib/svg';
 
 	let name = '';
 	let githubId = '';
 	let twitterId = '';
 
 	user.subscribe((u) => {
-		name = u?.name ?? 'Error';
-		githubId = u?.githubId ?? 'Error';
-		twitterId = u?.twitterId ?? '';
+		if (u.type !== 'success') return;
+		name = u.value.name ?? 'Error';
+		githubId = u.value.githubId ?? 'Error';
+		twitterId = u.value.twitterId ?? '';
 	});
 
 	const onSubmit = () => {
+		if ($token.type !== 'success') {
+			console.error('token is not loaded', $token);
+			return;
+		}
 		console.log('submitted', { name, githubId, twitterId });
 		updateUser(
 			{
@@ -27,7 +32,7 @@
 				}
 			},
 			{
-				Authorization: $token ?? ''
+				Authorization: $token.value ?? ''
 			}
 		)
 			.then(() => {
