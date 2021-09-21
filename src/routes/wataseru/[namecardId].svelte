@@ -1,9 +1,12 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
 	import { page } from '$app/stores';
 	import { token } from '$lib/auth';
 
 	import { QRcode, Header, Footer } from '$lib/components';
 	import { getNamecard } from '$lib/graphql/query';
+	import { user } from '$lib/store';
 	import { Dynamic } from '$lib/svg';
 
 	let event = '';
@@ -11,6 +14,11 @@
 	let product = { name: '' };
 	let usedTechnologies: Array<string> = [];
 	let preferTechnologies: Array<string> = [];
+
+	user.subscribe((u) => {
+		if (u.type === 'failure') goto('/');
+		return;
+	});
 
 	token.subscribe((t) => {
 		if (t.type !== 'success') return;
