@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { token } from '$lib/auth';
+	import { authUser, token } from '$lib/auth';
 	import { Button, Footer, Header, Input } from '$lib/components';
-	import { addComment } from '$lib/graphql/query/addComment';
-	import { getNamecard } from '$lib/graphql/query/getNamecard';
+	import { addNamecard, addComment, getNamecard } from '$lib/graphql/query';
 	import { user } from '$lib/store';
 	import { Dynamic, Static } from '$lib/svg';
 	import { QrCode16, SendFilled32 } from 'carbon-icons-svelte';
-	import type { Comment, Product, Team } from 'src/generated/graphql';
+	import type { AddNamecardInput, Comment, Product, Team } from 'src/generated/graphql';
 
+	let namecardId = '';
 	let ownerId = '';
 	let name = '';
 	let github = '';
@@ -53,20 +53,36 @@
 				}
 			},
 			{ Authorization: t.value ?? '' }
-		).then(({ getNamecard }) => {
-			const { owner, event, team: t } = getNamecard;
-			ownerId = owner.id;
-			if (owner.name != null) name = owner.name;
-			if (owner.githubId != null) github = owner.githubId;
-			if (owner.twitterId != null) twitter = owner.twitterId;
-			if (event.name != null) eventName = event.name;
-			team = t;
-			product = team.product;
-			usedTechnologies = getNamecard.usedTechnologies ?? [];
-			preferedTechnologies = getNamecard.preferTechnologies ?? undefined;
-			if (t.product.comments != null) comments = t.product.comments;
-			memberOf = getNamecard.memberOf ?? undefined;
-		});
+		)
+			.then(({ getNamecard }) => {
+				const { owner, event, team: t, id } = getNamecard;
+				namecardId = id;
+				ownerId = owner.id;
+				if (owner.name != null) name = owner.name;
+				if (owner.githubId != null) github = owner.githubId;
+				if (owner.twitterId != null) twitter = owner.twitterId;
+				if (event.name != null) eventName = event.name;
+				team = t;
+				product = team.product;
+				usedTechnologies = getNamecard.usedTechnologies ?? [];
+				preferedTechnologies = getNamecard.preferTechnologies ?? undefined;
+				if (t.product.comments != null) comments = t.product.comments;
+				memberOf = getNamecard.memberOf ?? undefined;
+			})
+			.then(() => {
+				if ($authUser.type !== 'success') return;
+				if ($authUser.value?.sub === ownerId) {
+					console.log('This card is mine. skip addNamecards...');
+					return;
+				}
+				const addNamecardInput: AddNamecardInput = {
+					namecardId
+				};
+				console.log('call addNamecard');
+				addNamecard({ input: addNamecardInput }, { Authorization: t.value ?? '' }).then((res) =>
+					console.log('addNamecard done', res)
+				);
+			});
 	});
 </script>
 
