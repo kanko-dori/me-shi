@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Product, Team } from 'src/generated/graphql';
-	import { getToken } from '$lib/auth';
+	import type { ProductInput, Team } from 'src/generated/graphql';
+	import { getToken, token } from '$lib/auth';
 	import {
 		Header,
 		Footer,
@@ -9,15 +9,23 @@
 		SuggestableTagInput,
 		Button
 	} from '$lib/components';
-	import { listAffiliation, listEvent, listTeamAll, listTechnology } from '$lib/graphql/query';
+	import {
+		listAffiliation,
+		listEvent,
+		listTeamAll,
+		listTechnology,
+		createNamecard
+	} from '$lib/graphql/query';
 	import { Dynamic } from '$lib/svg';
 	import { onMount } from 'svelte';
 	import Tag16 from 'carbon-icons-svelte/lib/Tag16';
 	import Event16 from 'carbon-icons-svelte/lib/Event16';
+	import { createEvent } from '$lib/graphql/query/createEvent';
+	import { createTeam } from '$lib/graphql/query/createTeam';
 
-	let event: string = '';
-	let team: string = '';
-	let product: Product = { name: '' };
+	let eventName: string = '';
+	let teamName: string = '';
+	let product: ProductInput = { name: '' };
 	let usedTechnologies: string[] | undefined = [];
 	let preferedTechnologies: string[] | undefined = undefined;
 	let memberOf = '';
@@ -49,19 +57,57 @@
 			.catch(console.error);
 	});
 
-	const onSubmit = () => {
-		console.log('submitted', {
-			event,
-			team,
-			product,
-			usedTechnologies,
-			preferedTechnologies,
-			memberOf
-		});
+	const onSubmit = async () => {
+		const productInput: ProductInput = {
+			name: product.name,
+			description: product.description,
+			repository: product.repository
+		};
+		try {
+			const event = await createEvent(
+				{
+					input: {
+						name: eventName
+					}
+				},
+				{
+					Authorization: $token || ''
+				}
+			);
+			const team = await createTeam(
+				{
+					input: {
+						name: teamName,
+						product: productInput,
+						eventId: event.createEvent.id
+					}
+				},
+				{
+					Authorization: $token || ''
+				}
+			);
+			const namecard = await createNamecard(
+				{
+					input: {
+						affiliation: memberOf,
+						eventId: event.createEvent.id,
+						preferTechnologies: preferedTechnologies,
+						usedTechnologies: usedTechnologies,
+						teamId: team.createTeam.id
+					}
+				},
+				{
+					Authorization: $token || ''
+				}
+			);
+			console.log('createNamecard done!', namecard.createNamecard);
+		} catch (err) {
+			console.error(err);
+		}
 	};
 
 	$: showTeamNameList = teamList.map((t) => (t.event.name === event ? t.name : ''));
-	$: product = teamList.find((t) => t.name === team)?.product ?? { name: '' };
+	$: product = teamList.find((t) => t.name === teamName)?.product ?? { name: '' };
 </script>
 
 <Header />
@@ -69,8 +115,8 @@
 	<div class="p-8">
 		<div class="max-w-3xl w-full mx-auto">
 			<Dynamic
-				{event}
-				{team}
+				event={eventName}
+				team={teamName}
 				{product}
 				usedTechnologies={usedTechnologies || undefined}
 				preferedTechnologies={preferedTechnologies || undefined}
@@ -82,11 +128,11 @@
 	<div class="block p-4 max-w-2xl mx-auto">
 		<div class="p-4">
 			<p class="text-sm text-gray-500">ハッカソン名</p>
-			<SuggestableInput class="w-full" candidates={eventList} bind:value={event} />
+			<SuggestableInput class="w-full" candidates={eventList} bind:value={eventName} />
 		</div>
 		<div class="p-4">
 			<p class="text-sm text-gray-500">チーム名</p>
-			<SuggestableInput class="w-full" candidates={showTeamNameList} bind:value={team} />
+			<SuggestableInput class="w-full" candidates={showTeamNameList} bind:value={teamName} />
 		</div>
 		<div class="p-4">
 			<p class="text-sm text-gray-500">作品名</p>
