@@ -14,6 +14,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-node": "next",
 		"@sveltejs/kit": "next",
+		"@types/qrcode-svg": "^1.1.1",
 		"@typescript-eslint/eslint-plugin": "^4.31.1",
 		"@typescript-eslint/parser": "^4.31.1",
 		"autoprefixer": "^10.3.4",
@@ -37,9 +38,10 @@
 	"type": "module",
 	"dependencies": {
 		"@auth0/auth0-spa-js": "^1.18.0",
-		"aws-amplify": "^4.2.10",
 		"@tailwindcss/aspect-ratio": "^0.2.1",
-		"carbon-icons-svelte": "^10.38.0"
+		"aws-amplify": "^4.2.10",
+		"carbon-icons-svelte": "^10.38.0",
+		"qrcode-svg": "^1.1.0"
 	},
 	"engines": {
 		"node": "14.x"

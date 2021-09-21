@@ -9,7 +9,7 @@
 <header class="py-4" role="banner" aria-label="me-shi">
 	<div class="container mx-auto flex items-center">
 		<a href="/" class="outline-none focus:ring-2">
-			<Svg width={200} height={50}>
+			<Svg width={200} height={50} style="width:200px;height:50px;">
 				<Logo scale={5} x={2} y={1} />
 			</Svg>
 		</a>
