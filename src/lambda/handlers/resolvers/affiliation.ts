@@ -1,7 +1,7 @@
 import { PutCommand, PutCommandInput, ScanCommand, ScanCommandInput } from "@aws-sdk/lib-dynamodb"
-import { AffiliationTableName } from "../../../lib/namecard-backend-stack"
-import { Affiliation } from "../../generated/graphql"
-import { docClient } from "./me_shi"
+import { AffiliationTableName } from "../../../../lib/namecard-backend-stack"
+import { Affiliation } from "../../../generated/graphql"
+import { docClient } from "../me_shi"
 
 export const createAffiliation = async (name: string) => {
     console.log('call affiliation')

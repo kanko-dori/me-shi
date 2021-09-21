@@ -1,7 +1,7 @@
 import { ScanCommand, PutCommand, PutCommandInput, ScanCommandInput, GetCommandInput, GetCommand, UpdateCommandInput, UpdateCommand } from '@aws-sdk/lib-dynamodb'
-import { TeamTableName } from '../../../lib/namecard-backend-stack'
-import { AddCommentInput, CreateTeamInput, Event, Team, Comment } from '../../generated/graphql'
-import { docClient } from './me_shi'
+import { TeamTableName } from '../../../../lib/namecard-backend-stack'
+import { AddCommentInput, CreateTeamInput, Event, Team, Comment } from '../../../generated/graphql'
+import { docClient } from '../me_shi'
 import { v4 as uuidv4 } from 'uuid'
 
 export const createTeam = async (input: CreateTeamInput) => {

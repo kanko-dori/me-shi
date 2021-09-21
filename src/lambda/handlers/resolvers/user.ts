@@ -1,7 +1,7 @@
 import { GetCommand, GetCommandInput, PutCommand, PutCommandInput, UpdateCommand, UpdateCommandInput } from '@aws-sdk/lib-dynamodb'
-import { UserTableName } from '../../../lib/namecard-backend-stack'
-import { CreateUserInput, Namecard, User } from '../../generated/graphql'
-import { docClient } from './me_shi'
+import { UserTableName } from '../../../../lib/namecard-backend-stack'
+import { CreateUserInput, Namecard, User } from '../../../generated/graphql'
+import { docClient } from '../me_shi'
 import { getNamecard } from './namecard'
 
 // type UserDB = {
@@ -132,4 +132,8 @@ export const getUser = async (userId: string, mustGetNamecard: boolean): Promise
         user.givenNamecards = null
     }
     return user
+}
+
+export const greeting = (name: string): string => {
+    return `hello ${name}`
 }

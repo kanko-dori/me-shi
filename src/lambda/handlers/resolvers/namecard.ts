@@ -1,9 +1,9 @@
 import { GetCommand, GetCommandInput, PutCommand, PutCommandInput, ScanCommand, ScanCommandInput } from "@aws-sdk/lib-dynamodb";
 
-import { NamecardTableName } from "../../../lib/namecard-backend-stack";
-import { CreateNamecardInput, Event, Namecard, User, Zukan, ZukanNamecard } from "../../generated/graphql";
+import { NamecardTableName } from "../../../../lib/namecard-backend-stack";
+import { CreateNamecardInput, Event, Namecard, User, Zukan, ZukanNamecard } from "../../../generated/graphql";
 import { createAffiliation } from "./affiliation";
-import { docClient } from "./me_shi";
+import { docClient } from "../me_shi";
 import { createTechnology } from "./technology";
 import { getTeam } from "./team";
 import { addGivenNamecard, addOwnNamecard, getUser } from "./user";
