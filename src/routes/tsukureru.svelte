@@ -127,11 +127,6 @@
 	};
 
 	$: showTeamNameList = teamList.map((t) => (t.event.name === eventName ? t.name : ''));
-	$: product = teamList.find((t) => t.name === teamName)?.product ?? {
-		name: '',
-		repository: '',
-		description: ''
-	};
 </script>
 
 <Header />
