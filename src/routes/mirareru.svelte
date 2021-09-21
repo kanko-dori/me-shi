@@ -71,9 +71,3 @@
 </main>
 
 <Footer />
-
-<style>
-	.t-size {
-		font-size: 3vw;
-	}
-</style>
