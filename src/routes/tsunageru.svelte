@@ -8,7 +8,6 @@
 
 	import { user } from '$lib/store';
 	import { Static } from '$lib/svg';
-	import { Book16 } from 'carbon-icons-svelte';
 	import { Auth } from 'aws-amplify/lib';
 	import { Pen16 } from 'carbon-icons-svelte';
 	import Add16 from 'carbon-icons-svelte/lib/Add16';
@@ -32,6 +31,7 @@
 				);
 			})
 			.catch(console.error);
+	});
 	user.subscribe((u) => {
 		if (u.type === 'failure') goto('/');
 		return;

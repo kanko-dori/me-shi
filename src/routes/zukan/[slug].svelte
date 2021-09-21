@@ -6,12 +6,12 @@
 	import type { ZukanNamecard } from 'src/generated/graphql';
 	import { user } from '$lib/store';
 	import { goto } from '$app/navigation';
-	const eventId = 'testEvent';
+
 	let eventname = '';
 	let namecardList: ZukanNamecard[] = [];
 	let teamList: string[] = [];
 	let team: string[] = [];
-	let path: string = '';
+	let path = '';
 
 	user.subscribe((u) => {
 		if (u.type === 'failure') goto('/');
@@ -20,7 +20,7 @@
 
 	onMount(() => {
 		getToken().then((token) => {
-			path = location.pathname.match(/([^\/.]+)/g)?.pop() ?? '';
+			path = location.pathname.match(/([^/.]+)/g)?.pop() ?? '';
 			getZukan(
 				{
 					input: {
@@ -78,17 +78,17 @@
 									{#if n.isOwn}
 										<a href="/mirareru/{n.id}">
 											<ZukanCard
-												name={n.owner.name || undefined}
-												icon={n.owner.iconURL || undefined}
-												isOwn={n.isOwn || undefined}
+												name={n.owner.name ?? ''}
+												icon={n.owner.iconURL ?? ''}
+												isOwn={n.isOwn ?? false}
 												class="w-32 lg:w-48 hover:bg-gray-200 transform motion-safe:hover:-translate-y-1 motion-safe:hover:scale-110 transition ease-in-out duration-300"
 											/>
 										</a>
 									{:else}
 										<ZukanCard
-											name={n.owner.name || undefined}
-											icon={n.owner.iconURL || undefined}
-											isOwn={n.isOwn || undefined}
+											name={n.owner.name ?? ''}
+											icon={n.owner.iconURL ?? ''}
+											isOwn={n.isOwn ?? false}
 											class="w-32 lg:w-48"
 										/>
 									{/if}

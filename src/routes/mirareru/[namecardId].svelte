@@ -64,7 +64,7 @@
 	import { user } from '$lib/store';
 	import { Dynamic, Static } from '$lib/svg';
 	import { QrCode16, SendFilled32 } from 'carbon-icons-svelte';
-	import type { Comment, Namecard, Product, Team } from 'src/generated/graphql';
+	import type { Namecard } from 'src/generated/graphql';
 	import { Book16 } from 'carbon-icons-svelte';
 	import { appsyncApiKey } from '$lib/env';
 
