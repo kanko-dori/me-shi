@@ -23,8 +23,8 @@
 	import { createEvent } from '$lib/graphql/query/createEvent';
 	import { createTeam } from '$lib/graphql/query/createTeam';
 
-	let eventName: string = '';
-	let teamName: string = '';
+	let eventName = '';
+	let teamName = '';
 	let product: Product = { name: '', repository: '', description: '' };
 	let usedTechnologies: string[] | undefined = [];
 	let preferedTechnologies: string[] | undefined = undefined;
