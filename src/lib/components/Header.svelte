@@ -20,7 +20,9 @@
 			{:else if showSignOut}
 				<button on:click={auth.signOut}>Sign out</button>
 			{:else}
-				<img class="h-10 rounded-full ring-2 focus:ring-4" src={$user?.picture} alt="user icon" />
+				<a href="/tsunageru">
+					<img class="h-10 rounded-full ring-2 focus:ring-4" src={$user?.picture} alt="user icon" />
+				</a>
 			{/if}
 		</p>
 	</div>
