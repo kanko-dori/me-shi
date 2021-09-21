@@ -32,15 +32,6 @@
 							return acc;
 						}, {})
 					);
-
-					let test = namecardList.map((a) => {
-						{
-							a.team.name, a.owner.name;
-						}
-						return;
-					});
-
-					console.log(test);
 				})
 				.catch((err) => console.error(err));
 		});
