@@ -3,9 +3,14 @@ import type { Observable } from 'node_modules/zen-observable-ts/lib';
 import * as amplify from 'aws-amplify';
 
 amplify.Amplify.configure({
-	API: {
-		graphql_endpoint:
-			'https://h6qrtrf4hrdl5pt5z2ojjomstq.appsync-api.ap-northeast-1.amazonaws.com/graphql'
+	aws_project_region: 'ap-northeast-1',
+	aws_appsync_graphqlEndpoint:
+		'https://h6qrtrf4hrdl5pt5z2ojjomstq.appsync-api.ap-northeast-1.amazonaws.com/graphql',
+	aws_appsync_region: 'ap-northeast-1',
+	aws_appsync_authenticationType: 'OPENID_CONNECT',
+	Auth: {
+		identityPoolId: 'ap-northeast-1:8f75aeee-2a4a-41ec-84bc-386d7c3db5c1',
+		region: 'ap-northeast-1'
 	}
 });
 
