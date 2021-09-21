@@ -5,8 +5,8 @@ import type { AuthHeader } from './types';
 export const getZukan = (
 	variables: { input: GetZukanInput },
 	headers: AuthHeader
-): Promise<Zukan> =>
-	query<{ input: GetZukanInput }, Zukan>(
+): Promise<{ getZukan: Zukan }> =>
+	query<{ input: GetZukanInput }, { getZukan: Zukan }>(
 		`
         query getZukan($input: GetZukanInput) {
             getZukan(input: $input){
@@ -28,7 +28,7 @@ export const getZukan = (
 						id
 						name
 						githubId
-						tiwtterId
+						twitterId
 						iconURL
 					}
 					team {
