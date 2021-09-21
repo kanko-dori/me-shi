@@ -60,8 +60,3 @@ export const user = derived<typeof auth, User | undefined>(
 	},
 	undefined
 );
-
-export const tokenUserTupple = derived<
-	[typeof token, typeof user],
-	[string | undefined, User | undefined]
->([token, user], ([t, u], set) => set([t, u]), [undefined, undefined]);

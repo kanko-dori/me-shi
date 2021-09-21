@@ -1,111 +1,88 @@
 <script lang="ts">
-	import { tokenUserTupple } from '$lib/auth';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
-	import { getUser } from '$lib/graphql/query';
+	import { user } from '$lib/store';
 	import { Static } from '$lib/svg';
 	import { Pen16 } from 'carbon-icons-svelte';
 	import Add16 from 'carbon-icons-svelte/lib/Add16';
 	import ArrowRight16 from 'carbon-icons-svelte/lib/ArrowRight16';
-	import type { User } from 'src/generated/graphql';
-	import { onMount } from 'svelte';
-
-	let userPromise: Promise<User> = Promise.resolve({ id: '' });
-
-	onMount(() => {
-		tokenUserTupple.subscribe(([token, user]) => {
-			userPromise = getUser(
-				{
-					input: { userId: user?.sub ?? '' }
-				},
-				{ Authorization: token ?? '' }
-			).then((u) => {
-				if (u == null) throw new Error('User not found');
-				return u.getUser;
-			});
-		});
-	});
 </script>
 
 <Header showSignOut={true} />
 
-{#await userPromise then user}
-	<main class="container mx-auto max-w-screen-lg relative px-4">
-		<div class="p-8">
-			<div class="max-w-3xl w-full mx-auto relative">
-				<Static
-					name={user.githubId ?? 'Error'}
-					github={user.githubId ?? 'Error'}
-					twitter={user.twitterId ?? undefined}
-					class="w-full shadow-xl"
-				/>
-				<a
-					href="/kaerareru"
-					class="absolute flex justify-center items-center outline-none focus:ring-2 w-12 h-12 rounded-md opacity-75 bg-gray-800 right-2 bottom-2"
-				>
-					<Pen16 class="h-3/5 w-3/5" style="fill:white" />
-				</a>
-			</div>
+<main class="container mx-auto max-w-screen-lg relative px-4">
+	<div class="p-8">
+		<div class="max-w-3xl w-full mx-auto relative">
+			<Static
+				name={$user?.githubId ?? 'Error'}
+				github={$user?.githubId ?? 'Error'}
+				twitter={$user?.twitterId ?? undefined}
+				class="w-full shadow-xl"
+			/>
+			<a
+				href="/kaerareru"
+				class="absolute flex justify-center items-center outline-none focus:ring-2 w-12 h-12 rounded-md opacity-75 bg-gray-800 right-2 bottom-2"
+			>
+				<Pen16 class="h-3/5 w-3/5" style="fill:white" />
+			</a>
 		</div>
+	</div>
 
-		<div class="md:flex">
-			<section class="md:w-1/2 md:px-2 py-4">
-				<p class="text-xl p-2 border-b-2 border-gray-300">参加したイベントの名刺</p>
-				<ul>
+	<div class="md:flex">
+		<section class="md:w-1/2 md:px-2 py-4">
+			<p class="text-xl p-2 border-b-2 border-gray-300">参加したイベントの名刺</p>
+			<ul>
+				<li>
+					<a
+						href="/tsukuritai"
+						class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
+					>
+						<p>新しくイベントの名刺を作る</p>
+						<div class="flex-grow" />
+						<Add16
+							class="transition-transform duration-200 ease-out group-hover:rotate-180 group-hover:scale-150"
+						/>
+					</a>
+				</li>
+				{#each $user?.myNamecards ?? [] as mycard}
 					<li>
 						<a
-							href="/tsukuritai"
+							href="/mirareru"
 							class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
 						>
-							<p>新しくイベントの名刺を作る</p>
+							<p>{mycard.event.name}</p>
 							<div class="flex-grow" />
-							<Add16
-								class="transition-transform duration-200 ease-out group-hover:rotate-180 group-hover:scale-150"
+							<ArrowRight16
+								class="transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:scale-110"
 							/>
 						</a>
 					</li>
-					{#each user?.myNamecards ?? [] as mycard}
-						<li>
-							<a
-								href="/mirareru"
-								class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
-							>
-								<p>{mycard.event.name}</p>
-								<div class="flex-grow" />
-								<ArrowRight16
-									class="transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:scale-110"
-								/>
-							</a>
-						</li>
-					{/each}
-				</ul>
-			</section>
-			<section class="md:w-1/2 md:px-2 py-4">
-				<p class="text-xl p-2 border-b-2 border-gray-300">いままでにもらった名刺</p>
-				<ul>
-					{#each user?.givenNamecards ?? [] as givencard}
-						<li>
-							<a
-								href="/"
-								class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
-							>
-								<div class="flex-col">
-									<p>{givencard.owner}</p>
-									<p class="text-sm text-gray-500">{givencard.event.name}</p>
-								</div>
-								<div class="flex-grow" />
-								<ArrowRight16
-									class="transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:scale-110"
-								/>
-							</a>
-						</li>
-					{/each}
-				</ul>
-			</section>
-		</div>
-	</main>
-{:catch err}
-	<p class="bg-red-600 text-white">{err.toString()}</p>
-{/await}
+				{/each}
+			</ul>
+		</section>
+		<section class="md:w-1/2 md:px-2 py-4">
+			<p class="text-xl p-2 border-b-2 border-gray-300">いままでにもらった名刺</p>
+			<ul>
+				{#each $user?.givenNamecards ?? [] as givencard}
+					<li>
+						<a
+							href="/"
+							class="group hover:bg-gray-100 transition outline-none focus:ring-2 w-full h-full flex p-2 items-center"
+						>
+							<div class="flex-col">
+								<p>{givencard.owner}</p>
+								<p class="text-sm text-gray-500">{givencard.event.name}</p>
+							</div>
+							<div class="flex-grow" />
+							<ArrowRight16
+								class="transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:scale-110"
+							/>
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</section>
+	</div>
+</main>
 
 <Footer />
