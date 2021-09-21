@@ -144,7 +144,7 @@ export async function handler(
     case 'addNamecard':
       console.log('call addNamecard')
       try {
-        const input = event.arguments.input as AddNamecardInput
+        const input = event.arguments as AddNamecardInput
         return await addNamecard(input, userId)
       } catch (err) {
         throw err
