@@ -2,7 +2,7 @@ import { browser } from '$app/env';
 import { path } from '$lib/path';
 import type { StatusStore } from '$lib/store';
 import type { RedirectLoginResult, User } from '@auth0/auth0-spa-js';
-import Auth from '@aws-amplify/auth';
+import { Auth } from 'aws-amplify';
 import { derived, writable } from 'svelte/store';
 import { auth0 } from './auth0';
 
