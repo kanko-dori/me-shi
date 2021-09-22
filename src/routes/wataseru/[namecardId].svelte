@@ -66,6 +66,7 @@
 							{ input: onAddNamecard.getterNamecardId ?? '' },
 							{ Authorization: t.value ?? '' }
 						).then(() => {
+							showOnAddNamecardModal = true;
 							console.log('addNamecard done.');
 						});
 					},
@@ -83,7 +84,7 @@
 		{#if !loading}
 			<QRcode
 				content="https://me-shi.ga/mirareru/{$page.params.namecardId}"
-				class="w-2/5 h-2/5 mx-auto shadow-xl"
+				class="w-2/5 h-2/5 mx-auto shadow-xl border border-gray-100"
 				color={[
 					{
 						color: '#3b82f6',
@@ -97,14 +98,14 @@
 			/>
 		{/if}
 	</div>
-	<p class="p-8 shadow-xl">
+	<p class="p-8">
 		<Dynamic
 			{event}
 			{team}
 			{product}
 			{usedTechnologies}
 			preferedTechnologies={preferTechnologies}
-			class="max-w-3xl mx-auto"
+			class="max-w-3xl mx-auto shadow-lg border border-gray-100"
 		/>
 	</p>
 </main>
