@@ -14,6 +14,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-node": "next",
 		"@sveltejs/kit": "next",
+		"@types/base-64": "^1.0.0",
 		"@types/isomorphic-fetch": "^0.0.35",
 		"@types/object-hash": "^2.2.1",
 		"@types/qrcode-svg": "^1.1.1",
@@ -43,6 +44,7 @@
 		"@auth0/auth0-spa-js": "^1.18.0",
 		"@tailwindcss/aspect-ratio": "^0.2.1",
 		"aws-amplify": "^4.2.10",
+		"base-64": "^1.0.0",
 		"carbon-icons-svelte": "^10.38.0",
 		"isomorphic-fetch": "^3.0.0",
 		"object-hash": "^2.2.0",

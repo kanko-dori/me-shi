@@ -1,6 +1,7 @@
 <script lang="ts" context="module">
 	import type { Load } from '@sveltejs/kit';
 	import { appsyncApiKey } from '$lib/env';
+
 	export const load: Load = ({ fetch, page }) =>
 		fetch('https://h6qrtrf4hrdl5pt5z2ojjomstq.appsync-api.ap-northeast-1.amazonaws.com/graphql', {
 			headers: {
@@ -70,6 +71,7 @@
 	import { QrCode16, SendFilled32 } from 'carbon-icons-svelte';
 	import type { Namecard } from 'src/generated/graphql';
 	import { Book16 } from 'carbon-icons-svelte';
+	import base64 from 'base-64';
 
 	export let namecard: Namecard | undefined;
 
@@ -95,6 +97,25 @@
 	let comment = '';
 
 	let processing = true;
+
+	const urlSearchParam = new URLSearchParams();
+	const ogImageUrl = new URL('https://me-shi.ga/png/dynamic');
+	urlSearchParam.append('event', eventName);
+	urlSearchParam.append('team', team?.name ?? 'event_name');
+	urlSearchParam.append('product_name', product?.name ?? '');
+	usedTechnologies.forEach((t) => {
+		urlSearchParam.append('usedTechnology', t);
+	});
+	if (preferedTechnologies != undefined) {
+		preferedTechnologies.forEach((t) => {
+			urlSearchParam.append('preferedTechnology', t);
+		});
+	}
+	if (memberOf != undefined) {
+		urlSearchParam.append('memberOf', memberOf);
+	}
+	ogImageUrl.searchParams.append('b64', base64.encode(urlSearchParam.toString()));
+
 	const send = () => {
 		if ($token.type !== 'success') {
 			console.log('Auth isnot initialized');
@@ -163,12 +184,12 @@
 	<meta property="og:url" content="https://me-shi.ga{$page.path}" />
 	<meta property="og:type" content="website" />
 	<meta property="og:site_name" content="me-shi" />
-	<meta property="og:image" content="https://me-shi.ga/ogp.png" />
+	<meta property="og:image" content={ogImageUrl.href} />
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
+<!-- https://me-shi.ga/png/dynamic?event=%E3%82%B9%E3%83%94%E3%83%8E%E3%82%AB%E3%83%83%E3%83%97&team=%E9%96%91%E5%8F%A4%E9%B3%A5&product_name=me-shi&usedTechnology=TypeScript&preferedTechnology=go&memberOf=%E8%B1%8A%E7%94%B0%E9%AB%98%E5%B0%82 -->
 <Header />
-
 <main class="container mx-auto px-4 max-w-3xl">
 	<div class="flex flex-col gap-2 w-full mx-auto p-4">
 		<div>
