@@ -1,94 +1,93 @@
 <script lang="ts">
-	import { getToken } from '$lib/auth';
-	import { Header, Footer, ZukanCard } from '$lib/components';
-	import { getZukan } from '$lib/graphql/query/getZukan';
-	import { onMount } from 'svelte';
-	import type { ZukanNamecard } from 'src/generated/graphql';
-	import { user } from '$lib/store';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { token } from '$lib/auth';
+	import { Footer, Header, Loading, Modal, ZukanCard } from '$lib/components';
+	import { getZukan } from '$lib/graphql/query/getZukan';
+	import { user } from '$lib/store';
+	import type { ZukanNamecard } from 'src/generated/graphql';
 
-	let eventname = '';
-	let namecardList: ZukanNamecard[] = [];
-	let teamList: string[] = [];
-	let team: string[] = [];
-	let path = '';
+	type TeamMap = Record<string, ZukanNamecard[]>;
+
+	let eventName = '';
+	let teamMap: TeamMap = {};
+	let processing = true;
 
 	user.subscribe((u) => {
 		if (u.type === 'failure') goto('/');
 		return;
 	});
 
-	onMount(() => {
-		getToken().then((token) => {
-			path = location.pathname.match(/([^/.]+)/g)?.pop() ?? '';
-			getZukan(
-				{
-					input: {
-						eventId: path
-					}
-				},
-				{ Authorization: token ?? '' }
-			)
-				.then((zukan) => {
-					console.log(zukan);
-					eventname = zukan.getZukan.event.name ?? '';
-					teamList = zukan.getZukan.namecards?.map((a) => a.team.name) ?? [];
-					namecardList = zukan.getZukan.namecards ?? [];
-
-					team = Object.keys(
-						teamList.reduce<Record<string, number>>((acc, val) => {
-							acc[val] = (acc[val] ?? 0) + 1;
-							return acc;
-						}, {})
-					);
-				})
-				.catch((err) => console.error(err));
-		});
+	token.subscribe((s) => {
+		if (s.type !== 'success') return;
+		getZukan(
+			{
+				input: { eventId: $page.params['slug'] }
+			},
+			{
+				Authorization: s.value ?? ''
+			}
+		)
+			.then(({ getZukan }) => {
+				console.log({ getZukan });
+				eventName = getZukan.event.name ?? 'イベント';
+				teamMap =
+					getZukan.namecards?.reduce<TeamMap>((acc, card) => {
+						const list = acc[card.team.name] ?? [];
+						acc[card.team.name] = [...list, card];
+						return acc;
+					}, {}) ?? {};
+			})
+			.finally(() => {
+				processing = false;
+			});
 	});
 </script>
 
 <Header />
 <main class="container mx-auto px-4 max-w-screen-lg">
 	<section class="flex px-4 py-8">
-		<h1 class="text-4xl">{eventname}</h1>
+		<h1 class="text-4xl">{eventName}</h1>
 		<div class="flex-grow" />
 		<p class="text-sm lg:text-xl text-gray-500">
-			{namecardList.filter((n) => n.isOwn).length}/{namecardList.length}
+			{Object.values(teamMap)
+				.flat()
+				.filter((n) => n.isOwn).length}/
+			{Object.values(teamMap).flat()}
 		</p>
 	</section>
 	<section class="px-4">
 		<ul>
-			{#each team as teamname}
+			{#each Object.entries(teamMap) as [teamName, cards] (teamName)}
 				<li>
 					<div class="flex">
 						<h3 class="text-2xl">
 							<span class="text-sm text-gray-500">team</span>
-							{teamname}
+							{teamName}
 						</h3>
 						<div class="flex-grow" />
 						<p class="text-sm lg:text-lg text-gray-500">
-							{namecardList.filter((n) => n.isOwn && n.team.name == teamname)
-								.length}/{namecardList.filter((n) => n.team.name == teamname).length}
+							{cards.filter((c) => c.isOwn).length}/{cards.length}
 						</p>
 					</div>
 					<div class="p-4">
 						<ul class="flex flex-wrap gap-4">
-							{#each namecardList.filter((c) => c.team.name === teamname) as n}
+							{#each cards as card (card.id)}
 								<li class="flex">
-									{#if n.isOwn}
-										<a href="/mirareru/{n.id}">
+									{#if card.isOwn}
+										<a href="/mirareru/{card.id}">
 											<ZukanCard
-												name={n.owner.name ?? ''}
-												icon={n.owner.iconURL ?? ''}
-												isOwn={n.isOwn ?? false}
+												name={card.owner.name ?? ''}
+												icon={card.owner.iconURL ?? '/favicon.png'}
+												isOwn={card.isOwn ?? false}
 												class="w-32 lg:w-48 hover:bg-gray-200 transform motion-safe:hover:-translate-y-1 motion-safe:hover:scale-110 transition ease-in-out duration-300"
 											/>
 										</a>
 									{:else}
 										<ZukanCard
-											name={n.owner.name ?? ''}
-											icon={n.owner.iconURL ?? ''}
-											isOwn={n.isOwn ?? false}
+											name={card.owner.name ?? ''}
+											icon={card.owner.iconURL ?? '/favicon.png'}
+											isOwn={card.isOwn ?? false}
 											class="w-32 lg:w-48"
 										/>
 									{/if}
@@ -101,4 +100,10 @@
 		</ul>
 	</section>
 </main>
+
+<Modal open={processing}>
+	<div class="z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+		<Loading />
+	</div>
+</Modal>
 <Footer />
