@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { path } from '$lib/path';
 
 	import '../app.postcss';
 
@@ -25,8 +26,10 @@
 	<meta property="og:title" content={title} />
 	<meta property="og:description" content={description} />
 	<meta property="og:site_name" content="me-shi" />
-	<meta property="og:image" content="https://me-shi.ga/ogp.png" />
 	<meta name="twitter:card" content="summary" />
+	{#if !$page.path.startsWith('/mirareru')}
+		<meta property="og:image" content="https://me-shi.ga/ogp.png" />
+	{/if}
 </svelte:head>
 
 <div class="font-body">
