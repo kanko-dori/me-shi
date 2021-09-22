@@ -1,6 +1,7 @@
 <script lang="ts" context="module">
 	import type { Load } from '@sveltejs/kit';
 	import { appsyncApiKey } from '$lib/env';
+
 	export const load: Load = ({ fetch, page }) =>
 		fetch('https://h6qrtrf4hrdl5pt5z2ojjomstq.appsync-api.ap-northeast-1.amazonaws.com/graphql', {
 			headers: {
@@ -70,6 +71,7 @@
 	import { QrCode16, SendFilled32 } from 'carbon-icons-svelte';
 	import type { Namecard } from 'src/generated/graphql';
 	import { Book16 } from 'carbon-icons-svelte';
+	import base64 from 'base-64';
 
 	export let namecard: Namecard | undefined;
 
@@ -96,20 +98,23 @@
 
 	let processing = true;
 
+	const urlSearchParam = new URLSearchParams();
 	const ogImageUrl = new URL('https://me-shi.ga/png/dynamic');
-	ogImageUrl.searchParams.append('event', eventName);
-	ogImageUrl.searchParams.append('team', team?.name ?? 'event_name');
-	// usedTechnologies.forEach((t) => {
-	// 	ogImageUrl.searchParams.append('usedTechnology', t);
-	// });
-	// if (preferedTechnologies != undefined) {
-	// 	preferedTechnologies.forEach((t) => {
-	// 		ogImageUrl.searchParams.append('preferedTechnology', t);
-	// 	});
-	// }
-	// if (memberOf != undefined) {
-	// 	ogImageUrl.searchParams.append('memberOf', memberOf);
-	// }
+	urlSearchParam.append('event', eventName);
+	urlSearchParam.append('team', team?.name ?? 'event_name');
+	urlSearchParam.append('product_name', product?.name ?? '');
+	usedTechnologies.forEach((t) => {
+		urlSearchParam.append('usedTechnology', t);
+	});
+	if (preferedTechnologies != undefined) {
+		preferedTechnologies.forEach((t) => {
+			urlSearchParam.append('preferedTechnology', t);
+		});
+	}
+	if (memberOf != undefined) {
+		urlSearchParam.append('memberOf', memberOf);
+	}
+	ogImageUrl.searchParams.append('b64', base64.encode(urlSearchParam.toString()));
 
 	const send = () => {
 		if ($token.type !== 'success') {
@@ -179,7 +184,7 @@
 	<meta property="og:url" content="https://me-shi.ga{$page.path}" />
 	<meta property="og:type" content="website" />
 	<meta property="og:site_name" content="me-shi" />
-	<meta property="og:image" content={ogImageUrl.toString()} />
+	<meta property="og:image" content={ogImageUrl.href} />
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
