@@ -51,7 +51,11 @@
 		})
 			.then((res) => res.json())
 			.then((r: { data: { getNamecard: Namecard } }) => r.data.getNamecard)
-			.then((namecard) => ({ props: { namecard } }));
+			.then((namecard) => ({ props: { namecard } }))
+			.catch((e) => {
+				console.error(e);
+				return {};
+			});
 </script>
 
 <script lang="ts">
@@ -67,26 +71,26 @@
 	import type { Namecard } from 'src/generated/graphql';
 	import { Book16 } from 'carbon-icons-svelte';
 
-	export let namecard: Namecard;
+	export let namecard: Namecard | undefined;
 
 	const twitterShareUrl = new URL('https://twitter.com/share');
 	twitterShareUrl.searchParams.append('url', `https://me-shi.ga${$page.path}`);
 	twitterShareUrl.searchParams.append('text', `イベントに参加してきました！`);
 	twitterShareUrl.searchParams.append('hashtags', 'me_shi');
 
-	let namecardId = namecard.id ?? '';
-	let ownerId = namecard.owner.id ?? '';
-	let name = namecard.owner.name ?? '';
-	let github = namecard.owner.githubId ?? '';
-	let twitter = namecard.owner.twitterId ?? undefined;
-	let eventName = namecard.event.name ?? '';
-	let team = namecard.team;
-	let product = team.product;
-	let usedTechnologies = namecard.usedTechnologies ?? [];
-	let preferedTechnologies = namecard.preferTechnologies ?? undefined;
-	let memberOf = namecard.memberOf ?? undefined;
-	let comments = namecard.team.product.comments ?? [];
-	let eventId = namecard.event.id;
+	let namecardId = namecard?.id ?? '';
+	let ownerId = namecard?.owner.id ?? '';
+	let name = namecard?.owner.name ?? '';
+	let github = namecard?.owner.githubId ?? '';
+	let twitter = namecard?.owner.twitterId ?? undefined;
+	let eventName = namecard?.event.name ?? '';
+	let team = namecard?.team;
+	let product = team?.product;
+	let usedTechnologies = namecard?.usedTechnologies ?? [];
+	let preferedTechnologies = namecard?.preferTechnologies ?? undefined;
+	let memberOf = namecard?.memberOf ?? undefined;
+	let comments = namecard?.team.product.comments ?? [];
+	let eventId = namecard?.event.id;
 
 	let comment = '';
 
