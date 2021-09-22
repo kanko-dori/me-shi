@@ -23,6 +23,11 @@ jobs:
         run: npm install
       - name: Build SvelteKit
         run: npm run build
+        env:
+          VITE_APPSYNC_API_KEY: ${{ secrets.VITE_APPSYNC_API_KEY }}
+          VITE_ORIGIN: ${{ secrets.VITE_ORIGIN }}
+          VITE_AUTH0_DOMAIN: ${{ secrets.VITE_AUTH0_DOMAIN }}
+          VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
 
       - name: poop ignore amplify error
         if: always()
