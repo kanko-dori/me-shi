@@ -96,8 +96,6 @@
 
 	let comment = '';
 
-	let processing = true;
-
 	const urlSearchParam = new URLSearchParams();
 	const ogImageUrl = new URL('https://me-shi.ga/png/dynamic');
 	urlSearchParam.append('event', eventName);
@@ -165,7 +163,6 @@
 				memberOf = getNamecard.memberOf ?? undefined;
 			})
 			.then(() => {
-				processing = false;
 				if ($authUser.type !== 'success') return;
 				if ($authUser.value?.sub === ownerId) {
 					console.log('This card is mine. skip addNamecards...');
@@ -259,11 +256,5 @@
 		</ul>
 	</div>
 </main>
-
-<Modal open={processing}>
-	<div class="z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-		<Loading />
-	</div>
-</Modal>
 
 <Footer />
