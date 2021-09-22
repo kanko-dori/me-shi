@@ -190,7 +190,7 @@
 					target="_blank"
 					class="absolute flex justify-center items-center outline-none focus:ring-2 w-12 h-12 right-2 bottom-16"
 				>
-					<img src="/static/twitter.svg" alt="twitter" />
+					<img src="/twitter.svg" alt="twitter" />
 				</a>
 				<a
 					href="/wataseru/{namecardId}"
