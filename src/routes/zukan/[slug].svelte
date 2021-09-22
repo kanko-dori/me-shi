@@ -53,7 +53,7 @@
 			{Object.values(teamMap)
 				.flat()
 				.filter((n) => n.isOwn).length}/
-			{Object.values(teamMap).flat()}
+			{Object.values(teamMap).flat().length}
 		</p>
 	</section>
 	<section class="px-4">
