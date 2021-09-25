@@ -1,0 +1,15 @@
+{
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
+	"[svelte]": {
+		"editor.defaultFormatter": "svelte.svelte-vscode"
+	},
+	"appService.zipIgnorePattern": [
+		"node_modules{,/**}",
+		".vscode{,/**}",
+		"src{,/**}",
+		"static{,/**}"
+	],
+	"appService.defaultWebAppToDeploy": "/subscriptions/6ec89eb6-0c9d-4e4f-9c3b-0b0cf5fc7611/resourceGroups/me-shi/providers/Microsoft.Web/sites/me-shi",
+	"appService.deploySubpath": "."
+}

@@ -1,0 +1,55 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy Node.js app to Azure Web App - me-shi
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - name: Install deps
+        run: npm install
+      - name: Build SvelteKit
+        run: npm run build
+        env:
+          VITE_APPSYNC_API_KEY: ${{ secrets.VITE_APPSYNC_API_KEY }}
+          VITE_ORIGIN: ${{ secrets.VITE_ORIGIN }}
+          VITE_AUTH0_DOMAIN: ${{ secrets.VITE_AUTH0_DOMAIN }}
+          VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
+
+      - name: poop ignore amplify error
+        if: always()
+        run: sed  -i 's|import "aws-amplify/lib";|// import "aws-amplify/lib";|g' build/middlewares.js
+
+      - name: Zip package
+        if: always()
+        run: zip -r app.zip .
+
+      - name: Azure Login
+        if: always()
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Azure CLI script
+        if: always()
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az webapp config appsettings set --resource-group ${{ env.RESOURCE_GROUP }} --name ${{ env.APP_NAME }} --settings WEBSITE_RUN_FROM_PACKAGE="1"
+            az webapp deployment source config-zip --resource-group ${{ env.RESOURCE_GROUP }} --name ${{ env.APP_NAME }} --src app.zip
+        env:
+          RESOURCE_GROUP: me-shi
+          APP_NAME: me-shi

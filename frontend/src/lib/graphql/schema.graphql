@@ -1,0 +1,177 @@
+type Query {
+	# サジェストするために使う
+	listEvent: [Event]
+	listTeam(input: ListTeamInput): [Team]
+
+	listTeamAll: [Team]
+	listAffiliation: [Affiliation]
+	listTechnology: [Technology]
+
+	getUser(input: GetUserInput): User
+	getNamecard(input: GetNamecardInput): Namecard
+	getZukan(input: GetZukanInput): Zukan
+}
+
+type Mutation {
+	createEvent(input: CreateEventInput): Event!
+	createTeam(input: CreateTeamInput): Team!
+	createNamecard(input: CreateNamecardInput): Namecard!
+	addComment(input: AddCommentInput): Team!
+
+	createUser(input: CreateUserInput!): User
+	updateUser(input: UpdateUserInput!): User
+
+	# この関数を呼んだ人の givenNamecards に指定した名刺を登録する
+	# 登録した人の、同じイベントに参加している Namecard が返ってくる
+	# AがBのカードを登録 addNamecard(namecardId: BのカードのID):
+	addNamecard(namecardId: String!): AddNamecardResult!
+}
+
+# AがBのカードを登録 addNamecard(ownerNamecardId: BのカードのID):
+type Subscription {
+	onAddNamecard(ownerNamecardId: String): AddNamecardResult
+		@aws_subscribe(mutations: ["addNamecard"])
+}
+
+type User {
+	id: ID!
+	name: String
+	githubId: String
+	twitterId: String
+	iconURL: String
+	myNamecards: [Namecard!]
+	givenNamecards: [Namecard!]
+}
+
+type Technology {
+	id: ID!
+	name: String!
+}
+
+type Affiliation {
+	id: ID!
+	name: String
+}
+
+type Comment {
+	id: ID!
+	body: String
+	commenterId: String # hidden
+}
+
+input CreateUserInput {
+	iconURL: String!
+	githubId: String!
+	twitterId: String
+	name: String
+}
+
+input DeleteUserInput {
+	userid: ID!
+}
+
+type Event {
+	id: ID!
+	name: String
+}
+
+input CreateEventInput {
+	name: String!
+}
+
+type Team {
+	id: ID!
+	name: String!
+	event: Event!
+	product: Product!
+}
+
+input CreateTeamInput {
+	name: String!
+	eventId: String!
+	product: ProductInput!
+}
+
+input AddCommentInput {
+	teamId: String!
+	comment: String!
+}
+
+type Namecard {
+	id: ID!
+	owner: User!
+	event: Event!
+	team: Team!
+	memberOf: String # affiliation name
+	usedTechnologies: [String!] # Technology names
+	preferTechnologies: [String!] #  Technology names
+}
+
+type AddNamecardResult {
+	ownerNamecardId: String
+	getterNamecardId: String
+}
+
+input AddNamecardInput {
+	namecardId: ID!
+}
+
+type Zukan {
+	event: Event!
+	namecards: [ZukanNamecard!]
+}
+
+type ZukanNamecard {
+	id: ID!
+	owner: User!
+	event: Event!
+	team: Team!
+	memberOf: String # affiliation name
+	usedTechnologies: [String!] # Technology names
+	preferTechnologies: [String!] #  Technology names
+	isOwn: Boolean
+}
+
+type Product {
+	name: String!
+	repository: String
+	description: String
+	comments: [Comment!]
+}
+
+input ProductInput {
+	name: String!
+	repository: String
+	description: String
+}
+
+input UpdateUserInput {
+	iconURL: String
+	name: String
+	githubId: String
+	twitterId: String
+}
+
+input CreateNamecardInput {
+	eventId: ID!
+	teamId: ID!
+	affiliation: String
+	usedTechnologies: [String!]
+	preferTechnologies: [String!]
+}
+
+input ListTeamInput {
+	eventId: ID!
+}
+
+input GetUserInput {
+	userId: ID!
+}
+
+input GetNamecardInput {
+	namecardId: ID!
+}
+
+input GetZukanInput {
+	eventId: ID!
+}

@@ -1,0 +1,33 @@
+name: checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - name: Install deps
+        run: npm install
+      - name: Lint
+        run: npm run lint
+      - name: Check
+        run: npm run check
+      - name: svelte-kit build
+        run: npm run build
+      - name: poop ignore amplify error
+        if: always()
+        run: sed  -i 's|import "aws-amplify/lib";|// import "aws-amplify/lib";|g' build/middlewares.js
+      - name: cat
+        if: always()
+        run: cat build/middlewares.js | grep aws-amplify
