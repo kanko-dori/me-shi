@@ -1,0 +1,42 @@
+{
+  "name": "namecard-backend",
+  "version": "0.1.0",
+  "bin": {
+    "namecard-backend": "bin/namecard-backend.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk",
+    "generate:graphql": "graphql-codegen --config codegen.yml",
+    "deploy": "cdk deploy"
+  },
+  "devDependencies": {
+    "@aws-cdk/assert": "1.123.0",
+    "@graphql-codegen/cli": "2.2.0",
+    "@graphql-codegen/introspection": "2.1.0",
+    "@graphql-codegen/typescript": "2.2.2",
+    "@graphql-codegen/typescript-resolvers": "2.2.1",
+    "@types/aws-lambda": "^8.10.83",
+    "@types/jest": "^26.0.24",
+    "@types/node": "10.17.27",
+    "@types/uuid": "^8.3.1",
+    "aws-cdk": "1.123.0",
+    "graphql-codegen": "^0.4.0",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.6",
+    "ts-node": "^9.0.0",
+    "typescript": "~3.9.7"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-appsync": "^1.123.0",
+    "@aws-cdk/aws-lambda-nodejs": "^1.123.0",
+    "@aws-cdk/aws-sns": "1.123.0",
+    "@aws-cdk/aws-sns-subscriptions": "1.123.0",
+    "@aws-cdk/aws-sqs": "1.123.0",
+    "@aws-cdk/core": "1.123.0",
+    "@aws-sdk/client-dynamodb": "^3.32.0",
+    "@aws-sdk/lib-dynamodb": "^3.32.0"
+  }
+}
